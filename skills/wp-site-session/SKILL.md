@@ -26,7 +26,9 @@ description: Protocolo de arranque y cierre de sesión sobre un sitio WordPress 
 ## Cierre
 
 1. Verificación final de lo escrito (read-back / page health).
-2. Actualizar `sites/{slug}/NOTAS.md`: qué se hizo, IDs de backup, decisiones, sorpresas.
+2. Memoria en su capa (regla "Dos memorias" de AGENTS.md):
+   - Decisiones de diseño/scope del sitio → memoria Kodavio (`kodavio/design-write`), para que cualquier agente futuro las vea.
+   - Caveats operativos, IDs de backup, gates aprobados, sorpresas → `sites/{slug}/NOTAS.md`.
 3. Si hubo acción sensible en producción → `Playbook/rules/sensitive-actions-log.md`.
 4. Tiempo en OPS si la tarea es facturable (`ops time <id> <min>`).
 5. Errores cometidos → `Playbook/retros/mistakes.md`.

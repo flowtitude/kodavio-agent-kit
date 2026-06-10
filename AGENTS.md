@@ -67,8 +67,11 @@ Siempre, en todos los entornos: `dry_run=true` antes de cualquier write; conserv
 | Skill | Cuándo |
 |---|---|
 | `wp-site-session` | SIEMPRE al empezar a trabajar con un sitio |
-| `wp-onboard-site` | Conectar un sitio nuevo a Kodavio + MCP en todos los agentes |
+| `wp-onboard-site` | Conectar un sitio nuevo a Kodavio + MCP en todos los agentes (atajo: `scripts/add-site.sh` interactivo) |
 | `wp-page-build` | Crear/editar páginas, secciones, templates (orquesta page_creation) |
+| `wp-design-patterns` | Fase de autoría: anatomía de sección, ritmo de página, catálogo de patrones |
+| `wp-bricks-fds` | Sitios Bricks con Flowtitude Design System: clases, tokens, elementos vetados |
+| `wp-tailwind-windpress` | Tailwind v4 vía WindPress: detección, reglas de utilities, convivencia con Bricks |
 | `wp-content-publish` | Posts, contenido editorial, SEO on-page (copy en castellano perfecto) |
 | `wp-builder-convert` | Conversión entre builders con rollback |
 | `wp-site-health` | Mantenimiento: updates, salud, rendimiento, logs |
@@ -96,8 +99,21 @@ Skills globales ya instaladas que aplican (no reinstalar): `wp-wpcli-and-ops`, `
 4. **Nunca PHP en tema/plugin activo.** Sandbox (`wp-content/kodavio-sandbox/`) o mu-plugin con lint + backup. En producción además: gate.
 5. **Un flujo primario por tarea.** `kodavio/workflow-router` decide; los flujos compuestos en orden de dependencia.
 6. **Verificar antes de declarar éxito.** Read-back, editor-open check, página sana. El write que "no falló" no es un write verificado.
-7. **Memoria.** Lo aprendido de un sitio → `sites/{slug}/NOTAS.md`. Errores → `Playbook/retros/mistakes.md`.
+7. **Memoria en su capa** (ver "Dos memorias" abajo). Errores → `Playbook/retros/mistakes.md`.
 8. **Comunicación en castellano**; código y tecnicismos en inglés. Contenido publicable → `rules/copy-review.md` del Playbook.
+
+## Dos memorias: Kodavio (servidor) vs NOTAS.md (local)
+
+Kodavio YA tiene memoria propia en cada sitio. No duplicar — cada hecho vive en una sola capa:
+
+| | **Memoria Kodavio** (en el sitio) | **`sites/{slug}/NOTAS.md`** (en tu máquina) |
+|---|---|---|
+| Qué es | `design-read/write` (lenguaje visual, tokens), `scope-read` (audiencia, sitemap, ofertas), change log (auditoría de escrituras) | Memoria del **operador** sobre el sitio |
+| Quién la ve | Cualquier agente/persona que se conecte a ESE sitio | Solo tú y tus agentes |
+| Qué guarda | Decisiones de diseño y alcance DEL sitio | Caveats operativos ("no auto-actualizar plugin X", "no PHP: lint roto"), datos de hosting/backups, gates aprobados, incidentes, relación prod↔staging, contexto de cliente |
+| Cuándo escribir | Tras decisiones de diseño/scope: `kodavio/design-write` | Al cierre de sesión (`wp-site-session`) |
+
+Regla práctica: si el dato describe **el sitio** y debería conocerlo cualquier agente que se conecte → memoria Kodavio. Si describe **cómo trabajas tú con ese sitio** (riesgos, permisos, hosting, historia operativa) → NOTAS.md. Además NOTAS.md sobrevive a reinstalaciones del plugin y sirve cuando el sitio está caído o comprometido.
 
 ## Multi-agente: qué lee cada herramienta
 

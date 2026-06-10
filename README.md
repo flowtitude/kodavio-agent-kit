@@ -86,7 +86,15 @@ Pide a tu agente: *"Lista las skills disponibles"* → deben aparecer las `wp-*`
 
 ## Onboarding: conectar tu primer sitio
 
-Versión corta (la versión completa y a prueba de fallos es el skill [`wp-onboard-site`](skills/wp-onboard-site/SKILL.md) — puedes pedirle al agente que la ejecute y te guíe):
+**Vía rápida (interactiva):**
+
+```bash
+./scripts/add-site.sh
+```
+
+El script pregunta URL, entorno, cliente y builder; comprueba que Kodavio responde; crea la entrada en `registry/sites.json` y la memoria del sitio; y registra el MCP en Claude Code si quieres (o te deja el comando listo).
+
+Versión manual (la versión completa y a prueba de fallos es el skill [`wp-onboard-site`](skills/wp-onboard-site/SKILL.md) — puedes pedirle al agente que la ejecute y te guíe):
 
 1. **Instala Kodavio** en el WordPress (Plugins → subir ZIP → activar).
 2. En **wp-admin → Kodavio → Setup**: activa las AI abilities y genera una **Application Password** para un usuario dedicado al agente (rol mínimo necesario; *editor* si solo va a tocar contenido). Deja el PHP editing en OFF salvo que lo necesites.
@@ -122,6 +130,9 @@ Lo que el agente **nunca** hace solo en producción: publicar, instalar/actualiz
 | [`wp-site-session`](skills/wp-site-session/SKILL.md) | Protocolo de arranque/cierre por sitio: entorno, memoria, handbook, guardarraíles |
 | [`wp-onboard-site`](skills/wp-onboard-site/SKILL.md) | Alta completa de un sitio nuevo: plugin, credencial, MCP en cada agente, registry |
 | [`wp-page-build`](skills/wp-page-build/SKILL.md) | Páginas/secciones/templates en Bricks, Elementor o Gutenberg, con autoría previa y verificación |
+| [`wp-design-patterns`](skills/wp-design-patterns/SKILL.md) | Patrones de composición: anatomía de sección, ritmo de página, catálogo (hero, features, pricing, FAQ…) |
+| [`wp-bricks-fds`](skills/wp-bricks-fds/SKILL.md) | Preferencias Bricks + Flowtitude Design System: clases semánticas, tokens fluidos, elementos vetados |
+| [`wp-tailwind-windpress`](skills/wp-tailwind-windpress/SKILL.md) | Tailwind v4 en WordPress vía WindPress: detección, reglas de utilities |
 | [`wp-content-publish`](skills/wp-content-publish/SKILL.md) | Contenido editorial con SEO on-page y flujo draft → aprobación → publicación |
 | [`wp-builder-convert`](skills/wp-builder-convert/SKILL.md) | Conversión entre builders con auditoría de fidelidad y rollback |
 | [`wp-site-health`](skills/wp-site-health/SKILL.md) | Mantenimiento: updates, limpieza, salud, rendimiento |
@@ -178,7 +189,8 @@ kodavio-agent-kit/
 │   ├── sites.example.json     ← plantilla del registro de sitios
 │   └── sites.json             (local, no versionado) tus sitios reales
 ├── rules/                     guardarraíles por entorno · protocolo Kodavio · código en vivo
-├── skills/                    7 skills de orquestación (SKILL.md portables)
+├── scripts/add-site.sh        alta interactiva de sitios
+├── skills/                    10 skills de orquestación y diseño (SKILL.md portables)
 ├── agents/                    5 subagentes especializados
 ├── workflows/WORKFLOWS.md     enrutado petición → flujo → skill → gates
 ├── sites/
