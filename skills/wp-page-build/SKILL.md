@@ -37,6 +37,18 @@ Para páginas con datos dinámicos (loops, CPTs, campos): el flujo compuesto es 
 - Borrar nodos: `bricks-node-delete` (flag `confirm_destructive`); `apply_changes` agrupado solo existe en Elementor.
 - Revisar responsive del grid de cards tras materializar (sale sin breakpoint móvil).
 
+## Fase 2.5 — Pase de diseño (OBLIGATORIO tras materializar)
+
+El output del materializador es un **andamio estructural, nunca el resultado final** (verificado en vivo: px fijos, anchos hardcodeados, sin clases del design system pese a declarar "class-first policy", sin breakpoints, alignment del hero ignorado). Tras el create, SIEMPRE un pase de patches (`bricks-apply-patch` / equivalente):
+
+1. **Spacing** → tokens del sitio (`var(--bt-space-section-*)`, `var(--bt-space-*)` o los del design system activo), nunca dejar los px del andamio.
+2. **Responsive** → breakpoints explícitos en grids/columnas (Bricks: claves con sufijo `_setting:tablet_portrait` / `:mobile_landscape` / `:mobile_portrait`; un grid de 3 → 2 → 1).
+3. **Alineaciones del brief** → verificar que se aplicaron (el materializador puede ignorarlas).
+4. **Superficie de cards/bandas** → fondos y radius con variables del sitio (`var(--bt-neutral-*)`, `var(--radius-*)`), no hex sueltos.
+5. **Clases utilitarias** solo si WindPress/Tailwind está activo (`wp-tailwind-windpress`).
+
+Sin pase de diseño no se pasa a Fase 3. "Crea las secciones y los textos bien" no es una página terminada.
+
 ## Fase 3 — Verificación (subagente wp-verifier si la página es grande)
 
 1. Read-back del árbol/contenido escrito.
