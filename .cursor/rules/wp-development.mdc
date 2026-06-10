@@ -1,0 +1,12 @@
+---
+description: Puerta de entrada wp-development — operar WordPress en vivo vía Kodavio
+alwaysApply: true
+---
+
+Lee y obedece `AGENTS.md` en la raíz de wp-development antes de cualquier acción. Resumen no negociable:
+
+1. Antes de tocar un sitio: skill `skills/wp-site-session/SKILL.md` (registry → memoria del sitio → handbook Kodavio → guardarraíles por entorno).
+2. `registry/sites.json` decide el entorno; `rules/production-guardrails.md` decide qué puedes hacer. Producción: drafts sí, publicar/borrar/plugins/PHP = confirmación humana siempre.
+3. dry_run antes de todo write; verificación read-back después; backup IDs en la respuesta.
+4. Tú redactas contenido y brief; Kodavio solo ejecuta.
+5. Skills en `skills/*/SKILL.md`, subagentes de referencia en `agents/`, enrutado en `workflows/WORKFLOWS.md`.

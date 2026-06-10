@@ -1,0 +1,60 @@
+{
+  "_meta": {
+    "descripcion": "PLANTILLA del registro de sitios. Copia este archivo a sites.json (no versionado) y rellena con tus sitios reales.",
+    "instrucciones": "cp registry/sites.example.json registry/sites.json — luego ejecuta el skill wp-onboard-site por cada sitio.",
+    "nota_env": "env es la clasificación OPERATIVA (la que manda en guardarraíles), no el environment_type que reporte WordPress.",
+    "esquema": {
+      "slug": "identificador local = nombre del server MCP principal (dominio con underscores, sufijo _staging/_dev)",
+      "env": "production | staging | development",
+      "guardrails": "perfil de rules/production-guardrails.md (normalmente = env)",
+      "client": "identificador del cliente o null",
+      "mcp_servers": "servers MCP que apuntan a este sitio (clave = propósito)",
+      "caveats": "limitaciones vinculantes detectadas (p. ej. php_lint_available=false => no PHP)",
+      "verified": "fecha del último contraste con kodavio/wp-get-config-summary"
+    }
+  },
+  "sites": [
+    {
+      "slug": "example_com",
+      "name": "Ejemplo S.L.",
+      "url": "https://example.com/",
+      "env": "production",
+      "guardrails": "production",
+      "client": "ejemplo",
+      "playbook": null,
+      "mcp_servers": {
+        "kodavio": "example_com"
+      },
+      "builder": "bricks",
+      "theme": "Mi Child Theme",
+      "stack": ["bricks", "rankmath", "fluentforms"],
+      "language": "es_ES",
+      "notes": "sites/example_com/NOTAS.md",
+      "caveats": ["Rellenar tras el primer wp-get-config-summary real"],
+      "verified": null
+    },
+    {
+      "slug": "example_com_staging",
+      "name": "Ejemplo S.L. (staging)",
+      "url": "https://staging.example.com/",
+      "env": "staging",
+      "guardrails": "staging",
+      "client": "ejemplo",
+      "playbook": null,
+      "mcp_servers": {
+        "kodavio": "example_com_staging"
+      },
+      "builder": "bricks",
+      "theme": "Mi Child Theme",
+      "stack": ["bricks"],
+      "language": "es_ES",
+      "notes": "sites/example_com/NOTAS.md",
+      "caveats": ["Staging no sincroniza solo con producción"],
+      "verified": null
+    }
+  ],
+  "shared_mcp_servers": {
+    "_nota": "Servers MCP genéricos cuyo sitio destino hay que confirmar antes de usar en una sesión. No asumir destino.",
+    "wordpress-docs": "documentación WP (lookup, sin sitio)"
+  }
+}

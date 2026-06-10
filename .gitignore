@@ -1,0 +1,12 @@
+# Datos locales — NUNCA se versionan (sitios y clientes reales)
+registry/sites.json
+sites/*
+!sites/_template/
+state.md
+
+# Config local de herramientas
+.claude/settings.local.json
+.cursor/mcp.json
+
+# Sistema
+.DS_Store
