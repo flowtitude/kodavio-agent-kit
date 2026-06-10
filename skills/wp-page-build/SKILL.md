@@ -27,7 +27,15 @@ Para páginas con datos dinámicos (loops, CPTs, campos): el flujo compuesto es 
 2. `kodavio/builder-get-config` + `builder-workflow action=schema`.
 3. Página nueva: `builder-workflow` create con el content model completo, **status draft**.
 4. Página existente (Bricks): leer árbol → `bricks-apply-patch`/primitivas. Antes de tocar página publicada: `bricks-snapshot-page`. Nunca reemplazar el árbol entero.
-5. Siempre `dry_run=true` primero.
+5. Siempre `dry_run=true` primero, **y leer el `materialization_plan` del dry-run**: si `mapped_blocks` < bloques enviados, o aparece `unknown_block_as_card`/`unsupported_block_types`, el contrato está mal — NO escribir.
+
+### Contrato del content_model (verificado en vivo, Kodavio 0.1.3)
+
+- `content_model.sections[].blocks` usa **`type`** (`eyebrow` | `heading` | `text` | `button` | `cards`), no nodos `{name, settings}` del builder. `heading` lleva `tag`; `button` lleva `url`; `cards` lleva `columns` + `items[{heading,text}]`.
+- Bloques sin `type` → fallback silencioso a cards con el nombre del tipo como título: **se pierde todo el copy y la verificación interna da PASS igualmente**. El read-back de fidelidad (Fase 3) es la única red.
+- No enviar `label` de sección con texto que no deba verse: hoy se materializa como text-basic visible.
+- Borrar nodos: `bricks-node-delete` (flag `confirm_destructive`); `apply_changes` agrupado solo existe en Elementor.
+- Revisar responsive del grid de cards tras materializar (sale sin breakpoint móvil).
 
 ## Fase 3 — Verificación (subagente wp-verifier si la página es grande)
 
