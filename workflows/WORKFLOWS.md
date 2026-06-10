@@ -6,17 +6,19 @@
 | Petición típica | Flujo Kodavio | Skill local | Subagentes | Gates en producción |
 |---|---|---|---|---|
 | "¿Cómo está el sitio X?" / informe / análisis previo | `diagnostic_audit` | `wp-site-health` (parte auditoría) | wp-auditor | ninguno (read-only) |
+| "Hazme la web" / sitio nuevo / rediseño completo | — (plan) → flujos en orden | `wp-site-plan` → cola de briefs | wp-content-architect → builder-operator del builder → wp-verifier | aprobar plan; publicar = gate |
 | Mantenimiento: updates, limpieza, ajustes | `wordpress_admin` | `wp-site-health` | wp-operator + wp-verifier | updates/limpieza = gate + log |
-| Crear/editar página, sección, template, componente | `page_creation` | `wp-page-build` | wp-builder-operator + wp-verifier (+ design-* para boceto) | publicar = gate |
+| Crear/editar página, sección, template, componente | `page_creation` | `wp-page-build` (+ `wp-design-patterns` en autoría) | wp-bricks/elementor/gutenberg-operator + wp-verifier | publicar = gate |
+| "Hazla como esta captura/mockup" | `page_creation` | `wp-reference-to-brief` → `wp-page-build` | builder-operator del builder + wp-verifier | publicar = gate |
 | Posts, contenido editorial, SEO on-page | `page_creation` (light) o CRUD | `wp-content-publish` | wp-content-writer | publicar = gate |
-| Tokens, paleta, sistema de diseño, frameworks | `design_system` | — (playbooks servidor `design-frameworks`, `flowtitude-design-scope`) | wp-builder-operator + wp-verifier | aplicar sistema activo = gate |
-| CPTs, campos, ACF/JetEngine, loops, dynamic data | `content_model_dynamic` | — (playbooks servidor `content-model-schema`, `dynamic-data-binding`, `acf-integration`, `jetengine-integration`) | wp-operator + wp-builder-operator + wp-verifier | migrar datos existentes = gate |
+| Tokens, paleta, sistema de diseño, frameworks | `design_system` | `wp-bricks-fds` / `wp-tailwind-windpress` (+ playbooks servidor `design-frameworks`, `flowtitude-design-scope`) | builder-operator + wp-verifier | aplicar sistema activo = gate |
+| CPTs, campos, ACF/JetEngine, loops, dynamic data | `content_model_dynamic` | — (playbooks servidor `content-model-schema`, `dynamic-data-binding`, `acf-integration`, `jetengine-integration`) | wp-content-architect + builder-operator + wp-verifier | migrar datos existentes = gate |
 | Snippet, shortcode, hook, endpoint, mu-plugin | `mini_plugin` | — + regla `code-on-live-sites.md` | wp-operator + wp-verifier | SIEMPRE gate en producción |
-| Migrar builder (E↔B↔G) o framework | `builder_migration` | `wp-builder-convert` | wp-auditor → wp-builder-operator → wp-verifier | cutover y borrado de original = gate |
-| WooCommerce: productos, pedidos, cupones | `wordpress_admin` | — (playbook servidor `woocommerce-operations`) | wp-operator | pedidos/refunds/precios = gate (dinero) |
+| Migrar builder (E↔B↔G) o framework | `builder_migration` | `wp-builder-convert` | wp-auditor → builder-operator destino → wp-verifier | cutover y borrado de original = gate |
+| WooCommerce: productos, pedidos, cupones | `wordpress_admin` | — (playbook servidor `woocommerce-operations`) | wp-woo-operator | pedidos/refunds/precios = gate (dinero) |
 | Fluent (CRM, forms, support, booking) | `wordpress_admin` | — (playbook servidor `fluent-suite` + MCPs fluent-*) | wp-operator | campañas/emails salientes = gate (comunicación externa) |
 | Sospecha de hackeo / hardening | — (mínimo Kodavio) | `wp-security-triage` | wp-auditor + wp-operator | borrar/rotar credenciales = gate |
-| Sitio nuevo a conectar | — | `wp-onboard-site` | — | instalar plugin en prod = gate |
+| Sitio nuevo a conectar | — | `wp-onboard-site` (comando interactivo) o `scripts/add-site.sh` | — | instalar plugin en prod = gate |
 
 ## Cadena estándar de una tarea de escritura
 

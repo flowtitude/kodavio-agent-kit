@@ -86,13 +86,21 @@ Pide a tu agente: *"Lista las skills disponibles"* → deben aparecer las `wp-*`
 
 ## Onboarding: conectar tu primer sitio
 
-**Vía rápida (interactiva):**
+**Vía recomendada — comando interactivo en el chat:**
+
+```
+/wp-onboard-site
+```
+
+(en Claude Code; en Cursor/Codex/OpenCode: *"da de alta un sitio nuevo"*). El agente te entrevista, verifica que Kodavio responde, registra el MCP en tu herramienta, rellena `registry/sites.json` con los **datos reales** del sitio (builder, theme, caveats vía `wp-get-config-summary`) y crea su memoria.
+
+**Vía terminal (sin agente):**
 
 ```bash
 ./scripts/add-site.sh
 ```
 
-El script pregunta URL, entorno, cliente y builder; comprueba que Kodavio responde; crea la entrada en `registry/sites.json` y la memoria del sitio; y registra el MCP en Claude Code si quieres (o te deja el comando listo).
+Mismo resultado base: pregunta URL/entorno/cliente/builder, comprueba el endpoint, crea registro + memoria y deja el comando MCP listo.
 
 Versión manual (la versión completa y a prueba de fallos es el skill [`wp-onboard-site`](skills/wp-onboard-site/SKILL.md) — puedes pedirle al agente que la ejecute y te guíe):
 
@@ -113,7 +121,9 @@ Toda sesión sobre un sitio empieza por el skill **`wp-site-session`**: el agent
 | Tú dices | El sistema hace |
 |---|---|
 | *"¿Cómo está example.com?"* | Auditoría read-only (`wp-site-health`) → informe con riesgos y plan |
+| *"Hazme la web de mi clínica"* | `wp-site-plan`: discovery → sitemap + modelo de contenido + cola de briefs → apruebas el plan → construcción página a página |
 | *"Crea una página de servicios con hero, 3 features y CTA"* | `wp-page-build`: brief y copy primero → build en draft → verificación → te enseña la preview |
+| *"Hazla parecida a esta captura"* (+ imagen) | `wp-reference-to-brief`: extrae estructura y jerarquía con visión → brief adaptado a TU design system → build |
 | *"Escribe 5 posts sobre X para el blog"* | `wp-content-publish`: muestra 1 de ejemplo → apruebas → lote completo en draft con SEO on-page |
 | *"Migra esta página de Elementor a Bricks"* | `wp-builder-convert`: plan → conversión a draft → auditoría de fidelidad → rollback garantizado |
 | *"Actualiza los plugins"* | `wp-site-health`: en producción te pide confirmación update a update, con backup previo |
@@ -128,7 +138,9 @@ Lo que el agente **nunca** hace solo en producción: publicar, instalar/actualiz
 | Skill | Qué hace |
 |---|---|
 | [`wp-site-session`](skills/wp-site-session/SKILL.md) | Protocolo de arranque/cierre por sitio: entorno, memoria, handbook, guardarraíles |
-| [`wp-onboard-site`](skills/wp-onboard-site/SKILL.md) | Alta completa de un sitio nuevo: plugin, credencial, MCP en cada agente, registry |
+| [`wp-onboard-site`](skills/wp-onboard-site/SKILL.md) | Comando interactivo de alta de sitio: plugin, credencial, MCP, registry con datos reales |
+| [`wp-site-plan`](skills/wp-site-plan/SKILL.md) | Planificación de sitio/rediseño: discovery, sitemap, modelo de contenido, cola de briefs |
+| [`wp-reference-to-brief`](skills/wp-reference-to-brief/SKILL.md) | Imagen de referencia o mockup → brief de construcción preciso (visión) |
 | [`wp-page-build`](skills/wp-page-build/SKILL.md) | Páginas/secciones/templates en Bricks, Elementor o Gutenberg, con autoría previa y verificación |
 | [`wp-design-patterns`](skills/wp-design-patterns/SKILL.md) | Patrones de composición: anatomía de sección, ritmo de página, catálogo (hero, features, pricing, FAQ…) |
 | [`wp-bricks-fds`](skills/wp-bricks-fds/SKILL.md) | Preferencias Bricks + Flowtitude Design System: clases semánticas, tokens fluidos, elementos vetados |
@@ -148,7 +160,12 @@ Lo que el agente **nunca** hace solo en producción: publicar, instalar/actualiz
 |---|---|
 | [`wp-auditor`](agents/wp-auditor.md) | Diagnóstico read-only; nunca escribe |
 | [`wp-operator`](agents/wp-operator.md) | Administración WP segura: plugins, settings, usuarios |
-| [`wp-builder-operator`](agents/wp-builder-operator.md) | Materializa briefs en el builder; no inventa contenido |
+| [`wp-bricks-operator`](agents/wp-bricks-operator.md) | Especialista Bricks (+FDS): nodos nativos, patch-first, elementos vetados |
+| [`wp-elementor-operator`](agents/wp-elementor-operator.md) | Especialista Elementor: contenedores, site kit, sin addons fantasma |
+| [`wp-gutenberg-operator`](agents/wp-gutenberg-operator.md) | Especialista Gutenberg: bloques core, patterns, theme.json |
+| [`wp-builder-operator`](agents/wp-builder-operator.md) | Genérico de builders (fallback cuando no hay especialista) |
+| [`wp-content-architect`](agents/wp-content-architect.md) | Modelo de contenido y datos dinámicos: CPTs, campos, bindings |
+| [`wp-woo-operator`](agents/wp-woo-operator.md) | WooCommerce con gates de dinero (precios, pedidos, reembolsos) |
 | [`wp-content-writer`](agents/wp-content-writer.md) | Copy editorial y SEO en el idioma del sitio |
 | [`wp-verifier`](agents/wp-verifier.md) | Verificación adversarial post-write: read-back, salud, fidelidad, rollback |
 
@@ -189,15 +206,16 @@ kodavio-agent-kit/
 │   ├── sites.example.json     ← plantilla del registro de sitios
 │   └── sites.json             (local, no versionado) tus sitios reales
 ├── rules/                     guardarraíles por entorno · protocolo Kodavio · código en vivo
-├── scripts/add-site.sh        alta interactiva de sitios
-├── skills/                    10 skills de orquestación y diseño (SKILL.md portables)
+├── scripts/add-site.sh        alta de sitios por terminal (el comando es /wp-onboard-site)
+├── skills/                    12 skills de orquestación, planificación y diseño (SKILL.md portables)
 ├── agents/                    5 subagentes especializados
 ├── workflows/WORKFLOWS.md     enrutado petición → flujo → skill → gates
 ├── sites/
 │   ├── _template/NOTAS.md     ← plantilla de memoria por sitio
 │   └── {slug}/                (local, no versionado) memoria de cada sitio
 └── docs/
-    └── mcp-config-examples.md plantillas de conexión MCP por herramienta
+    ├── mcp-config-examples.md plantillas de conexión MCP por herramienta
+    └── kodavio-vs-kit.md      doctrina: dónde vive cada capacidad nueva (plugin vs kit)
 ```
 
 ## Multi-agente

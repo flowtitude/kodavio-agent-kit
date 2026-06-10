@@ -67,8 +67,10 @@ Siempre, en todos los entornos: `dry_run=true` antes de cualquier write; conserv
 | Skill | Cuándo |
 |---|---|
 | `wp-site-session` | SIEMPRE al empezar a trabajar con un sitio |
-| `wp-onboard-site` | Conectar un sitio nuevo a Kodavio + MCP en todos los agentes (atajo: `scripts/add-site.sh` interactivo) |
+| `wp-onboard-site` | Comando interactivo de alta de sitio (`/wp-onboard-site`); alternativa terminal: `scripts/add-site.sh` |
+| `wp-site-plan` | Sitios nuevos/rediseños: discovery → sitemap → modelo de contenido → cola de briefs aprobada |
 | `wp-page-build` | Crear/editar páginas, secciones, templates (orquesta page_creation) |
+| `wp-reference-to-brief` | Imagen de referencia/mockup → brief de construcción (requiere modelo con visión) |
 | `wp-design-patterns` | Fase de autoría: anatomía de sección, ritmo de página, catálogo de patrones |
 | `wp-bricks-fds` | Sitios Bricks con Flowtitude Design System: clases, tokens, elementos vetados |
 | `wp-tailwind-windpress` | Tailwind v4 vía WindPress: detección, reglas de utilities, convivencia con Bricks |
@@ -87,9 +89,16 @@ Skills globales ya instaladas que aplican (no reinstalar): `wp-wpcli-and-ops`, `
 |---|---|---|
 | `wp-auditor` | auditor | Diagnóstico read-only, nunca escribe |
 | `wp-operator` | operator | Admin WP seguro: plugins, settings, usuarios |
-| `wp-builder-operator` | builder_operator | Escrituras builder tras brief aprobado |
+| `wp-bricks-operator` | builder_operator | Especialista Bricks (+FDS): nodos nativos, patch-first, vetos |
+| `wp-elementor-operator` | builder_operator | Especialista Elementor: contenedores, site kit, migración v4 |
+| `wp-gutenberg-operator` | builder_operator | Especialista Gutenberg: bloques core, patterns, theme.json |
+| `wp-builder-operator` | builder_operator | Genérico/fallback cuando el builder es mixto o desconocido |
+| `wp-content-architect` | content_architect | CPTs, taxonomías, campos, queries y bindings — antes que las páginas |
+| `wp-woo-operator` | operator | WooCommerce con gates de dinero (precios, pedidos, refunds) |
 | `wp-content-writer` | — | Copy, posts, SEO (castellano perfecto / inglés según sitio) |
 | `wp-verifier` | verifier / rollback_verifier | Verificación post-write: read-back, salud de página, rollback path |
+
+Regla de selección: el especialista del builder del sitio (registry) antes que el genérico. ¿Una capacidad nueva va al plugin o al kit? → `docs/kodavio-vs-kit.md`.
 
 ## Reglas de oro
 
