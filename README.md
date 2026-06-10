@@ -47,7 +47,7 @@ Kodavio convierte cada WordPress en un servidor MCP con abilities seguras para b
 
 ```bash
 # 1. Clonar
-git clone git@github.com:sabiertas/kodavio-agent-kit.git
+git clone git@github.com:flowtitude/kodavio-agent-kit.git
 cd kodavio-agent-kit
 
 # 2. Crear tu registro de sitios desde la plantilla (queda fuera de git)
