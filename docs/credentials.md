@@ -21,6 +21,16 @@ En Windows se usa `wp-mcp-launch.ps1` (Credential Manager o python-keyring).
 ## 1. Guardar la credencial (una vez por sitio)
 
 El nombre del item es siempre `wp-agent-{slug}` (mismo slug que `registry/sites.json`).
+La credencial es **por máquina**: nunca viaja con el repo ni se copia al clonar — quien clona
+guarda la suya en su propio almacén.
+
+**Recomendado — mismo comando en macOS, Linux y Windows (python-keyring):**
+```bash
+pip install keyring          # una vez
+python3 -m keyring set "wp-agent-example_com" "agente-ia"   # pide la password en oculto
+```
+keyring usa por debajo el almacén nativo de cada SO (Keychain / Secret Service / Credential
+Locker), pero el comando es idéntico en los tres. Alternativas nativas si prefieres no instalar nada:
 
 **macOS (Keychain):**
 ```bash
@@ -43,11 +53,6 @@ pass insert "mcp/wp-agent-example_com"
 Install-Module CredentialManager -Scope CurrentUser   # una vez
 New-StoredCredential -Target "wp-agent-example_com" -UserName "agente-ia" `
   -Password (Read-Host -AsSecureString | ConvertFrom-SecureString -AsPlainText) -Persist LocalMachine
-```
-
-**Cualquier SO (python-keyring):**
-```bash
-pip install keyring && python3 -m keyring set "wp-agent-example_com" "agente-ia"
 ```
 
 ## 2. Configurar el server MCP con el lanzador
