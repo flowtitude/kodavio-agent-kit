@@ -1,7 +1,7 @@
 # AGENTS.md — wp-development
 
 > Puerta de entrada para operar **instalaciones WordPress en vivo a través de Kodavio**.
-> La lee cualquier agente: Claude Code, Cursor, Codex, OpenCode, Mavis.
+> La lee cualquier agente: Claude Code, Cursor, Codex, OpenCode, Kilo Code, Mavis.
 > Fuente única: este archivo. `CLAUDE.md` y `.cursor/rules/` son punteros, no copias.
 
 ## Qué es
@@ -30,7 +30,7 @@ wp-development/
 ├── skills/              playbooks portables (formato SKILL.md, los lee cualquier agente)
 ├── agents/              subagentes (formato Claude; otros agentes los usan como prompts)
 ├── workflows/           WORKFLOWS.md = petición → flujo Kodavio → skill → gates
-├── sites/{slug}/        memoria por sitio (NOTAS.md)
+├── sites/{slug}/        memoria por sitio (NOTAS.md + PLAN.md si hay plan de sitio)
 └── state.md             estado vivo de esta capa
 ```
 
@@ -131,15 +131,16 @@ Regla práctica: si el dato describe **el sitio** y debería conocerlo cualquier
 | Claude Code | `CLAUDE.md` (→ este archivo) + `.claude/skills/` + `.claude/agents/` (symlinks) |
 | Codex / OpenCode / Amp | `AGENTS.md` directamente; skills en `skills/*/SKILL.md` como playbooks |
 | Cursor | `.cursor/rules/wp-development.mdc` (reenvía aquí) |
+| Kilo Code | `AGENTS.md` nativo + skills vía `.claude/skills/` (estándar Agent Skills); `agents/` como prompts de referencia para custom modes |
 
-Los MCP por sitio se configuran por herramienta (Claude: `~/.claude.json`; Cursor: `.cursor/mcp.json`; Codex: `~/.codex/config.toml`; OpenCode: `opencode.json`). El skill `wp-onboard-site` cubre el alta en las cuatro.
+Los MCP por sitio se configuran por herramienta (Claude: `~/.claude.json`; Cursor: `.cursor/mcp.json`; Codex: `~/.codex/config.toml`; OpenCode: `opencode.json`; Kilo: `~/.config/kilo/kilo.jsonc`). El skill `wp-onboard-site` cubre el alta en las cinco.
 
 ## Datos locales (NO versionados)
 
 Este repo es un **kit clonable**: nunca contiene datos de sitios ni clientes reales. Lo local vive solo en tu máquina (`.gitignore`):
 
 - `registry/sites.json` — tus sitios reales. Se crea desde `registry/sites.example.json`.
-- `sites/{slug}/NOTAS.md` — memoria de cada sitio (solo `sites/_template/` se versiona).
+- `sites/{slug}/NOTAS.md` y `sites/{slug}/PLAN.md` — memoria y cola de briefs de cada sitio (solo `sites/_template/` se versiona). En entorno SA el backlog maestro sigue siendo OPS; PLAN.md es el detalle por sitio.
 - `state.md`, `.claude/settings.local.json` — estado y permisos de tu máquina.
 - Credenciales: **jamás** en este árbol, ni versionadas ni sin versionar. Access store / gestor de secretos.
 

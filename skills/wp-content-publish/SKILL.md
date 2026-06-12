@@ -19,7 +19,7 @@ Posts de blog, noticias, fichas, textos de páginas — donde manda el contenido
 1. `wp-site-session` hecho. Idioma del sitio según el campo `language` del registry — nunca asumirlo.
 2. **Investigación mínima**: leer 2-3 posts existentes del sitio → tono, estructura, categorías y tags reales (no inventar taxonomía nueva sin avisar).
 3. **Redacción** (subagente wp-content-writer para lotes):
-   - Castellano perfecto → checklist `Playbook/rules/copy-review.md`. Inglés → registro editorial del sitio.
+   - Castellano perfecto → checklist `Playbook/rules/copy-review.md` (capa SA; si no existe en tu entorno, exige el mismo estándar con criterio propio). Inglés → registro editorial del sitio.
    - SEO on-page: title ≤60 chars con keyword, meta description 120-155, H1 único, H2/H3 jerárquicos, slug corto, enlaces internos a 2-3 contenidos existentes, alt text en imágenes.
    - Detectar el plugin SEO del sitio (Yoast/RankMath/SEOPress) en la lista de plugins y escribir sus meta fields, no inventar campos.
 4. **Imágenes**: solo de fuentes con licencia (media library existente, Unsplash, generadas). Subir con filename descriptivo + alt. No hotlinking.
@@ -33,4 +33,4 @@ Mostrar 1 post completo de muestra → OK del humano → resto del lote con la m
 
 ## SEO audit
 
-Para auditoría SEO de contenido existente usa la skill global `market-seo`; esta skill es de producción de contenido.
+Para auditoría SEO de contenido existente usa la skill global `market-seo` si está instalada (entorno SA); si no, audita con los criterios on-page del punto 3. Esta skill es de producción de contenido.

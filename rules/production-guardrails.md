@@ -1,7 +1,7 @@
 # Regla dura — Guardarraíles por entorno (sitios WP vía Kodavio)
 
 > La matriz que decide qué puede hacer un agente en cada sitio. El `env` lo fija `registry/sites.json`, **no** el `environment_type` que reporte WordPress.
-> Hereda de: `Playbook/rules/sensitive-actions-log.md` (gates) y `Playbook/SYSTEM.md` (Human Gates globales).
+> Hereda de: `Playbook/rules/sensitive-actions-log.md` (gates) y `Playbook/SYSTEM.md` (Human Gates globales) — capa SA, opcional fuera de Soluciones Abiertas (ver AGENTS.md › Doctrina superior).
 
 ## Invariantes (todos los entornos)
 

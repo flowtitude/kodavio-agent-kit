@@ -1,7 +1,9 @@
 #!/usr/bin/env bash
 # add-site.sh — alta interactiva de un sitio WordPress en el kit.
 # Crea la entrada en registry/sites.json, la memoria sites/{slug}/NOTAS.md
-# y muestra (u opcionalmente registra) la config MCP. Sin credenciales en disco.
+# y muestra (u opcionalmente registra) la config MCP. Las credenciales nunca
+# tocan este repo (ojo: 'claude mcp add' las guarda en ~/.claude.json).
+# Requiere: bash, curl, python3.
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
@@ -16,10 +18,19 @@ bold "── Kodavio Agent Kit · alta de sitio ──"
 
 url=$(ask "URL del sitio (https://...): ")
 url="${url%/}/"
-case "$url" in https://*) ;; *) echo "✖ La URL debe empezar por https://"; exit 1;; esac
+case "$url" in
+  https://*) ;;
+  http://*) echo "⚠ http:// solo es aceptable para sitios de desarrollo local.";;
+  *) echo "✖ La URL debe empezar por https:// (o http:// en local)"; exit 1;;
+esac
 
-domain=$(echo "$url" | sed -E 's#https://([^/]+)/?.*#\1#')
-slug_default=$(echo "$domain" | sed 's/^www\.//; s/[.-]/_/g')
+domain=$(echo "$url" | sed -E 's#https?://([^/]+)/?.*#\1#')
+base="${domain#www.}"
+case "$base" in
+  staging.*) slug_default="$(echo "${base#staging.}" | sed 's/[.-]/_/g')_staging";;
+  dev.*)     slug_default="$(echo "${base#dev.}" | sed 's/[.-]/_/g')_dev";;
+  *)         slug_default=$(echo "$base" | sed 's/[.-]/_/g');;
+esac
 slug=$(ask "Slug [${slug_default}]: "); slug="${slug:-$slug_default}"
 
 name=$(ask "Nombre del sitio/cliente: ")
@@ -40,7 +51,8 @@ bold "Comprobando endpoint Kodavio..."
 endpoint="${url}wp-json/mcp/kodavio"
 http=$(curl -s -o /dev/null -w '%{http_code}' --max-time 10 "$endpoint" || echo "000")
 case "$http" in
-  200|401|403) echo "✔ Kodavio responde en $endpoint (HTTP $http)";;
+  200) echo "✔ Kodavio responde en $endpoint (HTTP 200)";;
+  401|403) echo "✔ Endpoint protegido (HTTP $http) — probablemente instalado; confirma tras registrar la credencial";;
   404) echo "⚠ HTTP 404 — Kodavio no parece instalado. Instálalo y reactiva las AI abilities (skill wp-onboard-site)."; ;;
   *)   echo "⚠ Sin respuesta válida (HTTP $http). Verifica la URL o la conectividad."; ;;
 esac
@@ -79,8 +91,9 @@ d.setdefault('sites', []).append({
     "caveats": ["Completar tras el primer kodavio/wp-get-config-summary real"],
     "verified": None
 })
-json.dump(d, open(p, 'w'), indent=2, ensure_ascii=False)
-open(p, 'a').write('\n')
+with open(p, 'w') as f:
+    json.dump(d, f, indent=2, ensure_ascii=False)
+    f.write('\n')
 print(f"✔ '{slug}' añadido a registry/sites.json (env={os.environ['ENV']})")
 PY
 
@@ -93,7 +106,7 @@ fi
 echo
 bold "── Conexión MCP ──"
 echo "Usuario de aplicación dedicado + Application Password desde wp-admin → Kodavio → Setup."
-echo "Plantillas para Cursor/Codex/OpenCode: docs/mcp-config-examples.md"
+echo "Plantillas para Cursor/Codex/OpenCode/Kilo: docs/mcp-config-examples.md"
 echo
 reg=$(ask "¿Registrar ahora en Claude Code con 'claude mcp add'? (s/N): ")
 if [ "${reg:-n}" = "s" ] || [ "${reg:-n}" = "S" ]; then
@@ -103,7 +116,7 @@ if [ "${reg:-n}" = "s" ] || [ "${reg:-n}" = "S" ]; then
     --env WP_API_URL="$endpoint" \
     --env WP_API_USERNAME="$wpuser" \
     --env WP_API_PASSWORD="$wppass" \
-    -- npx -y @automattic/mcp-wordpress-remote@latest \
+    -- npx -y @automattic/mcp-wordpress-remote@0.3.4 \
     && echo "✔ MCP '$slug' registrado. Reinicia el agente para que lo cargue."
 else
   cat <<EOF
@@ -113,7 +126,7 @@ Comando para cuando tengas la credencial:
     --env WP_API_URL="$endpoint" \\
     --env WP_API_USERNAME="<usuario>" \\
     --env WP_API_PASSWORD="<app-password>" \\
-    -- npx -y @automattic/mcp-wordpress-remote@latest
+    -- npx -y @automattic/mcp-wordpress-remote@0.3.4
 EOF
 fi
 

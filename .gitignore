@@ -7,6 +7,8 @@ state.md
 # Config local de herramientas
 .claude/settings.local.json
 .cursor/mcp.json
+kilo.jsonc
+.kilo/
 
 # Sistema
 .DS_Store

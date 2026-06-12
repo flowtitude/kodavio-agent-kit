@@ -1,6 +1,6 @@
 # Kodavio Agent Kit
 
-Workspace clonable para operar **instalaciones WordPress en vivo con agentes de IA** (Claude Code, Cursor, Codex, OpenCode) a través del plugin **[Kodavio](https://flowtitude.com)**.
+Workspace clonable para operar **instalaciones WordPress en vivo con agentes de IA** (Claude Code, Cursor, Codex, OpenCode, Kilo Code) a través del plugin **[Kodavio](https://flowtitude.com)**.
 
 Kodavio convierte cada WordPress en un servidor MCP con abilities seguras para builders (Bricks, Elementor, Gutenberg), diseño, conversión, contenido dinámico y administración. Este kit es la **capa cliente** que le falta a tu máquina: registro de sitios, guardarraíles por entorno, protocolo de trabajo, skills de orquestación y subagentes — todo en markdown portable, sin lock-in a ninguna herramienta.
 
@@ -37,11 +37,12 @@ Kodavio convierte cada WordPress en un servidor MCP con abilities seguras para b
 
 ## Requisitos
 
-- **Un agente de IA** con soporte MCP: Claude Code (recomendado), Cursor, Codex u OpenCode.
+- **Un agente de IA** con soporte MCP: Claude Code (recomendado), Cursor, Codex, OpenCode o Kilo Code.
 - **Node.js ≥ 18** (el proxy MCP `@automattic/mcp-wordpress-remote` corre con `npx`).
 - **Plugin Kodavio** instalado en cada WordPress que quieras operar (ZIP de release de la beta).
 - Acceso de administrador a esos WordPress para generar la Application Password del agente.
-- `git` y, opcionalmente, `gh` (GitHub CLI).
+- `git`, `python3` (lo usa `scripts/add-site.sh`) y, opcionalmente, `gh` (GitHub CLI).
+- En Windows: clona con symlinks habilitados (`git clone -c core.symlinks=true`, requiere Developer Mode); si no, `CLAUDE.md` y `.claude/{skills,agents}` llegan rotos y Claude Code no carga las skills.
 
 ## Instalación
 
@@ -92,7 +93,7 @@ Pide a tu agente: *"Lista las skills disponibles"* → deben aparecer las `wp-*`
 /wp-onboard-site
 ```
 
-(en Claude Code; en Cursor/Codex/OpenCode: *"da de alta un sitio nuevo"*). El agente te entrevista, verifica que Kodavio responde, registra el MCP en tu herramienta, rellena `registry/sites.json` con los **datos reales** del sitio (builder, theme, caveats vía `wp-get-config-summary`) y crea su memoria.
+(en Claude Code; en Cursor/Codex/OpenCode/Kilo: *"da de alta un sitio nuevo"*). El agente te entrevista, verifica que Kodavio responde, registra el MCP en tu herramienta, rellena `registry/sites.json` con los **datos reales** del sitio (builder, theme, caveats vía `wp-get-config-summary`) y crea su memoria.
 
 **Vía terminal (sin agente):**
 
@@ -106,7 +107,7 @@ Versión manual (la versión completa y a prueba de fallos es el skill [`wp-onbo
 
 1. **Instala Kodavio** en el WordPress (Plugins → subir ZIP → activar).
 2. En **wp-admin → Kodavio → Setup**: activa las AI abilities y genera una **Application Password** para un usuario dedicado al agente (rol mínimo necesario; *editor* si solo va a tocar contenido). Deja el PHP editing en OFF salvo que lo necesites.
-3. **Registra el server MCP** en tu herramienta — plantillas exactas para Claude/Cursor/Codex/OpenCode en [docs/mcp-config-examples.md](docs/mcp-config-examples.md). Endpoint: `https://tudominio.com/wp-json/mcp/kodavio`.
+3. **Registra el server MCP** en tu herramienta — plantillas exactas para Claude/Cursor/Codex/OpenCode/Kilo en [docs/mcp-config-examples.md](docs/mcp-config-examples.md). Endpoint: `https://tudominio.com/wp-json/mcp/kodavio`.
 4. **Reinicia el agente** y verifica: pide un `kodavio/wp-get-config-summary` del sitio.
 5. **Da de alta el sitio** en `registry/sites.json` (campo a campo según la plantilla) con los datos reales del paso 4 — sobre todo `env` (production/staging/development), que es lo que activa los guardarraíles.
 6. Crea su memoria: `cp -r sites/_template sites/{slug}` y rellena la ficha.
@@ -208,7 +209,7 @@ kodavio-agent-kit/
 ├── rules/                     guardarraíles por entorno · protocolo Kodavio · código en vivo
 ├── scripts/add-site.sh        alta de sitios por terminal (el comando es /wp-onboard-site)
 ├── skills/                    12 skills de orquestación, planificación y diseño (SKILL.md portables)
-├── agents/                    5 subagentes especializados
+├── agents/                    10 subagentes especializados
 ├── workflows/WORKFLOWS.md     enrutado petición → flujo → skill → gates
 ├── sites/
 │   ├── _template/NOTAS.md     ← plantilla de memoria por sitio
@@ -226,6 +227,7 @@ kodavio-agent-kit/
 | Codex | `AGENTS.md` | `~/.codex/config.toml` |
 | OpenCode | `AGENTS.md` | `opencode.json` |
 | Cursor | `.cursor/rules/wp-development.mdc` → AGENTS.md | `.cursor/mcp.json` |
+| Kilo Code | `AGENTS.md` nativo + skills vía `.claude/skills` (Agent Skills) | `~/.config/kilo/kilo.jsonc` |
 
 Fuente única: `AGENTS.md`. Todo lo demás son punteros — edita siempre AGENTS.md.
 
@@ -235,7 +237,7 @@ Fuente única: `AGENTS.md`. Todo lo demás son punteros — edita siempre AGENTS
 git pull
 ```
 
-Tus datos locales (`sites.json`, `sites/*`, `state.md`) no se tocan: están fuera de git. Si una actualización cambia el esquema de `sites.example.json`, el changelog del repo lo indica y migras tu `sites.json` a mano.
+Tus datos locales (`sites.json`, `sites/*`, `state.md`) no se tocan: están fuera de git. Si una actualización cambia el esquema de `sites.example.json`, [CHANGELOG.md](CHANGELOG.md) lo indica y migras tu `sites.json` a mano.
 
 Mejoras y errores del **kit** → issues/PRs en este repo. Errores del **plugin Kodavio** → canal de la beta de Flowtitude.
 

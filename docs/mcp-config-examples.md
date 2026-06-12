@@ -3,7 +3,7 @@
 > Cómo registrar un sitio WordPress con Kodavio como server MCP en cada herramienta.
 > Convención de slug: dominio con underscores (`example_com`), sufijo `_staging` / `_dev` si aplica.
 > Endpoint preferido: `https://{dominio}/wp-json/mcp/kodavio` (alias legacy: `/wp-json/mcp/mcp-adapter-default-server`).
-> Proxy stdio→HTTP: [`@automattic/mcp-wordpress-remote`](https://www.npmjs.com/package/@automattic/mcp-wordpress-remote).
+> Proxy stdio→HTTP: [`@automattic/mcp-wordpress-remote`](https://www.npmjs.com/package/@automattic/mcp-wordpress-remote). Versión **pineada** (`@0.3.4`), no `@latest`: este proceso recibe las credenciales de tus sitios — actualiza la versión a conciencia, no automáticamente.
 
 ⚠ **Credenciales**: usuario de aplicación dedicado al agente + Application Password generada desde Kodavio (wp-admin → Kodavio → Setup). Estas configs viven en tu máquina, fuera de este repo. No las pegues en ningún archivo versionado.
 
@@ -16,7 +16,7 @@ claude mcp add example_com --scope user \
   --env WP_API_URL="https://example.com/wp-json/mcp/kodavio" \
   --env WP_API_USERNAME="agente-ia" \
   --env WP_API_PASSWORD="xxxx xxxx xxxx xxxx xxxx xxxx" \
-  -- npx -y @automattic/mcp-wordpress-remote@latest
+  -- npx -y @automattic/mcp-wordpress-remote@0.3.4
 ```
 
 O a mano en `~/.claude.json` → `mcpServers`:
@@ -25,7 +25,7 @@ O a mano en `~/.claude.json` → `mcpServers`:
 "example_com": {
   "type": "stdio",
   "command": "npx",
-  "args": ["-y", "@automattic/mcp-wordpress-remote@latest"],
+  "args": ["-y", "@automattic/mcp-wordpress-remote@0.3.4"],
   "env": {
     "WP_API_URL": "https://example.com/wp-json/mcp/kodavio",
     "WP_API_USERNAME": "agente-ia",
@@ -43,7 +43,7 @@ O a mano en `~/.claude.json` → `mcpServers`:
   "mcpServers": {
     "example_com": {
       "command": "npx",
-      "args": ["-y", "@automattic/mcp-wordpress-remote@latest"],
+      "args": ["-y", "@automattic/mcp-wordpress-remote@0.3.4"],
       "env": {
         "WP_API_URL": "https://example.com/wp-json/mcp/kodavio",
         "WP_API_USERNAME": "agente-ia",
@@ -61,7 +61,7 @@ O a mano en `~/.claude.json` → `mcpServers`:
 ```toml
 [mcp_servers.example_com]
 command = "npx"
-args = ["-y", "@automattic/mcp-wordpress-remote@latest"]
+args = ["-y", "@automattic/mcp-wordpress-remote@0.3.4"]
 
 [mcp_servers.example_com.env]
 WP_API_URL = "https://example.com/wp-json/mcp/kodavio"
@@ -78,7 +78,28 @@ WP_API_PASSWORD = "xxxx xxxx xxxx xxxx xxxx xxxx"
   "mcp": {
     "example_com": {
       "type": "local",
-      "command": ["npx", "-y", "@automattic/mcp-wordpress-remote@latest"],
+      "command": ["npx", "-y", "@automattic/mcp-wordpress-remote@0.3.4"],
+      "environment": {
+        "WP_API_URL": "https://example.com/wp-json/mcp/kodavio",
+        "WP_API_USERNAME": "agente-ia",
+        "WP_API_PASSWORD": "xxxx xxxx xxxx xxxx xxxx xxxx"
+      }
+    }
+  }
+}
+```
+
+## Kilo Code
+
+Kilo lee `AGENTS.md` y las skills (`.claude/skills/`, estándar Agent Skills) sin configuración extra. Los servers MCP van bajo la clave `mcp` de `kilo.jsonc` — **usa el global** `~/.config/kilo/kilo.jsonc` para que la credencial no caiga en el árbol del proyecto (el de proyecto, `kilo.jsonc`/`.kilo/`, está en `.gitignore` por si acaso):
+
+```jsonc
+// ~/.config/kilo/kilo.jsonc
+{
+  "mcp": {
+    "example_com": {
+      "type": "local",
+      "command": ["npx", "-y", "@automattic/mcp-wordpress-remote@0.3.4"],
       "environment": {
         "WP_API_URL": "https://example.com/wp-json/mcp/kodavio",
         "WP_API_USERNAME": "agente-ia",

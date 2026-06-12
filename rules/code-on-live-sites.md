@@ -21,4 +21,4 @@
 
 ## CSS
 
-CSS sigue `Playbook/rules/css-workflow.md`. En sitios Bricks: clases globales y design tokens del sistema activo, no estilos inline por elemento. Cambios de tokens = flujo `design_system`, no ediciones sueltas.
+CSS sigue `Playbook/rules/css-workflow.md` (capa SA — si esa ruta no existe en tu entorno, omítela y aplica lo que sigue). En sitios Bricks: clases globales y design tokens del sistema activo, no estilos inline por elemento. Cambios de tokens = flujo `design_system`, no ediciones sueltas.

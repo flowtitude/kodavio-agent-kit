@@ -15,12 +15,12 @@ Pregunta TODO junto, no por goteo:
 2. Entorno **operativo**: production / staging / development (explica que esto decide los guardarraíles, no lo que diga WP).
 3. Cliente/propietario (o "propio").
 4. ¿Kodavio ya instalado, o hay que instalarlo? (si hay que instalarlo: ¿tiene el ZIP y acceso wp-admin?)
-5. ¿En qué herramientas registrar el MCP? (Claude Code / Cursor / Codex / OpenCode)
+5. ¿En qué herramientas registrar el MCP? (Claude Code / Cursor / Codex / OpenCode / Kilo Code)
 
 ## Fase 2 — Verificación del plugin
 
 1. Comprueba el endpoint: `{url}/wp-json/mcp/kodavio` → 200/401/403 = instalado; 404 = falta.
-2. Si falta: guía la instalación (Plugins → subir ZIP → activar; en producción, instalar plugin = **Human Gate** ya aprobado por contexto de este alta). Luego: wp-admin → Kodavio → Setup → activar AI abilities. PHP editing: OFF salvo necesidad.
+2. Si falta: guía la instalación (Plugins → subir ZIP → activar). En producción, instalar el plugin es **Human Gate**: confirma explícitamente ("¿instalo Kodavio en ESTE production?") antes de guiar — el contexto del alta no lo aprueba solo. Luego: wp-admin → Kodavio → Setup → activar AI abilities. PHP editing: OFF salvo necesidad.
 3. Pide al usuario que genere la **Application Password** (usuario dedicado al agente, rol mínimo viable) y recuérdale: la credencial va a su gestor de secretos, nunca a un archivo del kit.
 
 ## Fase 3 — Registro MCP
