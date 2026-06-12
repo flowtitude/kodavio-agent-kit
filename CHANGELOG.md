@@ -6,6 +6,7 @@
 ## 2026-06-12
 
 ### Añadido
+- **Credenciales sin texto plano** (`docs/credentials.md` + `scripts/wp-mcp-launch.sh|.ps1`): lanzador multiplataforma que lee la Application Password del almacén de secretos del SO (Keychain / libsecret / `pass` / Credential Manager / python-keyring) y la inyecta al proxy en el arranque — los archivos de config del agente dejan de contener secretos en macOS, Linux y Windows.
 - **Soporte Kilo Code**: Kilo lee `AGENTS.md` y las skills (`.claude/skills/`, estándar Agent Skills) sin configuración. Plantilla MCP (`kilo.jsonc`) en `docs/mcp-config-examples.md`; `kilo.jsonc`/`.kilo/` en `.gitignore`.
 - `sites/_template/PLAN.md`: plantilla de la cola de briefs que crea `wp-site-plan`.
 - Este CHANGELOG (el README lo prometía para migraciones de esquema).

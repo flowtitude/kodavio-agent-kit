@@ -7,6 +7,8 @@
 
 ⚠ **Credenciales**: usuario de aplicación dedicado al agente + Application Password generada desde Kodavio (wp-admin → Kodavio → Setup). Estas configs viven en tu máquina, fuera de este repo. No las pegues en ningún archivo versionado.
 
+> 🔐 Las plantillas de abajo dejan la password **en claro** en el archivo de config de tu herramienta. Para evitarlo (recomendado), usa el lanzador multiplataforma del kit con el almacén de secretos del SO: [credentials.md](credentials.md).
+
 ## Claude Code
 
 CLI (scope user — disponible en todos los proyectos):

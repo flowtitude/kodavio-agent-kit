@@ -193,6 +193,8 @@ Este repo **nunca contiene datos de sitios o clientes reales**. La separación l
 | `sites/_template/` | `state.md`, configs locales de herramientas |
 | Plantillas MCP (sin credenciales) | Credenciales → access store / gestor de secretos, JAMÁS en este árbol |
 
+Las Application Passwords pueden además quedarse **fuera de los archivos de config de tu agente**: el lanzador `scripts/wp-mcp-launch.sh|.ps1` las lee del almacén de secretos del SO (Keychain / libsecret / `pass` / Credential Manager) en el arranque del proxy — [docs/credentials.md](docs/credentials.md).
+
 Antes de hacer commit, revisa que no se cuele nada local: `git status` no debe listar `sites/` (salvo `_template`) ni `registry/sites.json`.
 
 ## Estructura del repo
@@ -207,7 +209,9 @@ kodavio-agent-kit/
 │   ├── sites.example.json     ← plantilla del registro de sitios
 │   └── sites.json             (local, no versionado) tus sitios reales
 ├── rules/                     guardarraíles por entorno · protocolo Kodavio · código en vivo
-├── scripts/add-site.sh        alta de sitios por terminal (el comando es /wp-onboard-site)
+├── scripts/
+│   ├── add-site.sh            alta de sitios por terminal (el comando es /wp-onboard-site)
+│   └── wp-mcp-launch.sh|.ps1  lanzador MCP con credencial desde el almacén del SO
 ├── skills/                    12 skills de orquestación, planificación y diseño (SKILL.md portables)
 ├── agents/                    10 subagentes especializados
 ├── workflows/WORKFLOWS.md     enrutado petición → flujo → skill → gates
@@ -216,6 +220,7 @@ kodavio-agent-kit/
 │   └── {slug}/                (local, no versionado) memoria de cada sitio
 └── docs/
     ├── mcp-config-examples.md plantillas de conexión MCP por herramienta
+    ├── credentials.md         credenciales sin texto plano (almacén del SO)
     └── kodavio-vs-kit.md      doctrina: dónde vive cada capacidad nueva (plugin vs kit)
 ```
 

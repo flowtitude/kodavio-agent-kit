@@ -25,7 +25,7 @@ Pregunta TODO junto, no por goteo:
 
 ## Fase 3 — Registro MCP
 
-1. Slug = dominio con underscores (+ `_staging`/`_dev`). Plantillas exactas por herramienta: `docs/mcp-config-examples.md`.
+1. Slug = dominio con underscores (+ `_staging`/`_dev`). Plantillas exactas por herramienta: `docs/mcp-config-examples.md`. Ofrece el modo **sin credencial en la config** (`docs/credentials.md`): la password va al almacén de secretos del SO y el server usa `scripts/wp-mcp-launch.sh` — recomendado, multiplataforma.
 2. Para Claude Code puedes ejecutar tú el comando `claude mcp add {slug} ...` (el usuario pega la credencial cuando se le pida, o la pasa por variable de entorno — nunca la escribas tú en un archivo).
 3. Avisa: hay que **reiniciar el agente** para que cargue el server nuevo. Si es esta misma sesión, pide al usuario reiniciar y retomar con `/wp-onboard-site` indicando "continuar alta de {slug}".
 
