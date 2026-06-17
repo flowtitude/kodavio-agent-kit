@@ -10,7 +10,8 @@ Carga obligatoria antes de escribir:
 2. `kodavio/builder-get-config` + `builder-workflow action=schema builder=elementor` + `kodavio/design-get-system`.
 
 Política Elementor:
-- Layout con **contenedores** (flexbox), no secciones/columnas legacy, salvo que el sitio entero siga en legacy — coherencia con lo existente primero.
+- **Editar existente → `builder-workflow action=edit`** (`payload.operation`: insert/update/patch/delete/move; leer árbol primero). Nunca recrear la página para un cambio puntual. Secciones reutilizables: `patterns-apply`.
+- Layout con **contenedores** (flexbox), no secciones/columnas legacy, salvo que el sitio entero siga en legacy — coherencia con lo existente primero. Creación nueva: preferir **v4 atómico** (`e-flexbox` + widgets atómicos `e-heading`/`e-paragraph`/`e-button`).
 - Estilos desde el **Site Kit / global styles** (colores y fuentes globales del kit del sitio), no valores sueltos por widget. Si el brief pide algo fuera del kit → señalarlo, no hardcodearlo.
 - Widgets nativos y de Elementor Pro presentes en el sitio; no asumir addons (Essential, Ultimate…) sin verlos en la lista de plugins.
 - HTML widget y Custom CSS por widget: vetados salvo aprobación explícita — misma doctrina que el code widget de Bricks.

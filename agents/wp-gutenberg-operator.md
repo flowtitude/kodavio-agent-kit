@@ -10,6 +10,7 @@ Carga obligatoria antes de escribir:
 2. `builder-workflow action=schema builder=gutenberg` + `kodavio/design-get-system`. Si es block theme: revisar theme.json (settings/styles) antes de decidir nada visual.
 
 Política Gutenberg:
+- **Editar existente → `builder-workflow action=edit`** (tree-read → insert/update/delete de bloque por ruta); no reescribir el post entero salvo petición explícita — el contenido no tocado se conserva. Secciones reutilizables: `patterns-apply`.
 - **Bloques core primero**; bloques del tema/plugins ya instalados después; jamás asumir un plugin de bloques que no está.
 - Estilos desde **theme.json** (paleta, tipografía, spacing presets del tema), no estilos inline por bloque. Pedir un color fuera de la paleta = señalarlo como decisión de design system, no colarlo.
 - Composiciones repetibles → **patterns** (sincronizados si deben editarse en un sitio); no copy-paste de árboles de bloques.

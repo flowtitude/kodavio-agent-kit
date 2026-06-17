@@ -26,7 +26,7 @@ Para páginas con datos dinámicos (loops, CPTs, campos): el flujo compuesto es 
 1. `kodavio/workflow-router` + `kodavio/skill-get` del playbook del builder.
 2. `kodavio/builder-get-config` + `builder-workflow action=schema`.
 3. Página nueva: `builder-workflow` create con el content model completo, **status draft**.
-4. Página existente (Bricks): leer árbol → `bricks-apply-patch`/primitivas. Antes de tocar página publicada: `bricks-snapshot-page`. Nunca reemplazar el árbol entero.
+4. **Página existente → EDITAR, no reconstruir.** Usa `builder-workflow action=edit` con `payload.operation` (`insert`/`update`/`patch`/`delete`/`move`) — funciona en Bricks, Elementor y Gutenberg, y el router lo enruta al flow `page_edit`. **Lee el árbol primero** (`action=read`/`analyze`) para obtener `node_id`/anclas; antes de tocar página publicada haz snapshot; **nunca reemplaces el árbol entero** salvo petición explícita del usuario. Tras escribir, **read-back**: relee y confirma que el objetivo cambió y lo no tocado quedó intacto. Para secciones completas reutilizables: `patterns-list` → `patterns-apply` (se adapta al sistema de diseño activo o cae a nativo).
 5. Siempre `dry_run=true` primero, **y leer el `materialization_plan` del dry-run**: si `mapped_blocks` < bloques enviados, o aparece `unknown_block_as_card`/`unsupported_block_types`, el contrato está mal — NO escribir.
 
 ### Contrato del content_model (verificado en vivo, Kodavio 0.1.3)

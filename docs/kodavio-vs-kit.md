@@ -6,6 +6,16 @@
 
 **Si X requiere código ejecutándose en el WordPress → Kodavio (ability). Si X es conocimiento, criterio o proceso sobre abilities que ya existen → kit (skill).**
 
+## Moat: qué NUNCA va en el kit
+
+Regla dura de protección del producto: **el kit no debe contener nada que el usuario pueda aprovechar sin Kodavio.**
+
+El conocimiento del *formato* de un builder (el JSON de Bricks, el `_elementor_data`, el markup de bloques de Gutenberg) es **commodity** —público y reproducible desde el fuente del builder—, así que **no es moat y no va en el kit**: vive en el plugin como **validación/ejecución verificada** (linters de fidelidad, schema-discovery, contratos de escritura con dry-run/backup), donde se versiona, se testea y solo sirve a través de las abilities.
+
+El kit solo lleva lo que es **inerte sin las abilities vivas de Kodavio**: heurística "editar vs reconstruir", ruta por verbo del usuario, pase de diseño, vetos del operador, gates por entorno, read-back de fidelidad. Prueba rápida: si algo que ibas a poner en el kit se puede **pegar a mano** en un sitio sin Kodavio, va al plugin como ejecución, o no va.
+
+Fuente de verdad de la **guía técnica de edición** (qué ability/acción, flags, contrato del payload): el **plugin**, vía `skill-get` (`bricks-build-page`, `elementor-build-page`, `gutenberg-build-page`). El kit **refiere** a esos playbooks y añade solo criterio del operador; no duplica el contrato técnico (duplicarlo deriva al cambiar la versión instalada).
+
 ## Tabla de decisión
 
 | La capacidad nueva… | Dónde | Por qué |
