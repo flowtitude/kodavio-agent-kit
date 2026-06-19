@@ -142,6 +142,7 @@ Este repo es un **kit clonable**: nunca contiene datos de sitios ni clientes rea
 - `registry/sites.json` — tus sitios reales. Se crea desde `registry/sites.example.json`.
 - `sites/{slug}/NOTAS.md` y `sites/{slug}/PLAN.md` — memoria y cola de briefs de cada sitio (solo `sites/_template/` se versiona). En entorno SA el backlog maestro sigue siendo OPS; PLAN.md es el detalle por sitio.
 - `state.md`, `.claude/settings.local.json` — estado y permisos de tu máquina.
+- **Skills/subagentes personales del operador** — créalos en `skills/<nombre>/` (visibles para Claude Code porque `.claude/skills` es symlink a `skills/`) y lista su ruta en **`.sync-keep.local`** (una por línea, p. ej. `skills/intake/`). `sync-installed.sh` los preserva (no los borra al sincronizar) y `.sync-keep.local` está gitignored, así que tus nombres personales nunca llegan al kit compartido. Para tu flujo propio (intake/analyze/pricing/pm/track…) sin filtrarlo a otros.
 - Credenciales: **jamás** en este árbol, ni versionadas ni sin versionar. Access store / gestor de secretos.
 
 Si un archivo versionable necesita mencionar un sitio concreto, no lo hagas: la referencia va a `sites.json` (caveats) o a las NOTAS del sitio.
@@ -149,3 +150,16 @@ Si un archivo versionable necesita mencionar un sitio concreto, no lo hagas: la 
 ## Doctrina superior (capa SA — opcional fuera de Soluciones Abiertas)
 
 Las referencias a `Playbook/*`, `Handbook/*` y OPS (`ops.sh`) aplican en el entorno de Soluciones Abiertas. Si clonaste este kit y esas rutas no existen, **omítelas**: el resto del sistema es autosuficiente. En entorno SA: Human Gates, autonomía, WIP y comunicación heredan de `Playbook/SYSTEM.md`; acciones sensibles en producción → `Playbook/rules/sensitive-actions-log.md` SIEMPRE (fuera de SA: registra el equivalente en las NOTAS del sitio).
+
+<!-- KOMANDESK:AGENT_KIT:START version=2026-06-12.v1 hash=a572d7edf637673790b212a8516b0fe1cf35feece8bd5aa644c343c3139071f2 -->
+## Komandesk Agent Kit
+
+- Version: 2026-06-12.v1
+- Project: Kodavio Agent Kit
+- Type: meta
+- Source of truth: Komandesk (https://ops.solucionesabiertas.net).
+- Read first: `docs/komandesk-agent-kit.md`, `state.md` si existe.
+- Local kit role: bootstrap instructions, commands, skills, credentials references and project context.
+- Credentials: references only; never print or commit secret values.
+- Before closing: read `GET /api/tasks/:id/agent-work`.
+<!-- KOMANDESK:AGENT_KIT:END -->

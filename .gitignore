@@ -10,5 +10,16 @@ state.md
 kilo.jsonc
 .kilo/
 
+# Capa personal del operador: vive solo en la copia instalada, nunca en el kit compartido.
+# Las skills/subagentes personales se listan en .sync-keep.local, que la sync preserva.
+.sync-keep.local
+
 # Sistema
 .DS_Store
+# Komandesk Agent Kit local secrets
+.komandesk/secrets.local.env
+.komandesk/credentials.local.json
+.komandesk/*.secret
+.komandesk/*.secret.*
+.komandesk/*.bak
+.komandesk/*.tmp

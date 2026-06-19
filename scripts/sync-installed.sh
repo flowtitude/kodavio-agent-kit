@@ -37,6 +37,14 @@ EXCLUDES=(
   --exclude='secrets.local.env'
 )
 
+# Personal skills/agents the operator wants kept on sync: list their paths (relative to the
+# kit root, one per line) in .sync-keep.local inside the installed copy. That file is itself
+# excluded (*.local) and never lives in the shared kit, so personal names never leak here.
+KEEP_FILE="$TARGET_DIR/.sync-keep.local"
+if [[ -f "$KEEP_FILE" ]]; then
+  EXCLUDES+=(--exclude-from="$KEEP_FILE")
+fi
+
 rsync -a --delete "${EXCLUDES[@]}" "$SOURCE_DIR"/ "$TARGET_DIR"/
 
 echo "[sync] Source -> installed copy synced."
