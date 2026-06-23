@@ -1,7 +1,7 @@
-# AGENTS.md — wp-development
+# AGENTS.md — kodavio-agent-kit
 
 > Puerta de entrada para operar **instalaciones WordPress en vivo a través de Kodavio**.
-> La lee cualquier agente: Claude Code, Cursor, Codex, OpenCode, Kilo Code, Mavis.
+> La lee cualquier agente: Claude Code, Cursor, Codex, OpenCode, Kilo Code.
 > Fuente única: este archivo. `CLAUDE.md` y `.cursor/rules/` son punteros, no copias.
 
 ## Qué es
@@ -20,7 +20,7 @@ Kodavio (server-side) ya aporta: workflows, playbooks (`kodavio/skill-list`), ca
 ## Mapa
 
 ```
-wp-development/
+kodavio-agent-kit/
 ├── AGENTS.md            ← esta puerta (fuente única)
 ├── CLAUDE.md            → symlink a AGENTS.md
 ├── .cursor/rules/       → reenvía a AGENTS.md (Cursor)
@@ -43,6 +43,7 @@ Antes de tocar cualquier sitio, ejecuta el skill **`wp-site-session`**. Resumen:
 3. Si el sitio pertenece a un cliente → lee `Playbook/clients/{cliente}/HANDBOOK.md`.
 4. Por MCP: `kodavio/agent-handbook` + `kodavio/wp-get-config-summary`.
 5. Aplica la matriz de guardarraíles según `env` (abajo).
+5b. **Antes del primer write**: aplica invariantes 6 y 7 de `rules/production-guardrails.md` (env cross-check + multi-MCP guard).
 6. Para la tarea concreta: `kodavio/workflow-router` → `kodavio/skill-get` del playbook que toque.
 
 ## Matriz de guardarraíles por entorno
@@ -103,13 +104,19 @@ Regla de selección: el especialista del builder del sitio (registry) antes que 
 ## Reglas de oro
 
 1. **El agente es el autor; Kodavio es el ejecutor.** Copy, jerarquía, dirección de diseño y CTAs los decides tú ANTES de llamar a create-page. Nunca pidas a Kodavio que se invente el contenido.
-2. **dry_run primero, siempre.** Sin excepción en writes.
+2. **dry_run primero, siempre — y LEER su salida antes del write real.** Sin excepción en writes.
 3. **Producción = drafts.** Nada se publica ni se hace visible sin Human Gate.
 4. **Nunca PHP en tema/plugin activo.** Sandbox (`wp-content/kodavio-sandbox/`) o mu-plugin con lint + backup. En producción además: gate.
 5. **Un flujo primario por tarea.** `kodavio/workflow-router` decide; los flujos compuestos en orden de dependencia.
 6. **Verificar antes de declarar éxito.** Read-back, editor-open check, página sana. El write que "no falló" no es un write verificado.
 7. **Memoria en su capa** (ver "Dos memorias" abajo). Errores → `Playbook/retros/mistakes.md`.
 8. **Comunicación en castellano**; código y tecnicismos en inglés. Contenido publicable → `rules/copy-review.md` del Playbook.
+9. **Página existente + verbo de modificación** (cambia/edita/ajusta/corrige/mueve/reordena/reemplaza) ⇒ `action=edit`, **nunca** `create`. Crear solo si la página no existe (verificar con `wp-search` o `builder-router` antes de elegir).
+10. **El nombre del server MCP == entorno.** Ej.: `acme_com` = producción; `acme_com_staging` = staging. Verifica el server destino antes de cada write; equivocarlo es escribir en el entorno equivocado.
+11. **Los caveats de `registry/sites.json` y `sites/{slug}/NOTAS.md` son vinculantes** (PHP roto, hosting frágil, sin backups). Si un caveat prohíbe la acción, para y pregunta.
+12. **No filtrar datos sensibles en el transcript.** Nunca pegues literalmente: emails completos (`user@dominio.com` → `u***@dominio.com`), contraseñas/Application Passwords, license keys, contenido de `wp-config.php`, ni valores de options que parezcan API keys (>=20 chars alfanum + guiones o base64). Reads afectadas: `wp_list_users`, `wc_list_customers`, `fluentcrm_get_contact`/`fluentcrm_list_contacts`, `kodavio/windpress-read-config`, `kodavio/wp-get-config-summary`, change logs de Kodavio. Si el operador necesita el dato, indícale el path en admin (p. ej. `Usuarios > Editar`, `WindPress > License`) y que lo lea él. Detalle: `docs/credentials.md`.
+
+> Si dudas en cualquier regla, para y pregunta. No hay penalización por preguntar; sí la hay por sobreescribir producción.
 
 ## Dos memorias: Kodavio (servidor) vs NOTAS.md (local)
 
@@ -130,7 +137,7 @@ Regla práctica: si el dato describe **el sitio** y debería conocerlo cualquier
 |---|---|
 | Claude Code | `CLAUDE.md` (→ este archivo) + `.claude/skills/` + `.claude/agents/` (symlinks) |
 | Codex / OpenCode / Amp | `AGENTS.md` directamente; skills en `skills/*/SKILL.md` como playbooks |
-| Cursor | `.cursor/rules/wp-development.mdc` (reenvía aquí) |
+| Cursor | `.cursor/rules/kodavio-agent-kit.mdc` (reenvía aquí) |
 | Kilo Code | `AGENTS.md` nativo + skills vía `.claude/skills/` (estándar Agent Skills); `agents/` como prompts de referencia para custom modes |
 
 Los MCP por sitio se configuran por herramienta (Claude: `~/.claude.json`; Cursor: `.cursor/mcp.json`; Codex: `~/.codex/config.toml`; OpenCode: `opencode.json`; Kilo: `~/.config/kilo/kilo.jsonc`). El skill `wp-onboard-site` cubre el alta en las cinco.

@@ -27,6 +27,12 @@ wp-site-session → workflow-router → skill-get (playbook) → AUTORÍA (brief
 → dry_run → [GATE si aplica] → write → wp-verifier → NOTAS.md + OPS
 ```
 
+### Contrato de cierre
+
+Una sesión **NO puede declarar PASS** sobre un write en producción sin output explícito de `wp-verifier` registrado en `sites/{slug}/NOTAS.md` (sección **Verificación** con timestamp + IDs read-back + veredicto PASS / PASS-avisos / FAIL).
+
+Si trabaja un solo agente, debe ejecutar el protocolo `wp-verifier` como **pase separado** (otra invocación, no en la misma respuesta del write) antes del cierre. Sin ese registro, la tarea queda `in_progress` y no se cierra.
+
 ## Cuándo lanzar subagentes vs hacerlo el principal
 
 - Tarea corta de un solo dominio → el agente principal con el playbook cargado basta.

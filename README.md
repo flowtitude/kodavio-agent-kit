@@ -231,7 +231,7 @@ kodavio-agent-kit/
 | Claude Code | `CLAUDE.md` → AGENTS.md + `.claude/skills` + `.claude/agents` | `~/.claude.json` |
 | Codex | `AGENTS.md` | `~/.codex/config.toml` |
 | OpenCode | `AGENTS.md` | `opencode.json` |
-| Cursor | `.cursor/rules/wp-development.mdc` → AGENTS.md | `.cursor/mcp.json` |
+| Cursor | `.cursor/rules/kodavio-agent-kit.mdc` → AGENTS.md | `.cursor/mcp.json` |
 | Kilo Code | `AGENTS.md` nativo + skills vía `.claude/skills` (Agent Skills) | `~/.config/kilo/kilo.jsonc` |
 
 Fuente única: `AGENTS.md`. Todo lo demás son punteros — edita siempre AGENTS.md.

@@ -21,6 +21,17 @@ El agente redacta el brief completo; esto NO se delega al plugin:
 
 Para páginas con datos dinámicos (loops, CPTs, campos): el flujo compuesto es `content_model_dynamic` PRIMERO (playbooks `content-model-schema`, `dynamic-data-binding`), página después.
 
+## Fase 1.5 — Decisión create vs edit (obligatoria, antes de cualquier write)
+
+Antes de tocar Kodavio, resolver la acción de forma determinista:
+
+1. **Si el usuario mencionó una página por nombre, slug o URL existente** ⇒ `action=edit` con su `post_id`, jamás `create`. Verificar con `wp-search` o `builder-router` antes de elegir.
+2. **Si el verbo del usuario es** {cambia, edita, ajusta, corrige, retoca, mejora, actualiza, mueve, reordena, reemplaza, reescribe} ⇒ `action=edit`.
+3. **Si el verbo es** {crea, construye, monta, haz desde cero, genera} **y NO existe la URL/slug** ⇒ `action=create`.
+4. **Ambigüedad o conflicto** (verbo de crear pero el slug ya existe) ⇒ preguntar una pregunta cerrada al usuario **antes** de cualquier write.
+
+No hay penalización por preguntar; hay penalización irrecuperable por reconstruir una página publicada.
+
 ## Fase 2 — Construcción
 
 1. `kodavio/workflow-router` + `kodavio/skill-get` del playbook del builder.

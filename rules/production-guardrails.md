@@ -8,8 +8,10 @@
 1. `dry_run=true` antes de CUALQUIER write. Se lee el resultado del dry-run antes del write real.
 2. Conservar originales: conversiones y ediciones de builder guardan backup/snapshot; el ID de rollback se reporta en la respuesta final.
 3. El agente redacta el contenido ANTES del write (content model / payload concreto). Nunca se delega la creatividad a Kodavio.
-4. Verificación post-write obligatoria: read-back + page health / editor-open check. Sin verificar = no está hecho.
+4. Verificación post-write obligatoria: read-back + page health / editor-open check. **Contrato de cierre**: una tarea NO puede declararse PASS sobre un write en producción sin output explícito de `wp-verifier` registrado en `sites/{slug}/NOTAS.md` (sección Verificación con timestamp + IDs read-back + veredicto PASS/PASS-avisos/FAIL). Si trabaja un solo agente, el verifier corre como **pase separado** (otra invocación, no en la misma respuesta del write). Sin ese registro la tarea queda `in_progress`, no se cierra.
 5. Toda operación elevada queda anotada: qué, dónde, backup ID, cómo revertir.
+6. **Env cross-check antes del primer write**: ejecuta `kodavio/wp-get-config-summary` y compara `environment_type` y `siteurl` contra `env` y `url` del registry. El `env` del registry sigue mandando (ver línea 3), pero ante discrepancia con `environment_type` o `siteurl` ≠ `url`: PARAR, mostrar el desajuste al humano y esperar confirmación antes de continuar. Anotar en `sites/{slug}/NOTAS.md`.
+7. **Multi-MCP guard**: si en la sesión hay cargados >1 servers Kodavio (p. ej. `acme_com` + `acme_com_staging`), antes del primer write declara explícitamente el server destino y su `env` (`'voy a escribir en acme_com_staging, env=staging'`) y, si la última instrucción del humano solo mencionó el cliente sin sufijo, espera confirmación. Aplica también cuando el slug del registry incluye sufijos `_staging`/`_dev`.
 
 ## Perfil `development`
 
@@ -40,7 +42,7 @@
 | Usuarios: crear/editar/borrar, roles | **GATE** |
 | Settings del sitio (permalinks, lectura, URLs) | **GATE** |
 | Borrar cualquier cosa | **GATE siempre**; preferir papelera/desactivar a destruir |
-| Bulk ops (>10 items) | **GATE** con muestra de 2-3 items primero |
+| Bulk ops (>10 items, contando llamadas individuales en una misma sesión) | **GATE** con muestra de 2-3 items primero. **No paralelizar writes** contra el mismo post/template (Bricks/Elementor guardan el árbol en una sola fila de postmeta como `_bricks_page_content` / `_elementor_data`; escrituras concurrentes pisan datos). Para >5 escrituras: en serie, con read-back entre lotes. |
 | Conversión de builder | Solo sobre copia/draft; tocar el original = **GATE** |
 
 **GATE** = parar, presentar plan + impacto + rollback, esperar confirmación explícita del humano. La aprobación de un gate vale para ESA acción, no para las siguientes.

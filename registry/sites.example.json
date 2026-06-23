@@ -48,7 +48,7 @@
       "theme": "Mi Child Theme",
       "stack": ["bricks"],
       "language": "es_ES",
-      "notes": "sites/example_com/NOTAS.md",
+      "notes": "sites/example_com_staging/NOTAS.md",
       "caveats": ["Staging no sincroniza solo con producción"],
       "verified": null
     }
