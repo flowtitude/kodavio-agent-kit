@@ -44,7 +44,7 @@ Antes de tocar cualquier sitio, ejecuta el skill **`wp-site-session`**. Resumen:
 4. Por MCP: `kodavio/agent-handbook` + `kodavio/wp-get-config-summary`.
 5. Aplica la matriz de guardarraíles según `env` (abajo).
 5b. **Antes del primer write**: aplica invariantes 6 y 7 de `rules/production-guardrails.md` (env cross-check + multi-MCP guard).
-6. Para la tarea concreta: `kodavio/workflow-router` → `kodavio/skill-get` del playbook que toque.
+6. Para la tarea concreta: `kodavio/workflow-router` → `kodavio/context-bootstrap` → `kodavio/skill-get` del playbook que toque. `context-bootstrap` devuelve scope + sistema de diseño activo + memoria vinculante (`source=human` + `tag=instruction|caveat` son obligatorias) + últimos cambios, en una sola llamada; sustituye llamar a `scope-read`, `design-read` y `memory-list` por separado.
 
 ## Matriz de guardarraíles por entorno
 
@@ -76,9 +76,13 @@ Siempre, en todos los entornos: `dry_run=true` antes de cualquier write; conserv
 | `wp-bricks-fds` | Sitios Bricks con Flowtitude Design System: clases, tokens, elementos vetados |
 | `wp-tailwind-windpress` | Tailwind v4 vía WindPress: detección, reglas de utilities, convivencia con Bricks |
 | `wp-content-publish` | Posts, contenido editorial, SEO on-page (copy en castellano perfecto) |
+| `wp-copywriting` | Copy comercial (landing, home, página de servicio, sobre nosotros, FAQ) anclado a scope y sistema de diseño |
+| `wp-marketing` | Plan de marketing digital sobre WordPress: captación, CRO, secuencias FluentCRM, medición |
+| `wp-patterns-author` | Crear y mantener patterns propios para el catálogo de Kodavio (formato spec, plantillas por categoría, validación, packs) |
 | `wp-builder-convert` | Conversión entre builders con rollback |
 | `wp-site-health` | Mantenimiento: updates, salud, rendimiento, logs |
-| `wp-security-triage` | Sospecha de infección, hardening, auditoría de seguridad |
+| `wp-security-triage` | Sospecha de infección, hardening proactivo, auditoría de seguridad |
+| `wp-security-cleanup` | Respuesta a incidente: orquesta `wp-malware-cleanup-mcp` + abilities Kodavio + gates humanos para limpiar y endurecer un sitio comprometido |
 
 Los playbooks **del servidor** (bricks-build-page, acf-integration, fluent-suite, woocommerce-operations…) se cargan en runtime con `kodavio/skill-get` — no se duplican aquí.
 

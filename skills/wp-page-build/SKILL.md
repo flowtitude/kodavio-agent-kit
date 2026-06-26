@@ -34,7 +34,7 @@ No hay penalización por preguntar; hay penalización irrecuperable por reconstr
 
 ## Fase 2 — Construcción
 
-1. `kodavio/workflow-router` + `kodavio/skill-get` del playbook del builder.
+1. `kodavio/workflow-router` → `kodavio/context-bootstrap` → `kodavio/skill-get` del playbook del builder. Bootstrap recupera scope + sistema de diseño activo + memoria vinculante + últimos cambios en una sola llamada (no necesitas llamar a `design-read`/`scope-read` por separado).
 2. `kodavio/builder-get-config` + `builder-workflow action=schema`.
 3. Página nueva: `builder-workflow` create con el content model completo, **status draft**.
 4. **Página existente → EDITAR, no reconstruir.** Usa `builder-workflow action=edit` con `payload.operation` (`insert`/`update`/`patch`/`delete`/`move`) — funciona en Bricks, Elementor y Gutenberg, y el router lo enruta al flow `page_edit`. **Lee el árbol primero** (`action=read`/`analyze`) para obtener `node_id`/anclas; antes de tocar página publicada haz snapshot; **nunca reemplaces el árbol entero** salvo petición explícita del usuario. Tras escribir, **read-back**: relee y confirma que el objetivo cambió y lo no tocado quedó intacto. Para secciones completas reutilizables: `patterns-list` → `patterns-apply` (se adapta al sistema de diseño activo o cae a nativo).

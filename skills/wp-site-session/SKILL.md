@@ -20,7 +20,8 @@ description: Protocolo de arranque y cierre de sesión sobre un sitio WordPress 
 
 ## Durante la sesión
 
-- Cada tarea pasa por `kodavio/workflow-router` (regla `rules/kodavio-protocol.md`).
+- Cada tarea pasa por `kodavio/workflow-router` + `kodavio/context-bootstrap` (regla `rules/kodavio-protocol.md`). El bootstrap devuelve scope, sistema de diseño activo, memoria vinculante (`source=human` + `tag=instruction|caveat`) y últimos cambios en una sola llamada — úsalo siempre al arrancar tarea nueva o tras cambio de modelo.
+- **Memoria del sitio**: `source=human` + `tag=instruction|caveat` son vinculantes para toda la sesión. Antes de cualquier write destructivo, re-revisa `kodavio/memory-list tag=caveat` por si se ha añadido un caveat durante la sesión.
 - WIP: un sitio a la vez. Cambiar de sitio = cerrar y reabrir este protocolo.
 
 ## Cierre
@@ -28,7 +29,8 @@ description: Protocolo de arranque y cierre de sesión sobre un sitio WordPress 
 1. Verificación final de lo escrito (read-back / page health).
 2. Memoria en su capa (regla "Dos memorias" de AGENTS.md):
    - Decisiones de diseño/scope del sitio → memoria Kodavio (`kodavio/design-write`), para que cualquier agente futuro las vea.
-   - Caveats operativos, IDs de backup, gates aprobados, sorpresas → `sites/{slug}/NOTAS.md`.
+   - Decisiones del agente, progreso de tareas, resúmenes de sesión y notas operativas → `kodavio/memory-write` con `source=agent` y `type` explícito (`decision`, `task-progress`, `session-summary`, `note`). El bootstrap del siguiente arranque las recuperará automáticamente.
+   - Caveats operativos, IDs de backup, gates aprobados, sorpresas locales del operador → `sites/{slug}/NOTAS.md`.
 3. Si hubo acción sensible en producción → `Playbook/rules/sensitive-actions-log.md`.
 4. Tiempo en OPS si la tarea es facturable (`ops time <id> <min>`).
 5. Errores cometidos → `Playbook/retros/mistakes.md`.

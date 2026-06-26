@@ -5,12 +5,14 @@
 ## Orden de llamadas para cualquier tarea
 
 1. `kodavio/workflow-router` con la petición del usuario → flujo primario.
-2. `kodavio/skill-get` del playbook que el router/flujo indique. **No escribir sin haber cargado el playbook.**
-3. Primeras llamadas del flujo (las lista `kodavio/workflow-list`): config summary, design matrix, builder config, schema…
-4. Autoría: el agente redacta content model / payload / brief completo.
-5. `dry_run=true` → revisar → write real.
-6. Verificación: read-back, `kodavio/tester-verify` si tester mode, page health.
-7. Reportar: qué cambió, backup/rollback IDs, qué queda pendiente.
+2. `kodavio/context-bootstrap` para recuperar TODO el contexto persistente del sitio en una llamada: scope, sistema de diseño activo, memoria vinculante (entries con `source=human` y `tag=instruction|caveat`), últimas decisiones del agente y últimos cambios. Sustituye a llamar a `scope-read`, `design-read` y `memory-list` por separado. **Las entries vinculantes son obligatorias durante toda la sesión.**
+3. `kodavio/skill-get` del playbook que el router/flujo indique. **No escribir sin haber cargado el playbook.**
+4. Primeras llamadas del flujo (las lista `kodavio/workflow-list`): config summary, design matrix, builder config, schema…
+5. Autoría: el agente redacta content model / payload / brief completo.
+6. `dry_run=true` → revisar → write real. **Antes de cualquier write destructivo**, re-revisa `kodavio/memory-list tag=caveat` por si se ha añadido un caveat durante la sesión.
+7. Verificación: read-back, `kodavio/tester-verify` si tester mode, page health.
+8. Reportar: qué cambió, backup/rollback IDs, qué queda pendiente.
+9. Al cerrar la sesión, escribe decisiones load-bearing con `kodavio/memory-write` con `source=agent` y `type` explícito (`decision`, `task-progress`, `session-summary`, `note`).
 
 ## Flujos (no mezclarlos casualmente)
 

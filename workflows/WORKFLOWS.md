@@ -23,8 +23,9 @@
 ## Cadena estándar de una tarea de escritura
 
 ```
-wp-site-session → workflow-router → skill-get (playbook) → AUTORÍA (brief/copy/payload)
-→ dry_run → [GATE si aplica] → write → wp-verifier → NOTAS.md + OPS
+wp-site-session → workflow-router → context-bootstrap → skill-get (playbook) → AUTORÍA (brief/copy/payload)
+→ dry_run → [GATE si aplica] → re-check memory tag=caveat → write → wp-verifier
+→ memory-write source=agent (session-summary/decision) → NOTAS.md + OPS
 ```
 
 ### Contrato de cierre
