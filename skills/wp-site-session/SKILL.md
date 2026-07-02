@@ -20,7 +20,8 @@ description: Protocolo de arranque y cierre de sesión sobre un sitio WordPress 
 
 ## Durante la sesión
 
-- Cada tarea pasa por `kodavio/workflow-router` + `kodavio/context-bootstrap` (regla `rules/kodavio-protocol.md`). El bootstrap devuelve scope, sistema de diseño activo, memoria vinculante (`source=human` + `tag=instruction|caveat`) y últimos cambios en una sola llamada — úsalo siempre al arrancar tarea nueva o tras cambio de modelo.
+- Cada tarea pasa por `kodavio/workflow-router` + `kodavio/context-bootstrap` (regla `rules/kodavio-protocol.md`). El bootstrap devuelve scope, sistema de diseño activo, memoria vinculante (`source=human` + `tag=instruction|caveat`), preferencias per-site, el **perfil de ejecución** (`execution_profile.contract`) y últimos cambios en una sola llamada — úsalo siempre al arrancar tarea nueva o tras cambio de modelo.
+- **Perfil de ejecución** (`rules/execution-profile.md`): adopta `execution_profile.headline` como disciplina de escritura de la sesión (cuánto dry-run/verify, cuándo leer antes de escribir). El perfil nunca rebaja los guardarraíles de entorno (producción = drafts + gate, dry-run siempre).
 - **Memoria del sitio**: `source=human` + `tag=instruction|caveat` son vinculantes para toda la sesión. Antes de cualquier write destructivo, re-revisa `kodavio/memory-list tag=caveat` por si se ha añadido un caveat durante la sesión.
 - WIP: un sitio a la vez. Cambiar de sitio = cerrar y reabrir este protocolo.
 

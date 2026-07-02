@@ -17,7 +17,7 @@ Flujo Kodavio: `builder_migration` (perfil `conversion`). Playbooks del servidor
 ## Conversión
 
 1. `kodavio/skill-get slug=builder-conversion[-advanced]`.
-2. Convertir hacia **draft nuevo**, original intacto (`builder-transfer-page`, `convert-elementor-to-bricks`, etc., siempre `dry_run` primero).
+2. Convertir hacia **draft nuevo**, original intacto (`builder-transfer-page`, `convert-elementor-to-bricks`, etc., siempre `dry_run` primero). La conversión es irreversible-por-naturaleza: snapshot + dry-run son obligatorios en **cualquier** `execution_profile` (el perfil solo puede subir el verify, nunca saltarse la red de la conversión).
 3. `kodavio/conversion-status` tras cada página.
 4. Auditoría de fidelidad por página: estructura, estilos, responsive, dynamic bindings vivos, forms que envían. Side-by-side original vs convertida.
 5. Bugs conocidos del converter (color como background, video_type, template type forzado — backlog kodavio 0.1.4): revisar específicamente y corregir a mano en la copia.

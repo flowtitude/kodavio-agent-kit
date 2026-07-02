@@ -16,7 +16,7 @@ Posts de blog, noticias, fichas, textos de páginas — donde manda el contenido
 
 ## Flujo
 
-1. `wp-site-session` hecho. Idioma del sitio según el campo `language` del registry — nunca asumirlo.
+1. `wp-site-session` hecho. Idioma del sitio según el campo `language` del registry — nunca asumirlo. Aplica el **`execution_profile`** del bootstrap (`rules/execution-profile.md`) a la escritura del contenido; publicar sigue siendo Human Gate en producción sea cual sea el perfil.
 2. **Investigación mínima**: leer 2-3 posts existentes del sitio → tono, estructura, categorías y tags reales (no inventar taxonomía nueva sin avisar).
 3. **Redacción** (subagente wp-content-writer para lotes):
    - Castellano perfecto → checklist `Playbook/rules/copy-review.md` (capa SA; si no existe en tu entorno, exige el mismo estándar con criterio propio). Inglés → registro editorial del sitio.

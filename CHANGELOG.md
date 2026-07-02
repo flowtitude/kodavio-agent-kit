@@ -3,6 +3,17 @@
 > Qué cambia en cada actualización del kit y, sobre todo, **si tienes que migrar algo local**
 > (`registry/sites.json`, `sites/{slug}/`). Si una entrada no dice "migración", `git pull` basta.
 
+## 2026-07-02
+
+### Añadido
+- **Regla `rules/execution-profile.md`** — disciplina de escritura por perfil de ejecución (Rápido/Equilibrado/Seguro), alineada con Kodavio 0.1.9. El plugin devuelve el contrato vinculante en `kodavio/context-bootstrap` (`execution_profile.contract`) y funciona **sin el kit**; esta regla explica cómo aplicarlo y su precedencia: el perfil nunca rebaja los guardarraíles de entorno (producción = drafts + gate + dry-run siempre).
+
+### Cambiado
+- `rules/kodavio-protocol.md` (pasos 2/6/7), `skills/wp-site-session/SKILL.md`, `skills/wp-page-build/SKILL.md`, `skills/wp-content-publish/SKILL.md`, `skills/wp-builder-convert/SKILL.md`: cablean el `execution_profile` del bootstrap a la disciplina de dry-run/verify/read-before-write. También se menciona el snapshot `preferences[]` per-site que ahora devuelve el bootstrap (Kodavio 0.1.9 #4). Sin migración necesaria.
+
+### Notas
+- Requiere plugin Kodavio 0.1.9 para que el bootstrap devuelva `execution_profile` y `preferences[]`; con 0.1.8 las skills degradan a la disciplina por defecto (Equilibrado). Cambios de markdown puro, sin release del plugin para usarse.
+
 ## 2026-06-26
 
 ### Cambiado

@@ -17,7 +17,7 @@ El agente redacta el brief completo; esto NO se delega al plugin:
 
 1. **Contenido**: jerarquía de secciones, copy real (no lorem), CTAs con destino. Castellano perfecto o idioma del sitio (`rules/copy-review.md`).
 2. **Diseño**: leer `kodavio/design-read` + `kodavio/design-get-system` → usar tokens/clases del sistema activo. Si el encargo es visual y ambicioso, apoyarse en las skills globales `design-section` / `design-landing` para generar el boceto HTML y usarlo como brief.
-3. Elegir perfil: `fast` (defecto) o `supervised` (brief/boceto aprobado por el humano antes de escribir).
+3. Elegir perfil de autoría: `fast` (defecto) o `supervised` (brief/boceto aprobado por el humano antes de escribir). Aparte, respeta el **`execution_profile`** del bootstrap (`rules/execution-profile.md`): fija cuánto dry-run/verify y si lees antes de escribir en la Fase 2 — en Seguro, dry-run + read-before-write siempre y verify completo en Fase 3.
 
 Para páginas con datos dinámicos (loops, CPTs, campos): el flujo compuesto es `content_model_dynamic` PRIMERO (playbooks `content-model-schema`, `dynamic-data-binding`), página después.
 
