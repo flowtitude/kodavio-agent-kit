@@ -23,3 +23,6 @@ kilo.jsonc
 .komandesk/*.secret.*
 .komandesk/*.bak
 .komandesk/*.tmp
+
+# migraciones exportadas (generadas, pesadas)
+exports/
