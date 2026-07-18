@@ -40,13 +40,14 @@ No hay penalización por preguntar; hay penalización irrecuperable por reconstr
 4. **Página existente → EDITAR, no reconstruir.** Usa `builder-workflow action=edit` con `payload.operation` (`insert`/`update`/`patch`/`delete`/`move`) — funciona en Bricks, Elementor y Gutenberg, y el router lo enruta al flow `page_edit`. **Lee el árbol primero** (`action=read`/`analyze`) para obtener `node_id`/anclas; antes de tocar página publicada haz snapshot; **nunca reemplaces el árbol entero** salvo petición explícita del usuario. Tras escribir, **read-back**: relee y confirma que el objetivo cambió y lo no tocado quedó intacto. Para secciones completas reutilizables: `patterns-list` → `patterns-apply` (se adapta al sistema de diseño activo o cae a nativo).
 5. Siempre `dry_run=true` primero, **y leer el `materialization_plan` del dry-run**: si `mapped_blocks` < bloques enviados, o aparece `unknown_block_as_card`/`unsupported_block_types`, el contrato está mal — NO escribir.
 
-### Contrato del content_model (verificado en vivo, Kodavio 0.1.3)
+### Contrato del content_model → autoridad en el plugin (`skill-get`)
 
-- `content_model.sections[].blocks` usa **`type`** (`eyebrow` | `heading` | `text` | `button` | `cards`), no nodos `{name, settings}` del builder. `heading` lleva `tag`; `button` lleva `url`; `cards` lleva `columns` + `items[{heading,text}]`.
-- Bloques sin `type` → fallback silencioso a cards con el nombre del tipo como título: **se pierde todo el copy y la verificación interna da PASS igualmente**. El read-back de fidelidad (Fase 3) es la única red.
-- No enviar `label` de sección con texto que no deba verse: hoy se materializa como text-basic visible.
-- Borrar nodos: `bricks-node-delete` (flag `confirm_destructive`); `apply_changes` agrupado solo existe en Elementor.
-- Revisar responsive del grid de cards tras materializar (sale sin breakpoint móvil).
+El **contrato técnico** exacto (nombres de `type`, shapes de cada bloque, flags destructivos por builder) vive en el plugin y se carga en runtime con `kodavio/skill-get` (`bricks-build-page` u homólogo). **No lo memorices ni lo copies aquí**: cambia con la versión instalada y duplicarlo deriva (regla `docs/kodavio-vs-kit.md`). Carga el playbook del servidor antes de construir el content_model.
+
+Lo que el kit fija (criterio, independiente de versión):
+- **Lee el `materialization_plan` del dry-run**: si `mapped_blocks` < bloques enviados, o aparece `unknown_block_as_card` / `unsupported_block_types`, el contrato está mal → **NO escribir**. La verificación interna puede dar PASS con copy perdido; el read-back de fidelidad (Fase 3) es la única red real.
+- Borrados destructivos: exige el flag de confirmación que pida el playbook del servidor; nunca a ciegas.
+- Tras materializar, el pase de diseño (Fase 2.5) es **obligatorio** (el andamio sale con px fijos / sin breakpoints).
 
 ## Fase 2.5 — Pase de diseño (OBLIGATORIO tras materializar)
 
