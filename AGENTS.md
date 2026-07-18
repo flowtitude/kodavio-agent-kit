@@ -66,6 +66,9 @@ Siempre, en todos los entornos: `dry_run=true` antes de cualquier write; conserv
 
 ## Skills locales (esta capa)
 
+> Toda skill de construcción/edición/admin recorre las **fases canónicas** Discovery → Validate → Preview → Confirm → Execute → Report (`rules/skill-phases.md`), ejecutando por **rol** (`rules/ability-source-agnostic.md`), no por tool name.
+
+
 | Skill | Cuándo |
 |---|---|
 | `wp-site-session` | SIEMPRE al empezar a trabajar con un sitio |

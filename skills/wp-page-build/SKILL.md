@@ -7,6 +7,9 @@ description: Crear o mejorar páginas, secciones, templates y componentes en Bri
 
 Flujo Kodavio: `page_creation`. Playbooks del servidor: `bricks-build-page` / `elementor-build-page` / `gutenberg-build-page` + `design-frameworks`.
 
+> **Fases canónicas** (`rules/skill-phases.md`): Discovery = Fases 0-1 · Validate = Fase 1.5 + lectura del `materialization_plan` · Preview = `dry_run` · Confirm = gates de publicar/destructivo · Execute = Fases 2 y 2.5 · Report = Fase 3.
+> **Fuente de la ability** (`rules/ability-source-agnostic.md`): las lecturas/escrituras de abajo se dan por **rol** — prefiere la nativa (Bricks 2.4/WP-core) envuelta en el gate de Kodavio, fallback a `kodavio/*`. La orquestación (`workflow-router`, `context-bootstrap`, `skill-get`) es siempre de Kodavio.
+
 ## Fase 0 — Sesión
 
 `wp-site-session` ejecutado. Builder del sitio conocido (registry). Guardarraíles aplicados: en producción se trabaja en **draft** y publicar es gate.
@@ -16,7 +19,7 @@ Flujo Kodavio: `page_creation`. Playbooks del servidor: `bricks-build-page` / `e
 El agente redacta el brief completo; esto NO se delega al plugin:
 
 1. **Contenido**: jerarquía de secciones, copy real (no lorem), CTAs con destino. Castellano perfecto o idioma del sitio (`rules/copy-review.md`).
-2. **Diseño**: leer `kodavio/design-read` + `kodavio/design-get-system` → usar tokens/clases del sistema activo. Si el encargo es visual y ambicioso, apoyarse en las skills globales `design-section` / `design-landing` para generar el boceto HTML y usarlo como brief.
+2. **Diseño**: orientar el sistema de diseño activo (rol *orientar diseño* → nativa `bricks/get-design-context` o `kodavio/design-read`+`design-get-system`) y usar sus tokens/clases. Si el encargo es visual y ambicioso, apoyarse en las skills globales `design-section` / `design-landing` para generar el boceto HTML y usarlo como brief.
 3. Elegir perfil de autoría: `fast` (defecto) o `supervised` (brief/boceto aprobado por el humano antes de escribir). Aparte, respeta el **`execution_profile`** del bootstrap (`rules/execution-profile.md`): fija cuánto dry-run/verify y si lees antes de escribir en la Fase 2 — en Seguro, dry-run + read-before-write siempre y verify completo en Fase 3.
 
 Para páginas con datos dinámicos (loops, CPTs, campos): el flujo compuesto es `content_model_dynamic` PRIMERO (playbooks `content-model-schema`, `dynamic-data-binding`), página después.
@@ -37,7 +40,7 @@ No hay penalización por preguntar; hay penalización irrecuperable por reconstr
 1. `kodavio/workflow-router` → `kodavio/context-bootstrap` → `kodavio/skill-get` del playbook del builder. Bootstrap recupera scope + sistema de diseño activo + memoria vinculante + últimos cambios en una sola llamada (no necesitas llamar a `design-read`/`scope-read` por separado).
 2. `kodavio/builder-get-config` + `builder-workflow action=schema`.
 3. Página nueva: `builder-workflow` create con el content model completo, **status draft**.
-4. **Página existente → EDITAR, no reconstruir.** Usa `builder-workflow action=edit` con `payload.operation` (`insert`/`update`/`patch`/`delete`/`move`) — funciona en Bricks, Elementor y Gutenberg, y el router lo enruta al flow `page_edit`. **Lee el árbol primero** (`action=read`/`analyze`) para obtener `node_id`/anclas; antes de tocar página publicada haz snapshot; **nunca reemplaces el árbol entero** salvo petición explícita del usuario. Tras escribir, **read-back**: relee y confirma que el objetivo cambió y lo no tocado quedó intacto. Para secciones completas reutilizables: `patterns-list` → `patterns-apply` (se adapta al sistema de diseño activo o cae a nativo).
+4. **Página existente → EDITAR, no reconstruir.** Usa `builder-workflow action=edit` con `payload.operation` (`insert`/`update`/`patch`/`delete`/`move`) — funciona en Bricks, Elementor y Gutenberg, y el router lo enruta al flow `page_edit`. **Lee el árbol primero** (rol *leer árbol* → nativa `bricks/get-page-elements` o `kodavio/builder-workflow action=read`/`analyze`) para obtener `node_id`/anclas; antes de tocar página publicada haz snapshot; **nunca reemplaces el árbol entero** salvo petición explícita del usuario. Tras escribir, **read-back**: relee y confirma que el objetivo cambió y lo no tocado quedó intacto. Para secciones completas reutilizables: `patterns-list` → `patterns-apply` (se adapta al sistema de diseño activo o cae a nativo).
 5. Siempre `dry_run=true` primero, **y leer el `materialization_plan` del dry-run**: si `mapped_blocks` < bloques enviados, o aparece `unknown_block_as_card`/`unsupported_block_types`, el contrato está mal — NO escribir.
 
 ### Contrato del content_model → autoridad en el plugin (`skill-get`)
@@ -51,7 +54,7 @@ Lo que el kit fija (criterio, independiente de versión):
 
 ## Fase 2.5 — Pase de diseño (OBLIGATORIO tras materializar)
 
-El output del materializador es un **andamio estructural, nunca el resultado final** (verificado en vivo: px fijos, anchos hardcodeados, sin clases del design system pese a declarar "class-first policy", sin breakpoints, alignment del hero ignorado). Tras el create, SIEMPRE un pase de patches (`bricks-apply-patch` / equivalente):
+El output del materializador es un **andamio estructural, nunca el resultado final** (verificado en vivo: px fijos, anchos hardcodeados, sin clases del design system pese a declarar "class-first policy", sin breakpoints, alignment del hero ignorado). Tras el create, SIEMPRE un pase de patches (rol *escribir/parchear elementos* → nativa `bricks/update-element` o `kodavio/bricks-apply-patch`):
 
 1. **Spacing** → tokens del sitio (`var(--bt-space-section-*)`, `var(--bt-space-*)` o los del design system activo), nunca dejar los px del andamio.
 2. **Responsive** → breakpoints explícitos en grids/columnas (Bricks: claves con sufijo `_setting:tablet_portrait` / `:mobile_landscape` / `:mobile_portrait`; un grid de 3 → 2 → 1).
