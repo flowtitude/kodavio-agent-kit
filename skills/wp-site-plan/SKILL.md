@@ -5,11 +5,13 @@ description: Planificación de un sitio o rediseño completo ANTES de construir 
 
 # wp-site-plan — Planificar antes de construir
 
+> Recorre las fases canónicas (`rules/skill-phases.md`) y ejecuta por **rol**, prefiriendo la ability nativa cuando exista, envuelta en el gate de Kodavio (`rules/ability-source-agnostic.md`).
+
 El antídoto contra "ve construyendo y ya veremos": un plan corto, aprobado por el humano, que convierte un encargo difuso en una cola de tareas precisas. **Nada se construye hasta que el plan tiene OK.**
 
 ## Fase 1 — Discovery (entrevista única)
 
-Pregunta en una sola tanda lo que no sepas ya (revisa antes `kodavio/scope-read` y `kodavio/design-read` — quizá el sitio ya tiene scope):
+Pregunta en una sola tanda lo que no sepas ya (revisa antes `kodavio/scope-read` y el sistema de diseño — rol *orientar diseño* → nativa `bricks/get-design-context` o `kodavio/design-read` — quizá el sitio ya tiene scope):
 
 1. **Negocio**: qué vende/ofrece, a quién (audiencia), qué acción quiere provocar (lead, venta, llamada).
 2. **Contenido disponible**: textos, fotos, logos, testimonios reales — qué existe y qué hay que crear.

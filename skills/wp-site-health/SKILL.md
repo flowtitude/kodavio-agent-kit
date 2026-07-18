@@ -5,6 +5,8 @@ description: Revisión de salud y mantenimiento de un sitio WordPress en vivo - 
 
 # wp-site-health — Salud y mantenimiento
 
+> Recorre las fases canónicas (`rules/skill-phases.md`) y ejecuta por **rol**, prefiriendo la ability nativa cuando exista, envuelta en el gate de Kodavio (`rules/ability-source-agnostic.md`).
+
 Flujo Kodavio: `diagnostic_audit` (read-only) + `wordpress_admin` para aplicar. Playbook servidor: `wordpress-admin-safe`.
 
 ## Auditoría (read-only, sin gates)

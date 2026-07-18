@@ -5,6 +5,8 @@ description: Crear y publicar contenido editorial (posts, páginas de texto, lan
 
 # wp-content-publish — Contenido editorial y SEO
 
+> Recorre las fases canónicas (`rules/skill-phases.md`) y ejecuta por **rol**, prefiriendo la ability nativa cuando exista, envuelta en el gate de Kodavio (`rules/ability-source-agnostic.md`).
+
 ## Cuándo
 
 Posts de blog, noticias, fichas, textos de páginas — donde manda el contenido, no el layout. Si hay que construir layout → `wp-page-build`.

@@ -5,6 +5,8 @@ description: Planificación de marketing digital sobre WordPress — embudo de c
 
 # wp-marketing — Planificación de marketing sobre WordPress
 
+> Recorre las fases canónicas (`rules/skill-phases.md`) y ejecuta por **rol**, prefiriendo la ability nativa cuando exista, envuelta en el gate de Kodavio (`rules/ability-source-agnostic.md`).
+
 Skill de **planificación**: convierte un objetivo de negocio en un plan ejecutable encima del stack Kodavio + Fluent + Woo. **No mueve datos** (CRM, automatizaciones, audiencias) — el agente operativo lo hace después siguiendo el plan.
 
 ## Cuándo arrancarla

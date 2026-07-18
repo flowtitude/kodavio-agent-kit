@@ -5,6 +5,8 @@ description: Crear patterns propios para el catálogo de Kodavio (hero, CTA, fea
 
 # wp-patterns-author — Crear patrones para Kodavio
 
+> Recorre las fases canónicas (`rules/skill-phases.md`). El motor de patrones es moat de Kodavio (sin equivalente nativo); se usa `kodavio/*` directamente.
+
 Skill de **autoría de patrones**. El plugin Kodavio incluye un catálogo Core de patterns (hero centrado, CTA banner, features, etc.) que se materializan en Bricks/Elementor/Gutenberg desde un único spec. Esta skill ayuda al operador a **crear los suyos propios** en el formato correcto, sin que tenga que aprender el motor.
 
 ## Por qué necesitas esto

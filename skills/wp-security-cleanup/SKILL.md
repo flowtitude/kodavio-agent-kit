@@ -5,6 +5,8 @@ description: Limpieza forense de un sitio WordPress comprometido — orquesta el
 
 # wp-security-cleanup — Sitio hackeado: triage + limpieza + hardening
 
+> Recorre las fases canónicas (`rules/skill-phases.md`). Orquesta MCP externo (wp-malware-cleanup) + abilities Kodavio bajo los gates humanos del kit; nada destructivo sin confirmación.
+
 Skill **operativa de incidente**. Cuando un sitio WordPress está comprometido (malware, webshell, admin oculto, redirecciones SEO, drop-ins maliciosos), esta skill orquesta el MCP propio **`wp-malware-cleanup-mcp`** + las abilities de Kodavio + los gates humanos del kit en un protocolo seguro.
 
 > Esto es **respuesta a incidente** sobre un sitio EN VIVO. No es prevención (eso es `wp-security-triage` para hardening proactivo).

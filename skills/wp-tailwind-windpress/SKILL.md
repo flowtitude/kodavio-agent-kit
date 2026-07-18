@@ -5,6 +5,8 @@ description: Trabajar con Tailwind CSS v4 en WordPress vía WindPress - detecci�
 
 # wp-tailwind-windpress — Tailwind en WordPress
 
+> Recorre las fases canónicas (`rules/skill-phases.md`) y ejecuta por **rol**, prefiriendo la ability nativa cuando exista, envuelta en el gate de Kodavio (`rules/ability-source-agnostic.md`).
+
 ## Detección (siempre primero)
 
 1. `kodavio/windpress-detect` → ¿el sitio tiene WindPress activo?

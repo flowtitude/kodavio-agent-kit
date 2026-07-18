@@ -5,6 +5,8 @@ description: Escribir copy comercial de WordPress (landing, home, página de ser
 
 # wp-copywriting — Copy comercial para WordPress
 
+> Recorre las fases canónicas (`rules/skill-phases.md`) y ejecuta por **rol**, prefiriendo la ability nativa cuando exista, envuelta en el gate de Kodavio (`rules/ability-source-agnostic.md`).
+
 Skill de **autoría** del agente. No mueve nada en el sitio; produce el copy listo para que `wp-page-build` lo materialice después.
 
 ## Cuándo arrancarla

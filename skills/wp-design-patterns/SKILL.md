@@ -5,11 +5,13 @@ description: Patrones de diseño para componer páginas WordPress con criterio -
 
 # wp-design-patterns — Patrones de composición
 
+> Recorre las fases canónicas (`rules/skill-phases.md`) y ejecuta por **rol**, prefiriendo la ability nativa cuando exista, envuelta en el gate de Kodavio (`rules/ability-source-agnostic.md`).
+
 Esta skill alimenta la **Fase 1 (autoría)** de `wp-page-build`: cómo decidir estructura y jerarquía antes de tocar Kodavio. Si el sitio usa FDS/Bricks → combinar con `wp-bricks-fds` (clases y elementos concretos).
 
 ## Principios
 
-1. **Leer antes de diseñar**: `kodavio/design-read` (lenguaje visual del sitio) + 2-3 páginas existentes. Una página nueva debe parecer del mismo sitio, no un tema demo.
+1. **Leer antes de diseñar** (rol *orientar diseño* → nativa `bricks/get-design-context` o `kodavio/design-read`): lenguaje visual del sitio + 2-3 páginas existentes. Una página nueva debe parecer del mismo sitio, no un tema demo.
 2. **Una idea por sección.** Si una sección cuenta dos cosas, son dos secciones.
 3. **Jerarquía**: 1 H1 por página; el tamaño visual decrece con la profundidad; el eyebrow/kicker no sustituye al heading.
 4. **Ritmo**: alternar densidad (sección llena → sección de aire), fondo (claro/oscuro/acento) y alineación (centrado/izquierda) para que el scroll respire. Tres secciones seguidas idénticas = monotonía.

@@ -5,6 +5,8 @@ description: Convertir imágenes de referencia (capturas de webs, mockups, wiref
 
 # wp-reference-to-brief — De imagen de referencia a brief
 
+> Recorre las fases canónicas (`rules/skill-phases.md`) y ejecuta por **rol**, prefiriendo la ability nativa cuando exista, envuelta en el gate de Kodavio (`rules/ability-source-agnostic.md`).
+
 Requiere un modelo con visión (Claude Opus/Sonnet, GPT-4o+ — los que usan Claude Code y Cursor la tienen). Si el modelo activo no ve imágenes, dilo y pide descripción textual; no finjas haber visto la imagen.
 
 ## Qué es una referencia (y qué no)
@@ -26,7 +28,7 @@ Recorre la captura de arriba a abajo y extrae, sección por sección:
 
 ### 2. Traducción al sistema del sitio
 
-- Lee `kodavio/design-read` + `design-get-system`: la referencia se reinterpreta con LOS TOKENS DEL SITIO (no con los colores/fuentes de la captura, salvo que el usuario quiera adoptarlos — eso sería flujo `design_system` aparte).
+- Orienta el sistema de diseño (rol *orientar diseño* → nativa `bricks/get-design-context` o `kodavio/design-read`+`design-get-system`): la referencia se reinterpreta con LOS TOKENS DEL SITIO (no con los colores/fuentes de la captura, salvo que el usuario quiera adoptarlos — eso sería flujo `design_system` aparte).
 - Sitio Bricks+FDS → mapea cada sección a clases FDS (`wp-bricks-fds`): qué heading, qué spacing semántico, qué grid.
 - Lo que la referencia hace con JS/animación compleja: anótalo como "efecto opcional, fase 2" — no condiciona la estructura.
 

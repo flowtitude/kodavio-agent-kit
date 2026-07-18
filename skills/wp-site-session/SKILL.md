@@ -5,6 +5,8 @@ description: Protocolo de arranque y cierre de sesión sobre un sitio WordPress 
 
 # wp-site-session — Sesión por sitio
 
+> Recorre las fases canónicas (`rules/skill-phases.md`) y ejecuta por **rol**, prefiriendo la ability nativa cuando exista, envuelta en el gate de Kodavio (`rules/ability-source-agnostic.md`).
+
 ## Arranque
 
 1. **Identificar el sitio** en `registry/sites.json`. Si no está → parar y ejecutar `wp-onboard-site`.

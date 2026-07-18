@@ -5,6 +5,8 @@ description: Triage de seguridad de un sitio WordPress - sospecha de infección,
 
 # wp-security-triage — Seguridad
 
+> Recorre las fases canónicas (`rules/skill-phases.md`). Read-only + MCP wp-malware-cleanup; ejecuta por **rol** donde aplique (`rules/ability-source-agnostic.md`).
+
 > Lección aprendida en incidentes reales: limpiar sin cerrar el vector ni rotar credenciales = reinfección garantizada. Auditoría de código estática → skill global `wp-security-audit`.
 
 ## Triage (read-only primero)

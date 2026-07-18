@@ -5,6 +5,8 @@ description: Comando interactivo de alta de un sitio WordPress - el agente entre
 
 # wp-onboard-site — Conectar un sitio (comando interactivo)
 
+> Recorre las fases canónicas (`rules/skill-phases.md`) y ejecuta por **rol**, prefiriendo la ability nativa cuando exista, envuelta en el gate de Kodavio (`rules/ability-source-agnostic.md`).
+
 Este skill ES el comando de alta: el usuario lo invoca (`/wp-onboard-site` en Claude Code, o "da de alta un sitio" en cualquier agente) y tú lo guías de principio a fin. La alternativa por terminal puro (sin agente) es `scripts/add-site.sh`.
 
 ## Fase 1 — Entrevista (una sola tanda de preguntas)
