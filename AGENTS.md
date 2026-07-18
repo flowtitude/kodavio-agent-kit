@@ -44,6 +44,7 @@ Antes de tocar cualquier sitio, ejecuta el skill **`wp-site-session`**. Resumen:
 4. Por MCP: `kodavio/agent-handbook` + `kodavio/wp-get-config-summary`.
 5. Aplica la matriz de guardarraíles según `env` (abajo).
 5b. **Antes del primer write**: aplica invariantes 6 y 7 de `rules/production-guardrails.md` (env cross-check + multi-MCP guard).
+5c. **Fuente de la ability**: descubre lo que expone el sitio (`kodavio/capability-map` + `mcp-adapter-discover-abilities`) y **prefiere la ability nativa** (Bricks 2.4, WP-core) envuelta en el gate de Kodavio; cae a `kodavio/*` si no hay. Razona por **rol**, no por tool name → `rules/ability-source-agnostic.md`.
 6. Para la tarea concreta: `kodavio/workflow-router` → `kodavio/context-bootstrap` → `kodavio/skill-get` del playbook que toque. `context-bootstrap` devuelve scope + sistema de diseño activo + memoria vinculante (`source=human` + `tag=instruction|caveat` son obligatorias) + últimos cambios, en una sola llamada; sustituye llamar a `scope-read`, `design-read` y `memory-list` por separado.
 
 ## Matriz de guardarraíles por entorno
