@@ -7,11 +7,13 @@ description: Preferencias de trabajo con Bricks Builder y el Flowtitude Design S
 
 Sitios con theme Flowtitude Child o stack `flowtitude`/`fds` en el registry. El playbook técnico de escritura es el del servidor (`kodavio/skill-get slug=bricks-build-page`); esta skill fija **nuestras preferencias** encima.
 
+> Fases canónicas (`rules/skill-phases.md`) y ejecución por **rol** (`rules/ability-source-agnostic.md`): las lecturas/escrituras de abajo prefieren la ability nativa de Bricks 2.4 envuelta en el gate de Kodavio; fallback a `kodavio/*`.
+
 ## Qué es FDS
 
 Design system CSS sobre **Tailwind v4** (vía WindPress). No es un framework: extiende Tailwind con tokens fluidos, componentes y layouts. Todo es fluido (tipografía y spacing escalan con el viewport vía knobs) — por eso **nunca se hardcodean tamaños**.
 
-Antes de construir: `kodavio/design-read` + `kodavio/design-get-system` para ver los tokens activos del sitio (los knobs pueden estar personalizados por proyecto).
+Antes de construir, orientar el sistema de diseño activo (rol *orientar diseño* → nativa `bricks/get-design-context` o `kodavio/design-read`+`design-get-system`) para ver los tokens activos del sitio (los knobs pueden estar personalizados por proyecto).
 
 ## Clases FDS — qué usar
 
@@ -41,7 +43,7 @@ Antes de construir: `kodavio/design-read` + `kodavio/design-get-system` para ver
 - Jerarquía: section → container → block/div → contenido.
 - Tag semántico vía settings del elemento (`name=heading` + `settings.tag=h2`), **nunca** HTML incrustado en el texto.
 - Un nodo de texto (`text-basic`, `text`, `heading`, `button`) contiene texto. Si contiene `<div>`, `<section>`, `<style>` o markup de layout, está mal.
-- Ediciones: patch del elemento (`bricks-apply-patch` / primitivas), no reenviar el árbol. Full-tree replace solo con rebuild pedido explícitamente.
+- Ediciones: patch del elemento (rol *escribir/parchear* → nativa `bricks/update-element` o `kodavio/bricks-apply-patch`), no reenviar el árbol. Full-tree replace solo con rebuild pedido explícitamente.
 - Clases: clases globales de Bricks + clases FDS. Estilos por-elemento (ID styles) solo para lo genuinamente único de ese elemento.
 
 **Vetados salvo aprobación explícita del humano (`allow_code_widget=true`):**

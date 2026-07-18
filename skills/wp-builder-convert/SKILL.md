@@ -7,6 +7,8 @@ description: Convertir páginas, templates o sitios entre Bricks, Elementor y Gu
 
 Flujo Kodavio: `builder_migration` (perfil `conversion`). Playbooks del servidor: `builder-conversion` (simple) o `builder-conversion-advanced` (con dynamic data, forms, Woo, ACF/JetEngine, frameworks). Para migración de versión Elementor: `elementor-migrate-v4`.
 
+> Fases canónicas: `rules/skill-phases.md`. **La conversión es moat de Kodavio: no hay ability nativa equivalente** (ningún builder convierte a otro) → aquí se usa `kodavio/*` directamente; la regla `ability-source-agnostic` no aplica a la conversión.
+
 ## Antes de convertir
 
 1. `wp-site-session` hecho. Conversión en producción = solo sobre copia/draft; tocar el original es **Human Gate**.
