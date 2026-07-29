@@ -8,6 +8,9 @@
 ### Añadido
 - **Skill `wp-client-report`** — convierte el trabajo ya hecho sobre un sitio (salud, seguridad, conversión de builder, migración de framework, entrega) en un informe HTML/PDF con la marca del cliente. Read-only sobre el sitio; entregar el informe es Human Gate por ser comunicación externa.
 
+### Cambiado
+- **`LICENSE` (MIT)** — venia de `kodavio-skills`, que es el repo que este sustituye. Un repo publico sin licencia es «todos los derechos reservados», que contradice a un kit que se anuncia como clonable.
+
 ### Notas
 - El reparto es deliberado: el plugin guarda la **marca** y sirve los **datos** (`kodavio/report-get-branding`, Kodavio 0.3); el informe lo **dibuja el agente** donde se ejecuta. Kodavio no lleva librería de PDF a propósito. Si no hay Chromium/weasyprint/wkhtmltopdf en el entorno, la skill entrega el HTML y lo dice.
 - Requiere plugin Kodavio 0.3 para `kodavio/report-get-branding`. Con versiones anteriores la skill sigue valiendo: firma el informe con el nombre del sitio. Sin migración necesaria.

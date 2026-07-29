@@ -247,6 +247,10 @@ Tus datos locales (`sites.json`, `sites/*`, `state.md`) no se tocan: están fuer
 
 Mejoras y errores del **kit** → issues/PRs en este repo. Errores del **plugin Kodavio** → canal de la beta de Flowtitude.
 
+## Licencia
+
+MIT (`LICENSE`). El kit es markdown y scripts: clónalo, cámbialo y úsalo en tus sitios. El plugin **Kodavio** tiene su propia licencia y no va incluido aquí.
+
 ---
 
 *Construido por [Soluciones Abiertas](https://solucionesabiertas.es) sobre [Kodavio](https://flowtitude.com). El agente redacta, Kodavio ejecuta, tú apruebas.*
