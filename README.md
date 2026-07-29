@@ -150,6 +150,7 @@ Lo que el agente **nunca** hace solo en producción: publicar, instalar/actualiz
 | [`wp-builder-convert`](skills/wp-builder-convert/SKILL.md) | Conversión entre builders con auditoría de fidelidad y rollback |
 | [`wp-site-health`](skills/wp-site-health/SKILL.md) | Mantenimiento: updates, limpieza, salud, rendimiento |
 | [`wp-security-triage`](skills/wp-security-triage/SKILL.md) | Triage de seguridad: infecciones, hardening, auditoría preventiva |
+| [`wp-client-report`](skills/wp-client-report/SKILL.md) | Informe HTML/PDF con la marca del cliente a partir del trabajo hecho (salud, seguridad, conversión, entrega) |
 
 ### Playbooks del servidor (Kodavio, se cargan en runtime con `kodavio/skill-get`)
 

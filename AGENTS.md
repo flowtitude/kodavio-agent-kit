@@ -87,6 +87,7 @@ Siempre, en todos los entornos: `dry_run=true` antes de cualquier write; conserv
 | `wp-site-health` | Mantenimiento: updates, salud, rendimiento, logs |
 | `wp-security-triage` | Sospecha de infección, hardening proactivo, auditoría de seguridad |
 | `wp-security-cleanup` | Respuesta a incidente: orquesta `wp-malware-cleanup-mcp` + abilities Kodavio + gates humanos para limpiar y endurecer un sitio comprometido |
+| `wp-client-report` | Informe HTML/PDF con la marca del cliente a partir del trabajo ya hecho; entregarlo es gate |
 
 Los playbooks **del servidor** (bricks-build-page, acf-integration, fluent-suite, woocommerce-operations…) se cargan en runtime con `kodavio/skill-get` — no se duplican aquí.
 

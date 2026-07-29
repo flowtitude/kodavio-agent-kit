@@ -3,6 +3,15 @@
 > Qué cambia en cada actualización del kit y, sobre todo, **si tienes que migrar algo local**
 > (`registry/sites.json`, `sites/{slug}/`). Si una entrada no dice "migración", `git pull` basta.
 
+## 2026-07-29
+
+### Añadido
+- **Skill `wp-client-report`** — convierte el trabajo ya hecho sobre un sitio (salud, seguridad, conversión de builder, migración de framework, entrega) en un informe HTML/PDF con la marca del cliente. Read-only sobre el sitio; entregar el informe es Human Gate por ser comunicación externa.
+
+### Notas
+- El reparto es deliberado: el plugin guarda la **marca** y sirve los **datos** (`kodavio/report-get-branding`, Kodavio 0.3); el informe lo **dibuja el agente** donde se ejecuta. Kodavio no lleva librería de PDF a propósito. Si no hay Chromium/weasyprint/wkhtmltopdf en el entorno, la skill entrega el HTML y lo dice.
+- Requiere plugin Kodavio 0.3 para `kodavio/report-get-branding`. Con versiones anteriores la skill sigue valiendo: firma el informe con el nombre del sitio. Sin migración necesaria.
+
 ## 2026-07-02
 
 ### Añadido
