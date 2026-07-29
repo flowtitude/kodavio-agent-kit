@@ -26,3 +26,8 @@ kilo.jsonc
 
 # migraciones exportadas (generadas, pesadas)
 exports/
+
+# Instalacion local de Komandesk: como el workspace de SA sigue este kit como
+# proyecto. No le sirve a nadie que clone, y publica la URL interna del OPS.
+.komandesk/
+docs/komandesk-agent-kit.md

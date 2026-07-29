@@ -167,15 +167,3 @@ Si un archivo versionable necesita mencionar un sitio concreto, no lo hagas: la 
 
 Las referencias a `Playbook/*`, `Handbook/*` y OPS (`ops.sh`) aplican en el entorno de Soluciones Abiertas. Si clonaste este kit y esas rutas no existen, **omítelas**: el resto del sistema es autosuficiente. En entorno SA: Human Gates, autonomía, WIP y comunicación heredan de `Playbook/SYSTEM.md`; acciones sensibles en producción → `Playbook/rules/sensitive-actions-log.md` SIEMPRE (fuera de SA: registra el equivalente en las NOTAS del sitio).
 
-<!-- KOMANDESK:AGENT_KIT:START version=2026-06-12.v1 hash=a572d7edf637673790b212a8516b0fe1cf35feece8bd5aa644c343c3139071f2 -->
-## Komandesk Agent Kit
-
-- Version: 2026-06-12.v1
-- Project: Kodavio Agent Kit
-- Type: meta
-- Source of truth: Komandesk (https://ops.solucionesabiertas.net).
-- Read first: `docs/komandesk-agent-kit.md`, `state.md` si existe.
-- Local kit role: bootstrap instructions, commands, skills, credentials references and project context.
-- Credentials: references only; never print or commit secret values.
-- Before closing: read `GET /api/tasks/:id/agent-work`.
-<!-- KOMANDESK:AGENT_KIT:END -->
