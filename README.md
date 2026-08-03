@@ -146,10 +146,14 @@ Lo que el agente **nunca** hace solo en producción: publicar, instalar/actualiz
 | [`wp-design-patterns`](skills/wp-design-patterns/SKILL.md) | Patrones de composición: anatomía de sección, ritmo de página, catálogo (hero, features, pricing, FAQ…) |
 | [`wp-bricks-fds`](skills/wp-bricks-fds/SKILL.md) | Preferencias Bricks + Flowtitude Design System: clases semánticas, tokens fluidos, elementos vetados |
 | [`wp-tailwind-windpress`](skills/wp-tailwind-windpress/SKILL.md) | Tailwind v4 en WordPress vía WindPress: detección, reglas de utilities |
+| [`wp-patterns-author`](skills/wp-patterns-author/SKILL.md) | Crear y mantener patterns propios del catálogo de Kodavio: spec, validación, packs |
+| [`wp-copywriting`](skills/wp-copywriting/SKILL.md) | Copy comercial (home, landing, servicio, precios, FAQ) anclado al scope y al sistema de diseño |
 | [`wp-content-publish`](skills/wp-content-publish/SKILL.md) | Contenido editorial con SEO on-page y flujo draft → aprobación → publicación |
+| [`wp-marketing`](skills/wp-marketing/SKILL.md) | Plan de captación sobre WordPress: embudo, CRO, secuencias FluentCRM, medición |
 | [`wp-builder-convert`](skills/wp-builder-convert/SKILL.md) | Conversión entre builders con auditoría de fidelidad y rollback |
 | [`wp-site-health`](skills/wp-site-health/SKILL.md) | Mantenimiento: updates, limpieza, salud, rendimiento |
 | [`wp-security-triage`](skills/wp-security-triage/SKILL.md) | Triage de seguridad: infecciones, hardening, auditoría preventiva |
+| [`wp-security-cleanup`](skills/wp-security-cleanup/SKILL.md) | Respuesta a incidente: limpieza forense y hardening de un sitio comprometido, con gates |
 | [`wp-client-report`](skills/wp-client-report/SKILL.md) | Informe HTML/PDF con la marca del cliente a partir del trabajo hecho (salud, seguridad, conversión, entrega) |
 
 ### Playbooks del servidor (Kodavio, se cargan en runtime con `kodavio/skill-get`)
@@ -209,11 +213,14 @@ kodavio-agent-kit/
 ├── registry/
 │   ├── sites.example.json     ← plantilla del registro de sitios
 │   └── sites.json             (local, no versionado) tus sitios reales
-├── rules/                     guardarraíles por entorno · protocolo Kodavio · código en vivo
+├── rules/                     guardarraíles por entorno · fases · rol de la ability · protocolo · código en vivo
 ├── scripts/
+│   ├── doctor.sh              detector de deriva del kit (verde/rojo) — engánchalo al pre-commit
+│   ├── validate-registry.py   valida sites.json contra registry/sites.schema.json
+│   ├── gen-codex-agents.sh    genera .codex/agents/*.toml desde agents/*.md (nunca editar a mano)
 │   ├── add-site.sh            alta de sitios por terminal (el comando es /wp-onboard-site)
 │   └── wp-mcp-launch.sh|.ps1  lanzador MCP con credencial desde el almacén del SO
-├── skills/                    12 skills de orquestación, planificación y diseño (SKILL.md portables)
+├── skills/                    17 skills de orquestación, planificación y diseño (SKILL.md portables)
 ├── agents/                    10 subagentes especializados
 ├── workflows/WORKFLOWS.md     enrutado petición → flujo → skill → gates
 ├── sites/
@@ -222,6 +229,7 @@ kodavio-agent-kit/
 └── docs/
     ├── mcp-config-examples.md plantillas de conexión MCP por herramienta
     ├── credentials.md         credenciales sin texto plano (almacén del SO)
+    ├── field-notes.md         lo aprendido en sitios reales + ejemplos de criterio
     └── kodavio-vs-kit.md      doctrina: dónde vive cada capacidad nueva (plugin vs kit)
 ```
 

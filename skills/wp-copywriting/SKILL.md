@@ -69,7 +69,7 @@ Adapta según objetivo; no es un molde rígido.
 
 ## Fase 3 — Reglas duras de copy
 
-1. **Castellano perfecto** (o idioma del sitio). Ver `rules/copy-review.md` del Playbook si está disponible. Sin anglicismos innecesarios (*"engagement"* → "interacción", *"awareness"* → "notoriedad").
+1. **Castellano perfecto** (o idioma del sitio). Ver `Playbook/rules/copy-review.md` si está disponible (capa SA). Sin anglicismos innecesarios (*"engagement"* → "interacción", *"awareness"* → "notoriedad").
 2. **Verbos activos**, voz directa: "te ayudamos" > "podemos ayudarte"; "te enviamos" > "se enviará".
 3. **Números concretos** o nada. "Más de 200 clientes" si es verdad. "Muchos clientes" es ruido.
 4. **CTA con verbo + destino claro**: "Empieza prueba gratis" > "Más info"; "Hablamos 20 min" > "Contactar".

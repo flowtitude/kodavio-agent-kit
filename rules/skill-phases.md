@@ -18,4 +18,3 @@
 - El verifier (Report) **no es quien escribió** (Execute) — pase separado, no autoaprobación.
 - El `execution_profile` solo **añade** cautela; nunca rebaja el guardarraíl de entorno.
 - El contrato técnico del builder se carga en runtime (`skill-get`), no se memoriza en la skill (evita drift).
-</content>

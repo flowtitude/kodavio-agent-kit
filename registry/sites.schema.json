@@ -1,0 +1,72 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://flowtitude.com/kodavio-agent-kit/registry/sites.schema.json",
+  "title": "Registro de sitios del kit",
+  "description": "Contrato de registry/sites.json. Lo valida scripts/validate-registry.py (llamado por scripts/doctor.sh). El campo env es la clasificación OPERATIVA: manda sobre el environment_type que reporte WordPress.",
+  "type": "object",
+  "required": ["sites"],
+  "properties": {
+    "_meta": { "type": "object" },
+    "sites": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/site" }
+    },
+    "shared_mcp_servers": {
+      "type": "object",
+      "description": "Servers MCP genéricos cuyo sitio destino hay que confirmar antes de usar."
+    }
+  },
+  "$defs": {
+    "site": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["slug", "name", "url", "env", "guardrails", "mcp_servers", "notes"],
+      "properties": {
+        "slug": {
+          "type": "string",
+          "pattern": "^[a-z0-9]+(_[a-z0-9]+)*$",
+          "description": "Identificador local = nombre del server MCP principal. El nombre del server ES el entorno (regla de oro 10)."
+        },
+        "name": { "type": "string", "minLength": 1 },
+        "url": { "type": "string", "format": "uri", "pattern": "^https?://" },
+        "env": { "enum": ["production", "staging", "development"] },
+        "guardrails": { "enum": ["production", "staging", "development"] },
+        "client": { "type": ["string", "null"] },
+        "playbook": { "type": ["string", "null"] },
+        "mcp_servers": {
+          "type": "object",
+          "minProperties": 1,
+          "additionalProperties": { "type": "string" },
+          "description": "clave = propósito, valor = nombre del server MCP registrado en tu herramienta."
+        },
+        "builder": { "enum": ["bricks", "elementor", "gutenberg", "mixed", "none", "unknown"] },
+        "theme": { "type": ["string", "null"] },
+        "stack": { "type": "array", "items": { "type": "string" } },
+        "language": { "type": "string", "pattern": "^[a-z]{2}(_[A-Z]{2})?$" },
+        "notes": {
+          "type": "string",
+          "pattern": "^sites/.+/NOTAS\\.md$",
+          "description": "Ruta a la memoria local del sitio."
+        },
+        "caveats": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Limitaciones VINCULANTES. Si un caveat prohíbe la acción, el agente para y pregunta."
+        },
+        "kodavio_version": {
+          "type": ["string", "null"],
+          "description": "Versión del plugin instalada la última vez que se verificó. El contrato de skill-get cambia con ella."
+        },
+        "native_abilities": {
+          "type": ["boolean", "null"],
+          "description": "¿El sitio expone abilities nativas del builder (Bricks 2.4+)? Lo decide capability-map; null = sin comprobar."
+        },
+        "verified": {
+          "type": ["string", "null"],
+          "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$",
+          "description": "Fecha del último contraste con kodavio/wp-get-config-summary."
+        }
+      }
+    }
+  }
+}

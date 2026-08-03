@@ -18,7 +18,7 @@ Flujo Kodavio: `page_creation`. Playbooks del servidor: `bricks-build-page` / `e
 
 El agente redacta el brief completo; esto NO se delega al plugin:
 
-1. **Contenido**: jerarquía de secciones, copy real (no lorem), CTAs con destino. Castellano perfecto o idioma del sitio (`rules/copy-review.md`).
+1. **Contenido**: jerarquía de secciones, copy real (no lorem), CTAs con destino. Castellano perfecto o idioma del sitio (checklist `Playbook/rules/copy-review.md`, capa SA; fuera de SA, el mismo estándar con criterio propio).
 2. **Diseño**: orientar el sistema de diseño activo (rol *orientar diseño* → nativa `bricks/get-design-context` o `kodavio/design-read`+`design-get-system`) y usar sus tokens/clases. Si el encargo es visual y ambicioso, apoyarse en las skills globales `design-section` / `design-landing` para generar el boceto HTML y usarlo como brief.
 3. Elegir perfil de autoría: `fast` (defecto) o `supervised` (brief/boceto aprobado por el humano antes de escribir). Aparte, respeta el **`execution_profile`** del bootstrap (`rules/execution-profile.md`): fija cuánto dry-run/verify y si lees antes de escribir en la Fase 2 — en Seguro, dry-run + read-before-write siempre y verify completo en Fase 3.
 
