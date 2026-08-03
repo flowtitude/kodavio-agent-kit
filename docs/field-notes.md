@@ -131,6 +131,8 @@ Ordenados por lo que cuestan. Cada uno tiene ya su regla; aquí está el porqué
 
 **`theme.json` solo sobre child theme.** Escribir sobre el parent se pierde en la siguiente actualización del tema y no hay aviso. Comprobar el tema activo antes, y pasar siempre por las abilities de design-source, nunca por el filesystem.
 
+**Elementor tiene su propia lista de brechas.** Widgets que no se pueden crear, clases de contenedor que no llegan al DOM, y CSS compilado que no se regenera por MCP (el estilo no se ve hasta que el operador da Update). Todas reproducidas: `docs/kodavio-gaps-elementor.md`. Léelas antes de presupuestar una plantilla de Elementor Pro.
+
 **Bugs conocidos del converter.** Al migrar entre builders, revisa específicamente: colores que aterrizan como `background`, `video_type` perdido, tipos de template mal mapeados y dynamic bindings que quedan muertos. `wp-verifier` los tiene en su checklist.
 
 ---
