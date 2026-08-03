@@ -19,7 +19,19 @@ if [[ -L "$TARGET_DIR" ]]; then
   exit 1
 fi
 
-mkdir -p "$TARGET_DIR"
+# Never CREATE an installed copy by accident. Guessing the default wrong once left a
+# phantom copy nobody used, silently diverging from the source — exactly the failure
+# this kit is built to avoid. Creating one is an explicit act.
+if [[ ! -d "$TARGET_DIR" ]]; then
+  echo "[sync] ERROR: $TARGET_DIR does not exist." >&2
+  if [[ -z "${1:-}" ]]; then
+    echo "[sync] That was the GUESSED default. Pass the real installed copy explicitly:" >&2
+    echo "[sync]   scripts/sync-installed.sh /path/to/installed-copy" >&2
+  else
+    echo "[sync] To create it from scratch:  mkdir -p '$TARGET_DIR' && scripts/sync-installed.sh '$TARGET_DIR'" >&2
+  fi
+  exit 1
+fi
 
 # Personal/local layer — lives ONLY in the installed copy; never overwritten or deleted.
 EXCLUDES=(

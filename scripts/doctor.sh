@@ -29,11 +29,24 @@ HOOK
 fi
 
 RED=0
+SECTION_RED=0
 say()  { [[ $QUIET -eq 1 ]] || echo "$@"; }
 ok()   { say "  ok   $*"; }
-fail() { echo "  FAIL $*" >&2; RED=1; }
+fail() { echo "  FAIL $*" >&2; RED=1; SECTION_RED=1; }
 warn() { say "  warn $*"; }
-section() { say ""; say "▸ $*"; }
+section() { say ""; say "▸ $*"; SECTION_RED=0; }
+# Resumen de sección: solo si esa sección salió limpia (un fallo en otra no lo silencia).
+ok_if_clean() { [[ $SECTION_RED -eq 0 ]] && ok "$*"; }
+
+# ------------------------------------------------- capa personal del operador
+# Las skills/subagentes propios del operador se listan en .sync-keep.local (gitignored)
+# y NO son del kit compartido: no tienen por qué llevar fases canónicas, ni fila en
+# WORKFLOWS, ni salir en el README. Un detector que sale rojo por ellas es un detector
+# que se acaba ignorando — y eso es peor que no tenerlo.
+is_personal() {  # $1 = slug de la skill
+  [[ -f .sync-keep.local ]] || return 1
+  grep -qE "^skills/$1/?[[:space:]]*$" .sync-keep.local
+}
 
 # ---------------------------------------------------------------- 1. symlinks
 # Windows sin Developer Mode y los rsync mal hechos los convierten en copias:
@@ -65,8 +78,10 @@ fi
 # ------------------------------------------------------- 3. skills bien formadas
 section "Skills"
 SKILLS=()
+PERSONAL=0
 for d in skills/*/; do
   slug="$(basename "$d")"
+  if is_personal "$slug"; then PERSONAL=$((PERSONAL + 1)); continue; fi
   SKILLS+=("$slug")
   f="$d/SKILL.md"
 
@@ -83,7 +98,7 @@ for d in skills/*/; do
   grep -q "$slug" workflows/WORKFLOWS.md || fail "$slug: sin fila en workflows/WORKFLOWS.md — no se enruta"
   grep -q "$slug" AGENTS.md || fail "$slug: no aparece en la tabla de AGENTS.md"
 done
-[[ $RED -eq 0 ]] && ok "${#SKILLS[@]} skills con frontmatter, fases, enrutado y puerta de entrada"
+ok_if_clean "${#SKILLS[@]} skills del kit con frontmatter, fases, enrutado y puerta de entrada$([[ $PERSONAL -gt 0 ]] && echo " (+$PERSONAL personales, fuera del alcance)")"
 
 # ------------------------------------------------------------ 4. subagentes
 section "Subagentes"
@@ -97,7 +112,7 @@ for f in agents/*.md; do
   grep -q "credentials" "$f" || fail "$slug: no cita la regla de no filtrar datos sensibles (docs/credentials.md)"
   grep -q "$slug" AGENTS.md || fail "$slug: no aparece en la tabla de subagentes de AGENTS.md"
 done
-[[ $RED -eq 0 ]] && ok "$(ls agents/*.md | wc -l | tr -d ' ') subagentes con reglas duras cableadas"
+ok_if_clean "$(ls agents/*.md | wc -l | tr -d ' ') subagentes con reglas duras cableadas"
 
 # ------------------------------------------------- 5. enlaces internos vivos
 # Una regla que apunta a un fichero que no existe es peor que no tenerla: el modelo
@@ -153,7 +168,7 @@ fi
 
 # ------------------------------------------- 7. el README no puede mentir
 section "README coherente"
-real_skills=$(ls -d skills/*/ | wc -l | tr -d ' ')
+real_skills=${#SKILLS[@]}   # solo las del kit; las personales no salen en el README
 real_agents=$(ls agents/*.md | wc -l | tr -d ' ')
 if grep -qE "^├── skills/ +${real_skills} skills|${real_skills} skills" README.md; then
   ok "README declara $real_skills skills"
