@@ -35,7 +35,7 @@ Roles genéricos (auditor, operator, builder/bricks/elementor/gutenberg-operator
 `production-guardrails`, `execution-profile`, `kodavio-protocol`, `code-on-live-sites`, `ability-source-agnostic`, `skill-phases`. **Son el moat de disciplina** — precisamente lo que hay que enseñar. Van todas.
 
 ## Fuera del público (SA-interno)
-- `.komandesk/`, `docs/komandesk-agent-kit.md` — bootstrap interno de SA.
+- `.komandesk/` y su doc de bootstrap interno de SA — ya fuera del repo (commit `4fd8b86`).
 - Secciones SA de `AGENTS.md` ("Doctrina superior (capa SA)", "Komandesk Agent Kit") → degradar a "SA-only, ignóralo si no eres SA" (ya están marcadas opcionales) o quitarlas.
 - Datos locales (`registry/sites.json`, `sites/{slug}`) — ya gitignored, no están en el repo.
 - Las 2 skills de seguridad (arriba).
@@ -52,4 +52,3 @@ Roles genéricos (auditor, operator, builder/bricks/elementor/gutenberg-operator
 2. **Repo público**: ¿mismo `flowtitude/kodavio-agent-kit` hecho público, o repo nuevo `kodavio-skills` limpio?
 3. **Las 2 de seguridad**: ¿fuera del todo, o versión genérica más adelante?
 4. **Timing de publicación**: el trabajo se puede hacer ya; publicar cuando la campaña esté lista (septiembre) — construir ahora, publicar cuando toque.
-</content>

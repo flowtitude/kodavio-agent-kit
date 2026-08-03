@@ -11,6 +11,8 @@
 | Crear/editar página, sección, template, componente | `page_creation` | `wp-page-build` (+ `wp-design-patterns` en autoría) | wp-bricks/elementor/gutenberg-operator + wp-verifier | publicar = gate |
 | "Hazla como esta captura/mockup" | `page_creation` | `wp-reference-to-brief` → `wp-page-build` | builder-operator del builder + wp-verifier | publicar = gate |
 | Posts, contenido editorial, SEO on-page | `page_creation` (light) o CRUD | `wp-content-publish` | wp-content-writer | publicar = gate |
+| Copy comercial: home, landing, servicio, precios, FAQ | — (autoría, previa a `page_creation`) | `wp-copywriting` → `wp-page-build` | wp-content-writer | ninguno (no escribe en el sitio) |
+| Plan de captación, embudo, CRO, secuencias FluentCRM | — (plan) → `wordpress_admin` al ejecutar | `wp-marketing` | wp-content-writer + wp-operator | envíos y campañas = gate (comunicación externa) |
 | Tokens, paleta, sistema de diseño, frameworks | `design_system` | `wp-bricks-fds` / `wp-tailwind-windpress` (+ playbooks servidor `design-frameworks`, `flowtitude-design-scope`) | builder-operator + wp-verifier | aplicar sistema activo = gate |
 | CPTs, campos, ACF/JetEngine, loops, dynamic data | `content_model_dynamic` | — (playbooks servidor `content-model-schema`, `dynamic-data-binding`, `acf-integration`, `jetengine-integration`) | wp-content-architect + builder-operator + wp-verifier | migrar datos existentes = gate |
 | Snippet, shortcode, hook, endpoint, mu-plugin | `mini_plugin` | — + regla `code-on-live-sites.md` | wp-operator + wp-verifier | SIEMPRE gate en producción |
@@ -18,6 +20,9 @@
 | WooCommerce: productos, pedidos, cupones | `wordpress_admin` | — (playbook servidor `woocommerce-operations`) | wp-woo-operator | pedidos/refunds/precios = gate (dinero) |
 | Fluent (CRM, forms, support, booking) | `wordpress_admin` | — (playbook servidor `fluent-suite` + MCPs fluent-*) | wp-operator | campañas/emails salientes = gate (comunicación externa) |
 | Sospecha de hackeo / hardening | — (mínimo Kodavio) | `wp-security-triage` | wp-auditor + wp-operator | borrar/rotar credenciales = gate |
+| Sitio comprometido: limpiar y endurecer (incidente) | — (MCP `wp-malware-cleanup` + Kodavio) | `wp-security-triage` → `wp-security-cleanup` | wp-auditor → wp-operator → wp-verifier | limpieza destructiva, reinstalar core/plugins, reset de contraseñas = gate |
+| Crear/mantener patterns propios del catálogo | `design_system` (autoría de spec) | `wp-patterns-author` | builder-operator del builder + wp-verifier | guardar en la biblioteca del sitio = confirmación; exportar pack = libre |
+| "Pásame un informe para el cliente" | — (read-only sobre trabajo ya hecho) | `wp-client-report` | wp-auditor | **entregar/enviar el informe = gate** (comunicación externa) |
 | Sitio nuevo a conectar | — | `wp-onboard-site` (comando interactivo) o `scripts/add-site.sh` | — | instalar plugin en prod = gate |
 
 ## Cadena estándar de una tarea de escritura

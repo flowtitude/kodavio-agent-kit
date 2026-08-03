@@ -2,7 +2,7 @@
 
 > El agente ejecuta usando **la mejor fuente disponible** de cada capacidad, no una tool concreta. Cuando el sitio expone una ability **nativa** del builder o de WordPress (p. ej. Bricks 2.4, WP-core 6.9+), se **prefiere la nativa** y se **envuelve en el gate/verify de Kodavio**; si no existe, se cae a la ability `kodavio/*` equivalente. La disciplina (entorno, gates, verificación) es del kit; la ejecución puede ser nativa o de Kodavio, indistintamente.
 >
-> Doctrina canónica: plugin Kodavio `docs/design/ecosystem-mcp-strategy-2026-07.md` (capa de disciplina = producto; delegar primitivas a lo nativo). Complementa a `kodavio-protocol.md`.
+> Doctrina canónica: `kodavio/docs/design/ecosystem-mcp-strategy-2026-07.md` (repo del **plugin**, no de este kit) (capa de disciplina = producto; delegar primitivas a lo nativo). Complementa a `kodavio-protocol.md`.
 
 ## Por qué
 
@@ -43,4 +43,3 @@ La nativa es single-site y "reversibility over gating". El kit aporta lo que nin
 ## En una línea
 
 Descubrir → **preferir nativa** → envolver en el gate de Kodavio → si no hay, `kodavio/*` → verificar. La fuente de la ability es intercambiable; la disciplina no.
-</content>

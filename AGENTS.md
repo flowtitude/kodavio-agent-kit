@@ -26,13 +26,18 @@ kodavio-agent-kit/
 ├── .cursor/rules/       → reenvía a AGENTS.md (Cursor)
 ├── .claude/             skills/ y agents/ symlinked para Claude Code
 ├── registry/sites.json  ← REGISTRO DE SITIOS: entorno, MCP, builder, guardarraíles
-├── rules/               reglas duras locales (guardarraíles, protocolo, código en vivo)
+│                          (contrato en registry/sites.schema.json)
+├── rules/               reglas duras locales (guardarraíles, fases, rol de la ability, protocolo)
 ├── skills/              playbooks portables (formato SKILL.md, los lee cualquier agente)
-├── agents/              subagentes (formato Claude; otros agentes los usan como prompts)
+├── agents/              subagentes (formato Claude; .codex/agents se GENERA desde aquí)
 ├── workflows/           WORKFLOWS.md = petición → flujo Kodavio → skill → gates
+├── docs/field-notes.md  cómo se ve el trabajo bien hecho + modos de fallo vistos en vivo
+├── scripts/doctor.sh    detector de deriva del kit — verde/rojo, engánchalo al pre-commit
 ├── sites/{slug}/        memoria por sitio (NOTAS.md + PLAN.md si hay plan de sitio)
 └── state.md             estado vivo de esta capa
 ```
+
+**Fuente única, sin excepción.** `CLAUDE.md`, `.claude/skills`, `.claude/agents` y `.agents/skills` son **symlinks**; `.codex/agents/*.toml` se genera con `scripts/gen-codex-agents.sh` y no se edita a mano. Si algo de eso se convierte en copia, cada herramienta acaba leyendo un kit distinto — `scripts/doctor.sh` lo detecta y bloquea el commit.
 
 ## Protocolo de sesión por sitio (obligatorio)
 
@@ -119,13 +124,15 @@ Regla de selección: el especialista del builder del sitio (registry) antes que 
 5. **Un flujo primario por tarea.** `kodavio/workflow-router` decide; los flujos compuestos en orden de dependencia.
 6. **Verificar antes de declarar éxito.** Read-back, editor-open check, página sana. El write que "no falló" no es un write verificado.
 7. **Memoria en su capa** (ver "Dos memorias" abajo). Errores → `Playbook/retros/mistakes.md`.
-8. **Comunicación en castellano**; código y tecnicismos en inglés. Contenido publicable → `rules/copy-review.md` del Playbook.
+8. **Comunicación en castellano**; código y tecnicismos en inglés. Contenido publicable → `Playbook/rules/copy-review.md` (capa SA).
 9. **Página existente + verbo de modificación** (cambia/edita/ajusta/corrige/mueve/reordena/reemplaza) ⇒ `action=edit`, **nunca** `create`. Crear solo si la página no existe (verificar con `wp-search` o `builder-router` antes de elegir).
 10. **El nombre del server MCP == entorno.** Ej.: `acme_com` = producción; `acme_com_staging` = staging. Verifica el server destino antes de cada write; equivocarlo es escribir en el entorno equivocado.
 11. **Los caveats de `registry/sites.json` y `sites/{slug}/NOTAS.md` son vinculantes** (PHP roto, hosting frágil, sin backups). Si un caveat prohíbe la acción, para y pregunta.
 12. **No filtrar datos sensibles en el transcript.** Nunca pegues literalmente: emails completos (`user@dominio.com` → `u***@dominio.com`), contraseñas/Application Passwords, license keys, contenido de `wp-config.php`, ni valores de options que parezcan API keys (>=20 chars alfanum + guiones o base64). Reads afectadas: `wp_list_users`, `wc_list_customers`, `fluentcrm_get_contact`/`fluentcrm_list_contacts`, `kodavio/windpress-read-config`, `kodavio/wp-get-config-summary`, change logs de Kodavio. Si el operador necesita el dato, indícale el path en admin (p. ej. `Usuarios > Editar`, `WindPress > License`) y que lo lea él. Detalle: `docs/credentials.md`.
 
 > Si dudas en cualquier regla, para y pregunta. No hay penalización por preguntar; sí la hay por sobreescribir producción.
+
+**Cómo se ve todo esto aplicado:** `docs/field-notes.md` — leer un dry-run de verdad, presentar un Human Gate, un informe de verificación que sirve, el caso caro de create-vs-edit, y los modos de fallo ya verificados en sitios reales. Léelo una vez antes de tu primer write; después, cuando algo salga raro.
 
 ## Dos memorias: Kodavio (servidor) vs NOTAS.md (local)
 
@@ -158,7 +165,7 @@ Este repo es un **kit clonable**: nunca contiene datos de sitios ni clientes rea
 - `registry/sites.json` — tus sitios reales. Se crea desde `registry/sites.example.json`.
 - `sites/{slug}/NOTAS.md` y `sites/{slug}/PLAN.md` — memoria y cola de briefs de cada sitio (solo `sites/_template/` se versiona). En entorno SA el backlog maestro sigue siendo OPS; PLAN.md es el detalle por sitio.
 - `state.md`, `.claude/settings.local.json` — estado y permisos de tu máquina.
-- **Skills/subagentes personales del operador** — créalos en `skills/<nombre>/` (visibles para Claude Code porque `.claude/skills` es symlink a `skills/`) y lista su ruta en **`.sync-keep.local`** (una por línea, p. ej. `skills/intake/`). `sync-installed.sh` los preserva (no los borra al sincronizar) y `.sync-keep.local` está gitignored, así que tus nombres personales nunca llegan al kit compartido. Para tu flujo propio (intake/analyze/pricing/pm/track…) sin filtrarlo a otros.
+- **Skills/subagentes personales del operador** — créalos en `skills/<nombre>/` (visibles para Claude Code porque `.claude/skills` es symlink a `skills/`) y lista su ruta en **`.sync-keep.local`** (una por línea, p. ej. `skills/<tu-skill>/`). `sync-installed.sh` los preserva (no los borra al sincronizar) y `.sync-keep.local` está gitignored, así que tus nombres personales nunca llegan al kit compartido. Para tu flujo propio (intake/analyze/pricing/pm/track…) sin filtrarlo a otros.
 - Credenciales: **jamás** en este árbol, ni versionadas ni sin versionar. Access store / gestor de secretos.
 
 Si un archivo versionable necesita mencionar un sitio concreto, no lo hagas: la referencia va a `sites.json` (caveats) o a las NOTAS del sitio.
