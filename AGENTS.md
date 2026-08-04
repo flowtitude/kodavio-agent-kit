@@ -27,7 +27,7 @@ kodavio-agent-kit/
 ├── .claude/             skills/ y agents/ symlinked para Claude Code
 ├── registry/sites.json  ← REGISTRO DE SITIOS: entorno, MCP, builder, guardarraíles
 │                          (contrato en registry/sites.schema.json)
-├── rules/               reglas duras locales (guardarraíles, fases, rol de la ability, protocolo)
+├── rules/               reglas duras locales (guardarraíles, fases, rol de la ability, render, protocolo)
 ├── skills/              playbooks portables (formato SKILL.md, los lee cualquier agente)
 ├── agents/              subagentes (formato Claude; .codex/agents se GENERA desde aquí)
 ├── workflows/           WORKFLOWS.md = petición → flujo Kodavio → skill → gates
@@ -123,7 +123,7 @@ Regla de selección: el especialista del builder del sitio (registry) antes que 
 3. **Producción = drafts.** Nada se publica ni se hace visible sin Human Gate.
 4. **Nunca PHP en tema/plugin activo.** Sandbox (`wp-content/kodavio-sandbox/`) o mu-plugin con lint + backup. En producción además: gate.
 5. **Un flujo primario por tarea.** `kodavio/workflow-router` decide; los flujos compuestos en orden de dependencia.
-6. **Verificar antes de declarar éxito.** Read-back, editor-open check, página sana. El write que "no falló" no es un write verificado.
+6. **Verificar antes de declarar éxito.** Read-back, editor-open check, página sana. El write que "no falló" no es un write verificado — y el que no se ve tampoco: **escrito ≠ visible** (`rules/render-verification.md`).
 7. **Memoria en su capa** (ver "Dos memorias" abajo). Errores → `Playbook/retros/mistakes.md`.
 8. **Comunicación en castellano**; código y tecnicismos en inglés. Contenido publicable → `Playbook/rules/copy-review.md` (capa SA).
 9. **Página existente + verbo de modificación** (cambia/edita/ajusta/corrige/mueve/reordena/reemplaza) ⇒ `action=edit`, **nunca** `create`. Crear solo si la página no existe (verificar con `wp-search` o `builder-router` antes de elegir).

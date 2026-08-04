@@ -22,7 +22,11 @@ Flujo Kodavio: `builder_migration` (perfil `conversion`). Playbooks del servidor
 2. Convertir hacia **draft nuevo**, original intacto (`builder-transfer-page`, `convert-elementor-to-bricks`, etc., siempre `dry_run` primero). La conversión es irreversible-por-naturaleza: snapshot + dry-run son obligatorios en **cualquier** `execution_profile` (el perfil solo puede subir el verify, nunca saltarse la red de la conversión).
 3. `kodavio/conversion-status` tras cada página.
 4. Auditoría de fidelidad por página: estructura, estilos, responsive, dynamic bindings vivos, forms que envían. Side-by-side original vs convertida.
-5. Bugs conocidos del converter (color como background, video_type, template type forzado — backlog kodavio 0.1.4): revisar específicamente y corregir a mano en la copia.
+5. **Bugs de fidelidad del converter** (verificados en fuente el 2026-08-04, Kodavio 0.3-dev):
+   - ✅ *Color como background* y *template type forzado*: **arreglados**. El color tipográfico ya mapea por widget (`title_color`/`text_color`/`button_text_color`) y el `_elementor_template_type` existente se respeta en vez de sobrescribirse.
+   - ⚠️ **`video_type` sigue vivo en Bricks → Elementor**: el converter mete la URL en `youtube_url` y **nunca escribe `video_type`**. Elementor asume `youtube` por defecto → un vídeo de Vimeo, Dailymotion o self-hosted llega **roto**. La dirección inversa (Elementor → Bricks) sí lo resuelve bien.
+   - ⚠️ **Vídeo en el camino Semantic Model V2** (el que usa `builder-transfer-page`, o sea las 6 direcciones): al analizar coge `youtube_url ?? vimeo_url ?? hosted_url` **sin mirar `video_type`**. Elementor conserva URLs viejas de proveedores anteriores, así que puede ganar una URL obsoleta y convertir el vídeo equivocado.
+   - Regla práctica: **si la página tiene vídeo, verifícalo a mano en la copia convertida** — reproducir, no solo ver que el widget existe.
 
 ## Cierre
 

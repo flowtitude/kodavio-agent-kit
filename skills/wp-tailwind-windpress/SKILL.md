@@ -5,6 +5,8 @@ description: Trabajar con Tailwind CSS v4 en WordPress vía WindPress - detecci�
 
 # wp-tailwind-windpress — Tailwind en WordPress
 
+> ⚠️ **WindPress compila Tailwind en el navegador**: no hay recompilación desde PHP. Un cambio de tokens o de config escrito por MCP puede no existir en el CSS servido hasta que alguien abra WindPress. Aplica `rules/render-verification.md` — si no se ve, no está hecho, y tu reporte lo dice.
+
 > Recorre las fases canónicas (`rules/skill-phases.md`) y ejecuta por **rol**, prefiriendo la ability nativa cuando exista, envuelta en el gate de Kodavio (`rules/ability-source-agnostic.md`).
 
 ## Detección (siempre primero)
