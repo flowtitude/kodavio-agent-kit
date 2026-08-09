@@ -34,6 +34,8 @@ kodavio-agent-kit/
 ├── docs/field-notes.md  cómo se ve el trabajo bien hecho + modos de fallo vistos en vivo
 ├── docs/kodavio-gaps-*  qué NO puede hacer la ability hoy, con el rodeo que sí funciona
 ├── scripts/doctor.sh    detector de deriva del kit — verde/rojo, engánchalo al pre-commit
+├── registry/abilities-kodavio.json  qué capacidades expone el plugin de verdad
+│                          (generado: kodavio/scripts/export-abilities-manifest.php)
 ├── sites/{slug}/        memoria por sitio (NOTAS.md + PLAN.md si hay plan de sitio)
 └── state.md             estado vivo de esta capa
 ```

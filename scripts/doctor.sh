@@ -232,6 +232,39 @@ python3 scripts/validate-registry.py registry/sites.example.json >/dev/null 2>&1
   && ok "sites.example.json valida contra el schema" \
   || fail "sites.example.json no valida contra su propio schema"
 
+# --------------------------------- 10. contrato con el plugin: no prometer lo que no hay
+section "Contrato con el plugin"
+MANIFEST="registry/abilities-kodavio.json"
+if [[ ! -f "$MANIFEST" ]]; then
+  warn "sin $MANIFEST — no se puede comprobar qué capacidades existen de verdad"
+  warn "regenéralo desde el plugin: php scripts/export-abilities-manifest.php <ruta-a-este-fichero>"
+else
+  # El kit llegó a vender kodavio/report-get-branding como «requiere Kodavio 0.3»
+  # cuando esa capacidad vivía en una rama sin fusionar, y este doctor salía verde
+  # igual: comprobaba enlaces y markdown, pero ni una sola capacidad contra el
+  # plugin. Esto cierra la clase de fallo entera, no el caso de aquel día.
+  # La lookahead descarta rutas de repo (kodavio/docs/design/...) y comodines
+  # escritos a medias (kodavio/bricks-node-), que no son capacidades.
+  citadas="$(grep -rhoP 'kodavio/[a-z0-9]+(?:-[a-z0-9]+)*(?![a-z0-9/-])' skills/ rules/ agents/ workflows/ docs/ *.md 2>/dev/null \
+    | sort -u)"
+  reales="$(python3 -c "
+import json, sys
+d = json.load(open('$MANIFEST', encoding='utf-8'))
+print('\n'.join(d['abilities']))
+")"
+  version="$(python3 -c "import json;print(json.load(open('$MANIFEST', encoding='utf-8'))['version'])")"
+  fantasmas="$(comm -23 <(echo "$citadas") <(echo "$reales"))"
+  if [[ -n "$fantasmas" ]]; then
+    while IFS= read -r a; do
+      [[ -z "$a" ]] && continue
+      donde="$(grep -rlE "${a//\//\\/}" skills/ rules/ agents/ workflows/ docs/ *.md 2>/dev/null | head -1)"
+      fail "$a no existe en el plugin $version — citada en ${donde:-?}"
+    done <<< "$fantasmas"
+  fi
+  n_citadas="$(echo "$citadas" | grep -c . || true)"
+  ok_if_clean "$n_citadas capacidades citadas, todas existen en el plugin $version"
+fi
+
 # ---------------------------------------------------------------- veredicto
 say ""
 if [[ $RED -eq 0 ]]; then
