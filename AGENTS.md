@@ -13,7 +13,7 @@ Kodavio (server-side) ya aporta: workflows, playbooks (`kodavio/skill-list`), ca
 - **Qué puede hacer el agente en cada entorno** → `rules/production-guardrails.md`
 - **Cómo se arranca y se cierra una sesión por sitio** → skill `wp-site-session`
 - **Memoria por sitio** (decisiones, peculiaridades, históricos) → `sites/{slug}/NOTAS.md`
-- **Orquestación**: skills locales + subagentes que componen los flujos de Kodavio con las reglas del Playbook de SA
+- **Orquestación**: skills locales + subagentes que componen los flujos de Kodavio con las reglas de `agentkit/` de SA
 
 ⚠ No confundir: `projects/kodavio` es el **código del plugin** (desarrollo del producto). Aquí se **usa** el plugin contra sitios reales. Bugs del plugin → backlog del proyecto kodavio, no parches aquí.
 
@@ -48,7 +48,7 @@ Antes de tocar cualquier sitio, ejecuta el skill **`wp-site-session`**. Resumen:
 
 1. Localiza el sitio en `registry/sites.json` → anota `env` y `mcp_servers`.
 2. Lee `sites/{slug}/NOTAS.md` (peculiaridades, prohibiciones, históricos).
-3. Si el sitio pertenece a un cliente → lee `Playbook/clients/{cliente}/HANDBOOK.md`.
+3. Si el sitio pertenece a un cliente → revisa `sites/{slug}/NOTAS.md` (no hay handbook por cliente en el sistema actual de SA).
 4. Por MCP: `kodavio/agent-handbook` + `kodavio/wp-get-config-summary`.
 5. Aplica la matriz de guardarraíles según `env` (abajo).
 5b. **Antes del primer write**: aplica invariantes 6 y 7 de `rules/production-guardrails.md` (env cross-check + multi-MCP guard).
@@ -126,8 +126,8 @@ Regla de selección: el especialista del builder del sitio (registry) antes que 
 4. **Nunca PHP en tema/plugin activo.** Sandbox (`wp-content/kodavio-sandbox/`) o mu-plugin con lint + backup. En producción además: gate.
 5. **Un flujo primario por tarea.** `kodavio/workflow-router` decide; los flujos compuestos en orden de dependencia.
 6. **Verificar antes de declarar éxito.** Read-back, editor-open check, página sana. El write que "no falló" no es un write verificado — y el que no se ve tampoco: **escrito ≠ visible** (`rules/render-verification.md`).
-7. **Memoria en su capa** (ver "Dos memorias" abajo). Errores → `Playbook/retros/mistakes.md`.
-8. **Comunicación en castellano**; código y tecnicismos en inglés. Contenido publicable → `Playbook/rules/copy-review.md` (capa SA).
+7. **Memoria en su capa** (ver "Dos memorias" abajo). Errores → `agentkit/retros/mistakes.md`.
+8. **Comunicación en castellano**; código y tecnicismos en inglés. Contenido publicable → `agentkit/rules/copy-review.md` (capa SA).
 9. **Página existente + verbo de modificación** (cambia/edita/ajusta/corrige/mueve/reordena/reemplaza) ⇒ `action=edit`, **nunca** `create`. Crear solo si la página no existe (verificar con `wp-search` o `builder-router` antes de elegir).
 10. **El nombre del server MCP == entorno.** Ej.: `acme_com` = producción; `acme_com_staging` = staging. Verifica el server destino antes de cada write; equivocarlo es escribir en el entorno equivocado.
 11. **Los caveats de `registry/sites.json` y `sites/{slug}/NOTAS.md` son vinculantes** (PHP roto, hosting frágil, sin backups). Si un caveat prohíbe la acción, para y pregunta.
@@ -159,7 +159,7 @@ Regla práctica: si el dato describe **el sitio** y debería conocerlo cualquier
 | Cursor | `.cursor/rules/kodavio-agent-kit.mdc` (reenvía aquí) |
 | Kilo Code | `AGENTS.md` nativo + skills vía `.claude/skills/` (estándar Agent Skills); `agents/` como prompts de referencia para custom modes |
 
-Los MCP por sitio se configuran por herramienta (Claude: `~/.claude.json`; Cursor: `.cursor/mcp.json`; Codex: `~/.codex/config.toml`; OpenCode: `opencode.json`; Kilo: `~/.config/kilo/kilo.jsonc`). El skill `wp-onboard-site` cubre el alta en las cinco.
+Los MCP por sitio se configuran por herramienta, cada una en su fichero de config de máquina (Claude: `~/.claude.json`; Cursor: config MCP propia de Cursor; Codex: `~/.codex/config.toml`; OpenCode: `opencode.json`; Kilo: `~/.config/kilo/kilo.jsonc`) — ninguno vive dentro de este repo. El skill `wp-onboard-site` cubre el alta en las cinco.
 
 ## Datos locales (NO versionados)
 
@@ -175,5 +175,5 @@ Si un archivo versionable necesita mencionar un sitio concreto, no lo hagas: la 
 
 ## Doctrina superior (capa SA — opcional fuera de Soluciones Abiertas)
 
-Las referencias a `Playbook/*`, `Handbook/*` y OPS (`ops.sh`) aplican en el entorno de Soluciones Abiertas. Si clonaste este kit y esas rutas no existen, **omítelas**: el resto del sistema es autosuficiente. En entorno SA: Human Gates, autonomía, WIP y comunicación heredan de `Playbook/SYSTEM.md`; acciones sensibles en producción → `Playbook/rules/sensitive-actions-log.md` SIEMPRE (fuera de SA: registra el equivalente en las NOTAS del sitio).
+Las referencias a `agentkit/*` y al script `ops.sh` (en `scripts/` de sa-workspace, no de este kit) aplican en el entorno de Soluciones Abiertas. Si clonaste este kit y esas rutas no existen, **omítelas**: el resto del sistema es autosuficiente. En entorno SA: Human Gates, autonomía, WIP y comunicación heredan de `AGENTS.md` (raíz del workspace); acciones sensibles en producción → `agentkit/retros/sensitive-actions-log.md` SIEMPRE (fuera de SA: registra el equivalente en las NOTAS del sitio).
 
