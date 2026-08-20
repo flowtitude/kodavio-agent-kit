@@ -255,7 +255,10 @@ else
   # plugin. Esto cierra la clase de fallo entera, no el caso de aquel día.
   # La lookahead descarta rutas de repo (kodavio/docs/design/...) y comodines
   # escritos a medias (kodavio/bricks-node-), que no son capacidades.
-  citadas="$(grep -rhoP 'kodavio/[a-z0-9]+(?:-[a-z0-9]+)*(?![a-z0-9/-])' skills/ rules/ agents/ workflows/ docs/ *.md 2>/dev/null \
+  # perl y no grep -P: el -P es de GNU grep y en macOS/BSD no existe — con él,
+  # esta sección entera se callaba (0 citadas) y daba verde sin comprobar nada.
+  citadas="$( { find skills rules agents workflows docs -type f 2>/dev/null; ls ./*.md 2>/dev/null; } \
+    | xargs perl -nle 'print $& while /kodavio\/[a-z0-9]+(?:-[a-z0-9]+)*(?![a-z0-9\/-])/g' 2>/dev/null \
     | sort -u)"
   reales="$(python3 -c "
 import json, sys
