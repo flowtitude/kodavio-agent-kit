@@ -3,6 +3,44 @@
 > Qué cambia en cada actualización del kit y, sobre todo, **si tienes que migrar algo local**
 > (`registry/sites.json`, `sites/{slug}/`). Si una entrada no dice "migración", `git pull` basta.
 
+## 2026-08-20
+
+### Añadido
+- **`registry/report-branding.json`** (+ `.example.json` + `.schema.json`, mismo patrón que
+  `sites.json`) — marca de quién firma los informes de cliente, **a nivel de kit, no por
+  sitio**: `issuer_name`, `logo`, colores, tipografía, contacto, `legal_footer` y las dos
+  plantillas de pie de página de texto libre `footer_left`/`footer_right` (variables `{emisor}`
+  `{correo}` `{telefono}` `{web}` `{legal}` `{fecha}` `{sitio}`), y `show_powered_by` (por
+  defecto `false` — marca blanca total salvo activación explícita). Validado por
+  `scripts/validate-report-branding.py`, enganchado a `scripts/doctor.sh`.
+- **`skills/wp-client-report/templates/`** — las tres plantillas HTML reales (auditoría
+  completa, por área, de tienda) que la skill clona y rellena a mano para componer cada
+  informe; sin motor de plantillas ni JavaScript de runtime. Contrato de sustitución completo
+  en `templates/README.md`. El mecanismo de cabecera/pie repetidos en impresión (`<table>`
+  real con `thead`/`tbody`/`tfoot`, no `display:table` sobre `<div>`) queda verificado
+  página a página con `chrome --headless --print-to-pdf` + `pdftotext`.
+
+### Cambiado
+- **`skills/wp-client-report/SKILL.md`** reescrita por completo sobre el diseño aprobado del
+  20-ago: los tres tipos de informe pasan a ser auditoría completa / por área / de tienda,
+  filtrados por `coverage_check` (`kodavio/capability-map`) en vez del catálogo ad hoc anterior
+  (salud/seguridad/conversión de builder/migración de framework/entrega). Si un área da `none`,
+  el informe no inventa una sección: semáforo gris y "sin cobertura verificable". Nombre de
+  fichero con versión (`informe-{tipo}-{sitio}-{AAAA-MM-DD}-v{N}`) para que dos entregas del
+  mismo día no se pisen.
+
+### Notas — migración
+- **La ability `kodavio/report-get-branding` (marca por sitio, Kodavio 0.3) queda deprecada
+  en el plugin.** Esta skill ya no la usa ni tiene fallback a ella. Si venías de la versión
+  anterior: `cp registry/report-branding.example.json registry/report-branding.json`, copia
+  ahí lo que tuvieras en *Kodavio → Diseño y memoria → Marca para informes* de cada sitio y
+  quédate con una sola marca de operador para todos. Sin ese fichero, la skill para y lo pide
+  antes de componer cualquier informe — no firma con un nombre inventado.
+- Los tipos de informe "conversión de builder", "migración de framework" y "entrega" que traía
+  la versión anterior de la skill **no tienen equivalente en el nuevo diseño** (el `coverage_check`
+  del que dependen los seis tipos actuales solo cubre salud/seguridad/rendimiento/SEO/accesibilidad/tienda).
+  Si siguen haciendo falta como informe de cliente, es una ampliación aparte, no una migración.
+
 ## 2026-07-29
 
 ### Añadido

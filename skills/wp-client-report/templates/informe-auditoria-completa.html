@@ -1,0 +1,954 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Informe de auditoría web — ejemplo.com</title>
+<style>
+
+/* ======================================================================
+   PUNTOS DE MARCA — personalizables desde registry/report-branding.json
+   Todo lo que cambia entre operadores vive en este bloque. El resto de la
+   hoja de estilos solo consume estas variables, nunca colores sueltos.
+   La skill wp-client-report reescribe estas variables con los valores de
+   registry/report-branding.json al montar cada informe real — ver el
+   contrato de sustitución en templates/README.md, junto a esta plantilla.
+   ====================================================================== */
+:root {
+  --color-primary: #1B3A4B;      /* cabeceras, filetes, portada */
+  --color-primary-light: #EAF0F2;
+  --color-accent: #C8792A;       /* acentos, CTA de recomendaciones */
+  --color-accent-light: #FBEEE1;
+  --color-text: #22292F;         /* cuerpo de texto */
+  --color-text-muted: #5B6670;
+  --font-family: "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+
+  /* ----------------------------------------------------------------
+     Tokens de sistema — NO son de marca, no se tocan al personalizar.
+     El semáforo debe leerse igual pase lo que pase con --color-accent.
+     ---------------------------------------------------------------- */
+  --color-ok: #1E7A46;
+  --color-ok-bg: #E7F5EC;
+  --color-warning: #A9660C;
+  --color-warning-bg: #FCF1DE;
+  --color-danger: #B3261E;
+  --color-danger-bg: #FBE9E7;
+  --color-neutral: #6B7580;
+  --color-neutral-bg: #EEF0F2;
+  --color-surface: #FFFFFF;
+  --color-page-bg: #F4F5F6;
+  --color-border: #DDE2E6;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  padding: 0;
+  background: var(--color-page-bg);
+  color: var(--color-text);
+  font-family: var(--font-family);
+  line-height: 1.55;
+  font-size: 16px;
+}
+
+.example-banner {
+  background: var(--color-accent);
+  color: #fff;
+  text-align: center;
+  padding: 10px 16px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.sheet {
+  max-width: 860px;
+  margin: 0 auto;
+  background: var(--color-surface);
+}
+
+.page {
+  padding: 48px 56px;
+  border-bottom: 1px solid var(--color-border);
+}
+.print-shell .page:last-child { border-bottom: none; }
+
+/* ---------- Portada ---------- */
+.cover {
+  padding: 0;
+  background: var(--color-primary);
+  color: #fff;
+  min-height: 520px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--color-border);
+}
+.cover-top {
+  padding: 48px 56px 0;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.cover-logo {
+  width: 44px;
+  height: 44px;
+  border-radius: 8px;
+  background: rgba(255,255,255,0.14);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 1.3rem;
+  overflow: hidden;
+  flex: 0 0 auto;
+}
+.cover-logo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.cover-issuer {
+  font-size: 0.95rem;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  opacity: 0.85;
+  color: #fff;
+}
+.cover-main {
+  padding: 40px 56px;
+}
+.cover-eyebrow {
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  opacity: 0.75;
+  margin: 0 0 10px;
+}
+.cover-title {
+  font-size: 2.4rem;
+  line-height: 1.15;
+  margin: 0 0 18px;
+  font-weight: 700;
+}
+.cover-site {
+  font-size: 1.15rem;
+  opacity: 0.92;
+  margin: 0;
+}
+.cover-meta {
+  padding: 24px 56px 40px;
+  border-top: 1px solid rgba(255,255,255,0.2);
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.9rem;
+  opacity: 0.9;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+/* ---------- Encabezados de sección ---------- */
+.section-title {
+  font-size: 1.5rem;
+  color: var(--color-primary);
+  margin: 0 0 4px;
+  font-weight: 700;
+}
+.section-subtitle {
+  color: var(--color-text-muted);
+  margin: 0 0 28px;
+  font-size: 0.98rem;
+}
+.section-rule {
+  height: 3px;
+  width: 56px;
+  background: var(--color-accent);
+  margin: 0 0 20px;
+  border-radius: 2px;
+}
+
+/* ---------- Resumen ejecutivo ---------- */
+.summary-lede {
+  font-size: 1.05rem;
+  color: var(--color-text);
+  margin: 0 0 28px;
+}
+.semaphore-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-bottom: 32px;
+}
+.semaphore-card {
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  padding: 16px;
+  text-align: center;
+}
+.semaphore-dot {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  margin-bottom: 8px;
+}
+.semaphore-label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--color-text);
+  margin: 0 0 2px;
+}
+.semaphore-status {
+  font-size: 0.78rem;
+  color: var(--color-text-muted);
+  margin: 0;
+}
+.dot-ok { background: var(--color-ok); }
+.dot-warning { background: var(--color-warning); }
+.dot-danger { background: var(--color-danger); }
+
+.top-findings {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.top-findings li {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  padding: 12px 14px;
+  border-radius: 8px;
+  border: 1px solid var(--color-border);
+}
+.severity-chip {
+  flex: 0 0 auto;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding: 3px 8px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+.chip-alto { background: var(--color-danger-bg); color: var(--color-danger); }
+.chip-medio { background: var(--color-warning-bg); color: var(--color-warning); }
+.chip-bajo { background: var(--color-ok-bg); color: var(--color-ok); }
+.chip-na { background: var(--color-neutral-bg); color: var(--color-neutral); }
+
+/* ---------- Área ---------- */
+.area-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 6px;
+}
+.area-name {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--color-primary);
+  margin: 0;
+}
+.area-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+.pill-ok { background: var(--color-ok-bg); color: var(--color-ok); }
+.pill-warning { background: var(--color-warning-bg); color: var(--color-warning); }
+.pill-danger { background: var(--color-danger-bg); color: var(--color-danger); }
+.area-desc {
+  color: var(--color-text-muted);
+  margin: 0 0 20px;
+  font-size: 0.95rem;
+}
+
+.finding {
+  border: 1px solid var(--color-border);
+  border-left: 4px solid var(--color-border);
+  border-radius: 8px;
+  padding: 14px 16px;
+  margin-bottom: 12px;
+  break-inside: avoid;
+}
+.finding.sev-alto { border-left-color: var(--color-danger); }
+.finding.sev-medio { border-left-color: var(--color-warning); }
+.finding.sev-bajo { border-left-color: var(--color-ok); }
+.finding-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 6px;
+}
+.finding-title {
+  font-weight: 600;
+  font-size: 0.98rem;
+  margin: 0;
+}
+.finding-why {
+  margin: 0;
+  color: var(--color-text-muted);
+  font-size: 0.92rem;
+}
+.finding-evidence {
+  margin: 8px 0 0;
+  font-size: 0.78rem;
+  color: var(--color-text-muted);
+  font-family: ui-monospace, "SFMono-Regular", Consolas, monospace;
+}
+
+.no-coverage {
+  border: 1px dashed var(--color-border);
+  border-radius: 8px;
+  padding: 16px;
+  color: var(--color-text-muted);
+  font-size: 0.92rem;
+  background: var(--color-neutral-bg);
+  break-inside: avoid;
+}
+
+/* ---------- Tienda ---------- */
+.stats-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-bottom: 24px;
+}
+.stat-card {
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  padding: 16px;
+  break-inside: avoid;
+}
+.stat-value {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--color-primary);
+  margin: 0;
+}
+.stat-label {
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+  margin: 4px 0 0;
+}
+table.product-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 24px;
+  font-size: 0.92rem;
+}
+table.product-table th, table.product-table td {
+  text-align: left;
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--color-border);
+}
+table.product-table th {
+  color: var(--color-text-muted);
+  font-weight: 600;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+table.product-table td.num { text-align: right; font-variant-numeric: tabular-nums; }
+table.product-table tr { break-inside: avoid; }
+
+/* ---------- Recomendaciones ---------- */
+.reco-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  counter-reset: reco;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.reco-item {
+  counter-increment: reco;
+  display: flex;
+  gap: 16px;
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  padding: 16px 18px;
+  break-inside: avoid;
+}
+.reco-item::before {
+  content: counter(reco);
+  flex: 0 0 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--color-accent-light);
+  color: var(--color-accent);
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.reco-body { flex: 1; }
+.reco-title {
+  margin: 0 0 4px;
+  font-weight: 600;
+}
+.reco-meta {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+}
+
+/* ---------- Anexo técnico ---------- */
+.annex-note {
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+  margin: 0 0 20px;
+}
+table.annex-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.82rem;
+  font-family: ui-monospace, "SFMono-Regular", Consolas, monospace;
+}
+table.annex-table th, table.annex-table td {
+  text-align: left;
+  padding: 8px 10px;
+  border-bottom: 1px solid var(--color-border);
+  vertical-align: top;
+}
+table.annex-table th {
+  font-family: var(--font-family);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  font-size: 0.72rem;
+  color: var(--color-text-muted);
+}
+table.annex-table tr { break-inside: avoid; }
+
+@media (max-width: 640px) {
+  .page, .cover-top, .cover-main, .cover-meta { padding-left: 22px; padding-right: 22px; }
+  .semaphore-row, .stats-row { grid-template-columns: 1fr 1fr; }
+  .cover-title { font-size: 1.8rem; }
+  table.annex-table { display: block; overflow-x: auto; }
+}
+
+/* ======================================================================
+   IMPRESIÓN — pensado para Cmd+P → Guardar como PDF desde Chrome.
+   Solo se usan reglas que Chrome aplica de verdad: @page (tamaño y
+   márgenes, con :first para la portada a sangre completa), break-before/
+   break-inside, print-color-adjust, y una <table> real de cabecera/pie
+   repetidos (thead/tbody/tfoot) — no hay position:running() ni
+   @top-center: ningún navegador los implementa para imprimir HTML.
+   ====================================================================== */
+@page {
+  size: A4;
+  margin: 20mm 16mm 18mm;
+}
+@page :first {
+  margin: 0;
+}
+
+.print-shell, .print-body, .print-shell tr, .print-shell td { display: contents; }
+.print-head, .print-foot { display: none; }
+.print-bar {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 8.5pt;
+  color: var(--color-text-muted);
+}
+.print-foot-left, .print-foot-right { flex: 1 1 auto; }
+.print-foot-right { text-align: right; }
+.js-powered-by { display: none; }
+
+@media print {
+  html, body {
+    background: #fff;
+  }
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    color-adjust: exact !important;
+  }
+  .example-banner { display: none; }
+  .sheet { max-width: none; margin: 0; }
+
+  .cover { width: 210mm; height: 297mm; min-height: 0; break-after: page; border-bottom: none; }
+
+  /* Cada área/sección arranca en página nueva, salvo la primera del bloque
+     con cabecera/pie repetidos (ya empieza en página nueva por el break-after
+     de la portada, forzarla otra vez dejaría una página en blanco). */
+  .print-body .page { padding: 0 0 6mm; border-bottom: none; }
+  .print-body .page + .page { break-before: page; padding-top: 4mm; }
+
+  /* El mecanismo que de verdad sobrevive en Chrome: una <table> semántica
+     (thead/tbody/tfoot reales), no display:table sobre <div>. Probado y
+     descartado: con divs, Chrome solo pinta el thead en la PRIMERA página
+     de la tabla y el tfoot en la ÚLTIMA — deja de repetirse en cuanto hay
+     contenido de sobra para más de una página, tanto si el salto es
+     forzado (break-before:page entre secciones) como si es overflow
+     natural (una sola sección larga que no cabe en una página). Con
+     elementos <table>/<thead>/<tbody>/<tfoot> reales — aunque tengan una
+     única fila/celda gigante por dentro, como aquí — Chrome sí repite la
+     cabecera y el pie en TODAS las páginas que ocupa la tabla, en ambos
+     casos. Verificado con una prueba mínima aislada antes de aplicarlo
+     aquí (detalle y evidencia en templates/README.md). */
+  .print-shell { display: table; width: 100%; border-collapse: collapse; border-spacing: 0; }
+  .print-body { display: table-row-group; }
+  .print-head { display: table-header-group; }
+  .print-foot { display: table-footer-group; }
+  .print-shell tr { display: table-row; }
+  .print-shell td { display: table-cell; padding: 0; }
+  .print-head .print-bar {
+    padding-bottom: 3mm;
+    border-bottom: 0.5pt solid var(--color-border);
+    margin-bottom: 4mm;
+  }
+  .print-foot .print-bar {
+    font-size: 7.5pt;
+    padding-top: 2.5mm;
+    border-top: 0.5pt solid var(--color-border);
+    margin-top: 3mm;
+  }
+}
+</style>
+</head>
+<body>
+
+<div class="example-banner">
+  PLANTILLA wp-client-report — el contenido (sitio, hallazgos, cifras) es de ejemplo. La skill lo sustituye por datos reales al componer cada informe — contrato en templates/README.md.
+</div>
+
+<div class="sheet">
+
+  <!-- ============================= PORTADA (página propia, a sangre completa) ============================= -->
+  <section class="page cover">
+    <div class="cover-top">
+      <div class="cover-logo" id="coverLogo">A</div>
+      <div class="cover-issuer js-issuer-name">Alcor Estudio Digital</div>
+    </div>
+    <div class="cover-main">
+      <p class="cover-eyebrow">Informe de auditoría web</p>
+      <h1 class="cover-title">Estado del sitio y recomendaciones</h1>
+      <p class="cover-site">ejemplo.com</p>
+    </div>
+    <div class="cover-meta">
+      <span>Fecha del informe: 20 de agosto de 2026</span>
+      <span>Preparado por <span class="js-issuer-name">Alcor Estudio Digital</span></span>
+    </div>
+  </section>
+
+  <!-- El resto del informe repite una cabecera y un pie discretos en cada
+       página impresa. Es una <table> real (thead/tbody/tfoot), no un
+       display:table sobre <div> — ver el porqué en el bloque @media print
+       de arriba y en templates/README.md. -->
+  <table class="print-shell">
+    <thead class="print-head">
+      <tr><td>
+        <div class="print-bar">
+          <span><span class="js-issuer-name">Alcor Estudio Digital</span> — Informe de auditoría web</span>
+          <span><span class="js-report-site">ejemplo.com</span> · <span class="js-report-date">20 ago 2026</span></span>
+        </div>
+      </td></tr>
+    </thead>
+
+    <tbody class="print-body">
+      <tr><td>
+
+      <!-- ========================= RESUMEN EJECUTIVO ========================= -->
+      <section class="page">
+        <h2 class="section-title">Resumen ejecutivo</h2>
+        <div class="section-rule"></div>
+        <p class="summary-lede">
+          En conjunto, ejemplo.com funciona con normalidad para sus visitantes, pero hemos encontrado
+          tres puntos que conviene atender pronto: un acceso de administrador que no reconocemos, varias
+          imágenes de producto sin texto alternativo (afecta a personas que usan lector de pantalla) y un
+          complemento con una actualización de seguridad pendiente. Ninguno ha causado una incidencia
+          todavía, pero los tres son fáciles de corregir esta semana.
+        </p>
+
+        <div class="semaphore-row">
+          <div class="semaphore-card">
+            <span class="semaphore-dot dot-warning"></span>
+            <p class="semaphore-label">Salud</p>
+            <p class="semaphore-status">Atención</p>
+          </div>
+          <div class="semaphore-card">
+            <span class="semaphore-dot dot-danger"></span>
+            <p class="semaphore-label">Seguridad</p>
+            <p class="semaphore-status">Urgente</p>
+          </div>
+          <div class="semaphore-card">
+            <span class="semaphore-dot dot-warning"></span>
+            <p class="semaphore-label">Rendimiento</p>
+            <p class="semaphore-status">Atención</p>
+          </div>
+          <div class="semaphore-card">
+            <span class="semaphore-dot dot-warning"></span>
+            <p class="semaphore-label">SEO</p>
+            <p class="semaphore-status">Atención</p>
+          </div>
+          <div class="semaphore-card">
+            <span class="semaphore-dot dot-danger"></span>
+            <p class="semaphore-label">Accesibilidad</p>
+            <p class="semaphore-status">Urgente</p>
+          </div>
+          <div class="semaphore-card">
+            <span class="semaphore-dot dot-ok"></span>
+            <p class="semaphore-label">Tienda</p>
+            <p class="semaphore-status">Correcto</p>
+          </div>
+        </div>
+
+        <ul class="top-findings">
+          <li>
+            <span class="severity-chip chip-alto">Alto</span>
+            <p style="margin:0;">Hay un usuario con permisos de administrador que nadie del equipo reconoce como propio, creado hace 12 días.</p>
+          </li>
+          <li>
+            <span class="severity-chip chip-alto">Alto</span>
+            <p style="margin:0;">18 de cada 100 imágenes de producto no tienen texto alternativo: una persona con lector de pantalla no sabe qué está viendo.</p>
+          </li>
+          <li>
+            <span class="severity-chip chip-alto">Alto</span>
+            <p style="margin:0;">Un complemento activo tiene pendiente una actualización que corrige un fallo de seguridad conocido.</p>
+          </li>
+        </ul>
+      </section>
+
+      <!-- ============================== SALUD ============================== -->
+      <section class="page">
+        <div class="area-header">
+          <h2 class="area-name">Salud</h2>
+          <span class="area-pill pill-warning">Atención</span>
+        </div>
+        <p class="area-desc">Estado técnico general: versiones, actualizaciones pendientes y funcionamiento de las páginas clave.</p>
+
+        <div class="finding sev-alto">
+          <div class="finding-top">
+            <p class="finding-title">Complemento con actualización de seguridad pendiente</p>
+            <span class="severity-chip chip-alto">Alto</span>
+          </div>
+          <p class="finding-why">El complemento de formularios lleva 3 versiones de retraso, una de ellas corrige una vulnerabilidad ya conocida públicamente. Cuanto más tiempo pasa sin actualizar, más fácil es de aprovechar.</p>
+          <p class="finding-evidence">Fuente: kodavio/wp-list-plugins · plugin: Formularios Pro · versión instalada 3.4.1 → disponible 3.7.0</p>
+        </div>
+
+        <div class="finding sev-alto">
+          <div class="finding-top">
+            <p class="finding-title">Modo de depuración activo en producción</p>
+            <span class="severity-chip chip-alto">Alto</span>
+          </div>
+          <p class="finding-why">El sitio en vivo tiene activado un modo pensado solo para desarrollo. Si algo falla, puede mostrar información técnica interna a cualquier visitante.</p>
+          <p class="finding-evidence">Fuente: kodavio/wp-get-config-summary · WP_DEBUG: true</p>
+        </div>
+
+        <div class="finding sev-bajo">
+          <div class="finding-top">
+            <p class="finding-title">Páginas clave responden correctamente</p>
+            <span class="severity-chip chip-bajo">Bajo</span>
+          </div>
+          <p class="finding-why">Portada, catálogo y ficha de producto cargan sin errores y en tiempos razonables (entre 1,2 y 1,8 segundos). No requiere acción.</p>
+          <p class="finding-evidence">Fuente: kodavio/page-health-check · 3 páginas verificadas · frontend_ok: true</p>
+        </div>
+      </section>
+
+      <!-- ============================= SEGURIDAD ============================= -->
+      <section class="page">
+        <div class="area-header">
+          <h2 class="area-name">Seguridad</h2>
+          <span class="area-pill pill-danger">Urgente</span>
+        </div>
+        <p class="area-desc">Riesgos que podrían llevar a un acceso no autorizado o a la pérdida de datos del sitio.</p>
+
+        <div class="finding sev-alto">
+          <div class="finding-top">
+            <p class="finding-title">Usuario administrador no reconocido</p>
+            <span class="severity-chip chip-alto">Alto</span>
+          </div>
+          <p class="finding-why">Se creó una cuenta con permisos totales hace 12 días que nadie del equipo identifica como propia. Con ese acceso se puede hacer cualquier cambio en el sitio, incluida la instalación de código.</p>
+          <p class="finding-evidence">Fuente: sesión wp-security-triage 2026-08-18 · usuario: s***@example-mail.com · rol: administrator</p>
+        </div>
+
+        <div class="finding sev-alto">
+          <div class="finding-top">
+            <p class="finding-title">Sin verificación reciente de que las copias de seguridad se puedan restaurar</p>
+            <span class="severity-chip chip-alto">Alto</span>
+          </div>
+          <p class="finding-why">Hay copias programadas, pero no consta ninguna prueba de restauración en los últimos meses. Una copia que nunca se ha probado no es una garantía.</p>
+          <p class="finding-evidence">Fuente: sesión wp-security-triage 2026-08-18 · última restauración de prueba: sin registro</p>
+        </div>
+
+        <div class="finding sev-medio">
+          <div class="finding-top">
+            <p class="finding-title">El acceso al panel no limita los intentos fallidos</p>
+            <span class="severity-chip chip-medio">Medio</span>
+          </div>
+          <p class="finding-why">Se puede probar contraseñas sin límite en el formulario de acceso. No hay indicios de que se esté explotando, pero es una puerta abierta innecesaria.</p>
+          <p class="finding-evidence">Fuente: sesión wp-security-triage 2026-08-18 · intentos de acceso sin bloqueo: confirmado</p>
+        </div>
+      </section>
+
+      <!-- ============================ RENDIMIENTO ============================ -->
+      <section class="page">
+        <div class="area-header">
+          <h2 class="area-name">Rendimiento</h2>
+          <span class="area-pill pill-warning">Atención</span>
+        </div>
+        <p class="area-desc">Velocidad de carga percibida por quien visita el sitio, especialmente desde el móvil.</p>
+
+        <div class="finding sev-medio">
+          <div class="finding-top">
+            <p class="finding-title">La portada tarda más de lo recomendable en mostrar el contenido principal</p>
+            <span class="severity-chip chip-medio">Medio</span>
+          </div>
+          <p class="finding-why">3,4 segundos hasta que se ve el bloque principal (el objetivo habitual es menos de 2,5). Cada segundo de más aumenta la probabilidad de que alguien se vaya antes de ver la página.</p>
+          <p class="finding-evidence">Fuente: medición manual de campo 2026-08-19 · LCP portada: 3,4 s</p>
+        </div>
+
+        <div class="finding sev-medio">
+          <div class="finding-top">
+            <p class="finding-title">Sin caché de página activa</p>
+            <span class="severity-chip chip-medio">Medio</span>
+          </div>
+          <p class="finding-why">Cada visita genera la página desde cero en el servidor. Activar caché es uno de los cambios con mayor impacto en velocidad por el menor esfuerzo.</p>
+          <p class="finding-evidence">Fuente: kodavio/wp-list-plugins · plugin de caché: no detectado</p>
+        </div>
+
+        <div class="finding sev-medio">
+          <div class="finding-top">
+            <p class="finding-title">Imágenes de producto sin optimizar</p>
+            <span class="severity-chip chip-medio">Medio</span>
+          </div>
+          <p class="finding-why">4 de cada 10 fichas de producto usan imágenes más pesadas de lo necesario, lo que alarga la carga sobre todo en conexiones móviles.</p>
+          <p class="finding-evidence">Fuente: medición manual de campo 2026-08-19 · muestra: 40 fichas de producto</p>
+        </div>
+      </section>
+
+      <!-- ================================ SEO ================================ -->
+      <section class="page">
+        <div class="area-header">
+          <h2 class="area-name">SEO</h2>
+          <span class="area-pill pill-warning">Atención</span>
+        </div>
+        <p class="area-desc">Cómo de fácil es encontrar el sitio en buscadores como Google.</p>
+
+        <div class="finding sev-medio">
+          <div class="finding-top">
+            <p class="finding-title">2 páginas sin meta descripción</p>
+            <span class="severity-chip chip-medio">Medio</span>
+          </div>
+          <p class="finding-why">Sin ese texto, Google elige uno automáticamente y suele quedar menos atractivo para quien busca. Son fáciles de escribir en unos minutos.</p>
+          <p class="finding-evidence">Fuente: kodavio/seo-analyze · 14 páginas analizadas · 2 con description ausente</p>
+        </div>
+
+        <div class="finding sev-medio">
+          <div class="finding-top">
+            <p class="finding-title">1 página sin encabezado principal (H1)</p>
+            <span class="severity-chip chip-medio">Medio</span>
+          </div>
+          <p class="finding-why">El encabezado principal ayuda tanto a Google como a la persona que llega a la página a entender de qué trata de un vistazo.</p>
+          <p class="finding-evidence">Fuente: kodavio/seo-analyze · página: /sobre-nosotros · h1_count: 0</p>
+        </div>
+
+        <div class="finding sev-bajo">
+          <div class="finding-top">
+            <p class="finding-title">3 artículos recientes sin palabra clave definida</p>
+            <span class="severity-chip chip-bajo">Bajo</span>
+          </div>
+          <p class="finding-why">No es un error, pero definirla ayuda a enfocar mejor cada artículo para el término por el que se quiere que aparezca en buscadores.</p>
+          <p class="finding-evidence">Fuente: kodavio/seo-analyze · posts afectados: 3 · severidad: notice</p>
+        </div>
+      </section>
+
+      <!-- ============================ ACCESIBILIDAD ============================ -->
+      <section class="page">
+        <div class="area-header">
+          <h2 class="area-name">Accesibilidad</h2>
+          <span class="area-pill pill-danger">Urgente</span>
+        </div>
+        <p class="area-desc">Si cualquier persona, incluidas quienes usan lector de pantalla o tienen baja visión, puede usar el sitio sin barreras.</p>
+
+        <div class="finding sev-alto">
+          <div class="finding-top">
+            <p class="finding-title">18% de las imágenes sin texto alternativo</p>
+            <span class="severity-chip chip-alto">Alto</span>
+          </div>
+          <p class="finding-why">Sin ese texto, una persona con lector de pantalla no sabe qué muestra la imagen — en una tienda, eso puede significar no saber qué producto está viendo.</p>
+          <p class="finding-evidence">Fuente: revisión manual de campo 2026-08-19 · muestra: 220 imágenes · sin alt: 40</p>
+        </div>
+
+        <div class="finding sev-alto">
+          <div class="finding-top">
+            <p class="finding-title">Contraste insuficiente en los botones secundarios</p>
+            <span class="severity-chip chip-alto">Alto</span>
+          </div>
+          <p class="finding-why">El texto de los botones grises apenas se distingue del fondo (contraste 2,8:1, el mínimo recomendado es 4,5:1). Afecta sobre todo a personas con baja visión o en pantallas con luz de sol.</p>
+          <p class="finding-evidence">Fuente: revisión manual de campo 2026-08-19 · componente: botón "Ver más" · ratio: 2,8:1</p>
+        </div>
+
+        <div class="finding sev-medio">
+          <div class="finding-top">
+            <p class="finding-title">Campos de formulario sin etiqueta asociada correctamente</p>
+            <span class="severity-chip chip-medio">Medio</span>
+          </div>
+          <p class="finding-why">El formulario de contacto se puede rellenar viendo la pantalla, pero un lector de pantalla no anuncia qué campo es cada uno.</p>
+          <p class="finding-evidence">Fuente: revisión manual de campo 2026-08-19 · formulario: contacto · campos afectados: 3 de 5</p>
+        </div>
+      </section>
+
+      <!-- ============================== TIENDA ============================== -->
+      <section class="page">
+        <div class="area-header">
+          <h2 class="area-name">Tienda</h2>
+          <span class="area-pill pill-ok">Correcto</span>
+        </div>
+        <p class="area-desc">Ventas y estado del catálogo de los últimos 30 días (WooCommerce).</p>
+
+        <div class="stats-row">
+          <div class="stat-card">
+            <p class="stat-value">128</p>
+            <p class="stat-label">Pedidos pagados</p>
+          </div>
+          <div class="stat-card">
+            <p class="stat-value">9.842,50 €</p>
+            <p class="stat-label">Ingresos del periodo</p>
+          </div>
+          <div class="stat-card">
+            <p class="stat-value">76,89 €</p>
+            <p class="stat-label">Ticket medio</p>
+          </div>
+        </div>
+
+        <table class="product-table">
+          <thead>
+            <tr>
+              <th>Producto</th>
+              <th class="num">Unidades</th>
+              <th class="num">Ingresos</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Cesta de temporada mediana</td>
+              <td class="num">64</td>
+              <td class="num">2.176,00 €</td>
+            </tr>
+            <tr>
+              <td>Aceite de oliva virgen extra 500 ml</td>
+              <td class="num">140</td>
+              <td class="num">1.680,00 €</td>
+            </tr>
+            <tr>
+              <td>Miel artesana 250 g</td>
+              <td class="num">98</td>
+              <td class="num">980,00 €</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="finding sev-medio">
+          <div class="finding-top">
+            <p class="finding-title">4 productos con ventas recientes y sin stock</p>
+            <span class="severity-chip chip-medio">Medio</span>
+          </div>
+          <p class="finding-why">Se siguen vendiendo (o se intentan vender) productos que ya no hay en almacén, lo que puede generar pedidos que luego no se pueden servir.</p>
+          <p class="finding-evidence">Fuente: kodavio/wc-list-products · stock_status: outofstock · con ventas en los últimos 30 días: 4</p>
+        </div>
+      </section>
+
+      <!-- ========================= RECOMENDACIONES ========================= -->
+      <section class="page">
+        <h2 class="section-title">Recomendaciones priorizadas</h2>
+        <div class="section-rule"></div>
+        <p class="area-desc">Ordenadas por urgencia, no por área — así se puede trabajar la lista de arriba a abajo.</p>
+
+        <ol class="reco-list">
+          <li class="reco-item">
+            <div class="reco-body">
+              <p class="reco-title">Revisar y, si procede, eliminar el usuario administrador no reconocido; rotar contraseñas de acceso</p>
+              <p class="reco-meta">Severidad: Alto · Área: Seguridad · Requiere confirmación antes de borrar el usuario</p>
+            </div>
+          </li>
+          <li class="reco-item">
+            <div class="reco-body">
+              <p class="reco-title">Añadir texto alternativo a las imágenes de producto y corregir el contraste de los botones secundarios</p>
+              <p class="reco-meta">Severidad: Alto · Área: Accesibilidad</p>
+            </div>
+          </li>
+          <li class="reco-item">
+            <div class="reco-body">
+              <p class="reco-title">Actualizar el complemento de formularios y desactivar el modo de depuración en producción</p>
+              <p class="reco-meta">Severidad: Alto · Área: Salud</p>
+            </div>
+          </li>
+          <li class="reco-item">
+            <div class="reco-body">
+              <p class="reco-title">Probar una restauración real de la copia de seguridad más reciente</p>
+              <p class="reco-meta">Severidad: Alto · Área: Seguridad</p>
+            </div>
+          </li>
+          <li class="reco-item">
+            <div class="reco-body">
+              <p class="reco-title">Activar caché de página y optimizar las imágenes de producto más pesadas</p>
+              <p class="reco-meta">Severidad: Medio · Área: Rendimiento</p>
+            </div>
+          </li>
+          <li class="reco-item">
+            <div class="reco-body">
+              <p class="reco-title">Completar las meta descripciones y el encabezado principal que faltan</p>
+              <p class="reco-meta">Severidad: Medio · Área: SEO</p>
+            </div>
+          </li>
+          <li class="reco-item">
+            <div class="reco-body">
+              <p class="reco-title">Reponer stock de los 4 productos con ventas recientes agotados</p>
+              <p class="reco-meta">Severidad: Medio · Área: Tienda</p>
+            </div>
+          </li>
+        </ol>
+      </section>
+
+      <!-- ============================ ANEXO TÉCNICO ============================ -->
+      <section class="page">
+        <h2 class="section-title">Anexo técnico</h2>
+        <div class="section-rule"></div>
+        <p class="annex-note">Para quien quiera verificar cada dato con su propia herramienta. No es necesario leerlo para entender el informe.</p>
+
+        <table class="annex-table">
+          <thead>
+            <tr>
+              <th>Fuente</th>
+              <th>Campo</th>
+              <th>Valor</th>
+              <th>Fecha</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>kodavio/wp-get-config-summary</td><td>WP_DEBUG</td><td>true</td><td>2026-08-19</td></tr>
+            <tr><td>kodavio/wp-list-plugins</td><td>formularios-pro.version</td><td>3.4.1 → 3.7.0 disponible</td><td>2026-08-19</td></tr>
+            <tr><td>kodavio/page-health-check</td><td>frontend.status_code</td><td>200 (portada, catálogo, ficha)</td><td>2026-08-19</td></tr>
+            <tr><td>kodavio/seo-analyze</td><td>issue_totals</td><td>error: 0 · warning: 3 · notice: 3</td><td>2026-08-19</td></tr>
+            <tr><td>kodavio/wc-sales-report</td><td>paid_orders / gross_total</td><td>128 / 9.842,50 €</td><td>date_from: 2026-07-21</td></tr>
+            <tr><td>kodavio/wc-list-products</td><td>stock_status=outofstock con ventas recientes</td><td>4 productos</td><td>2026-08-19</td></tr>
+            <tr><td>sesión wp-security-triage</td><td>usuarios admin no reconocidos</td><td>1 (creado 2026-08-08)</td><td>2026-08-18</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      </td></tr>
+    </tbody>
+
+    <tfoot class="print-foot">
+      <tr><td>
+        <div class="print-bar">
+          <span class="print-foot-left"><span class="js-footer-left">Alcor Estudio Digital · hola@alcorestudio.example · +34 900 000 000 · alcorestudio.example</span></span>
+          <span class="print-foot-right"><span class="js-footer-right">Alcor Estudio Digital S.L. · Informe confidencial preparado para uso exclusivo del destinatario · No redistribuir sin autorización.</span><span class="js-powered-by"> · Generado con la tecnología Kodavio.</span></span>
+        </div>
+      </td></tr>
+    </tfoot>
+  </table>
+
+</div>
+
+</body>
+</html>

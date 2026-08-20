@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Informe de tienda — ejemplo.com</title>
+<style>
+
+/* ======================================================================
+   PUNTOS DE MARCA — personalizables desde registry/report-branding.json
+   Todo lo que cambia entre operadores vive en este bloque. El resto de la
+   hoja de estilos solo consume estas variables, nunca colores sueltos.
+   La skill wp-client-report reescribe estas variables con los valores de
+   registry/report-branding.json al montar cada informe real — ver el
+   contrato de sustitución en templates/README.md, junto a esta plantilla.
+   ====================================================================== */
+:root {
+  --color-primary: #1B3A4B;
+  --color-primary-light: #EAF0F2;
+  --color-accent: #C8792A;
+  --color-accent-light: #FBEEE1;
+  --color-text: #22292F;
+  --color-text-muted: #5B6670;
+  --font-family: "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+
+  --color-ok: #1E7A46;
+  --color-ok-bg: #E7F5EC;
+  --color-warning: #A9660C;
+  --color-warning-bg: #FCF1DE;
+  --color-danger: #B3261E;
+  --color-danger-bg: #FBE9E7;
+  --color-neutral: #6B7580;
+  --color-neutral-bg: #EEF0F2;
+  --color-surface: #FFFFFF;
+  --color-page-bg: #F4F5F6;
+  --color-border: #DDE2E6;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  padding: 0;
+  background: var(--color-page-bg);
+  color: var(--color-text);
+  font-family: var(--font-family);
+  line-height: 1.55;
+  font-size: 16px;
+}
+
+.example-banner {
+  background: var(--color-accent);
+  color: #fff;
+  text-align: center;
+  padding: 10px 16px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.sheet {
+  max-width: 860px;
+  margin: 0 auto;
+  background: var(--color-surface);
+}
+
+.page {
+  padding: 48px 56px;
+  border-bottom: 1px solid var(--color-border);
+}
+.print-shell .page:last-child { border-bottom: none; }
+
+/* ---------- Portada ---------- */
+.cover {
+  padding: 0;
+  background: var(--color-primary);
+  color: #fff;
+  min-height: 480px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--color-border);
+}
+.cover-top {
+  padding: 48px 56px 0;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.cover-logo {
+  width: 44px;
+  height: 44px;
+  border-radius: 8px;
+  background: rgba(255,255,255,0.14);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 1.3rem;
+  overflow: hidden;
+  flex: 0 0 auto;
+}
+.cover-logo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.cover-issuer {
+  font-size: 0.95rem;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  opacity: 0.85;
+  color: #fff;
+}
+.cover-main { padding: 40px 56px; }
+.cover-eyebrow {
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  opacity: 0.75;
+  margin: 0 0 10px;
+}
+.cover-title {
+  font-size: 2.2rem;
+  line-height: 1.15;
+  margin: 0 0 18px;
+  font-weight: 700;
+}
+.cover-site { font-size: 1.1rem; opacity: 0.92; margin: 0; }
+.cover-meta {
+  padding: 22px 56px 36px;
+  border-top: 1px solid rgba(255,255,255,0.2);
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.9rem;
+  opacity: 0.9;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+/* ---------- Encabezados de sección ---------- */
+.section-title {
+  font-size: 1.5rem;
+  color: var(--color-primary);
+  margin: 0 0 4px;
+  font-weight: 700;
+}
+.section-rule {
+  height: 3px;
+  width: 56px;
+  background: var(--color-accent);
+  margin: 0 0 20px;
+  border-radius: 2px;
+}
+.summary-lede {
+  font-size: 1.02rem;
+  color: var(--color-text);
+  margin: 0 0 24px;
+}
+.area-desc {
+  color: var(--color-text-muted);
+  margin: 0 0 20px;
+  font-size: 0.95rem;
+}
+
+.area-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 6px;
+}
+.area-name {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--color-primary);
+  margin: 0;
+}
+.area-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+.pill-ok { background: var(--color-ok-bg); color: var(--color-ok); }
+.pill-warning { background: var(--color-warning-bg); color: var(--color-warning); }
+.pill-danger { background: var(--color-danger-bg); color: var(--color-danger); }
+
+/* ---------- Estadísticas / tienda ---------- */
+.stats-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-bottom: 24px;
+}
+.stat-card {
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  padding: 16px;
+  break-inside: avoid;
+}
+.stat-value {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--color-primary);
+  margin: 0;
+}
+.stat-label { font-size: 0.8rem; color: var(--color-text-muted); margin: 4px 0 0; }
+
+table.product-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 24px;
+  font-size: 0.92rem;
+}
+table.product-table th, table.product-table td {
+  text-align: left;
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--color-border);
+}
+table.product-table th {
+  color: var(--color-text-muted);
+  font-weight: 600;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+table.product-table td.num { text-align: right; font-variant-numeric: tabular-nums; }
+table.product-table tr { break-inside: avoid; }
+
+.severity-chip {
+  flex: 0 0 auto;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding: 3px 8px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+.chip-alto { background: var(--color-danger-bg); color: var(--color-danger); }
+.chip-medio { background: var(--color-warning-bg); color: var(--color-warning); }
+.chip-bajo { background: var(--color-ok-bg); color: var(--color-ok); }
+
+.finding {
+  border: 1px solid var(--color-border);
+  border-left: 4px solid var(--color-border);
+  border-radius: 8px;
+  padding: 14px 16px;
+  margin-bottom: 12px;
+  break-inside: avoid;
+}
+.finding.sev-alto { border-left-color: var(--color-danger); }
+.finding.sev-medio { border-left-color: var(--color-warning); }
+.finding.sev-bajo { border-left-color: var(--color-ok); }
+.finding-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 6px;
+}
+.finding-title { font-weight: 600; font-size: 0.98rem; margin: 0; }
+.finding-why { margin: 0; color: var(--color-text-muted); font-size: 0.92rem; }
+.finding-evidence {
+  margin: 8px 0 0;
+  font-size: 0.78rem;
+  color: var(--color-text-muted);
+  font-family: ui-monospace, "SFMono-Regular", Consolas, monospace;
+}
+
+/* ---------- Recomendaciones ---------- */
+.reco-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  counter-reset: reco;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.reco-item {
+  counter-increment: reco;
+  display: flex;
+  gap: 16px;
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  padding: 16px 18px;
+  break-inside: avoid;
+}
+.reco-item::before {
+  content: counter(reco);
+  flex: 0 0 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--color-accent-light);
+  color: var(--color-accent);
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.reco-body { flex: 1; }
+.reco-title { margin: 0 0 4px; font-weight: 600; }
+.reco-meta { margin: 0; font-size: 0.85rem; color: var(--color-text-muted); }
+
+/* ---------- Anexo técnico ---------- */
+.annex-note { color: var(--color-text-muted); font-size: 0.9rem; margin: 0 0 20px; }
+table.annex-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.82rem;
+  font-family: ui-monospace, "SFMono-Regular", Consolas, monospace;
+}
+table.annex-table th, table.annex-table td {
+  text-align: left;
+  padding: 8px 10px;
+  border-bottom: 1px solid var(--color-border);
+  vertical-align: top;
+}
+table.annex-table th {
+  font-family: var(--font-family);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  font-size: 0.72rem;
+  color: var(--color-text-muted);
+}
+table.annex-table tr { break-inside: avoid; }
+
+@media (max-width: 640px) {
+  .page, .cover-top, .cover-main, .cover-meta { padding-left: 22px; padding-right: 22px; }
+  .stats-row { grid-template-columns: 1fr 1fr; }
+  .cover-title { font-size: 1.7rem; }
+  table.annex-table { display: block; overflow-x: auto; }
+}
+
+/* ======================================================================
+   IMPRESIÓN — pensado para Cmd+P → Guardar como PDF desde Chrome.
+   Solo reglas que Chrome aplica de verdad: @page (con :first para la
+   portada a sangre completa), break-before/break-inside, print-color-
+   adjust, y el truco table-header-group/table-footer-group para repetir
+   una cabecera/pie discretos en cada página. Nada de position:running()
+   ni @top-center: ningún navegador los implementa para imprimir HTML.
+   ====================================================================== */
+@page {
+  size: A4;
+  margin: 20mm 16mm 18mm;
+}
+@page :first {
+  margin: 0;
+}
+
+.print-shell, .print-body, .print-shell tr, .print-shell td { display: contents; }
+.print-head, .print-foot { display: none; }
+.print-bar {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 8.5pt;
+  color: var(--color-text-muted);
+}
+.print-foot-left, .print-foot-right { flex: 1 1 auto; }
+.print-foot-right { text-align: right; }
+.js-powered-by { display: none; }
+
+@media print {
+  html, body { background: #fff; }
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    color-adjust: exact !important;
+  }
+  .example-banner { display: none; }
+  .sheet { max-width: none; margin: 0; }
+
+  .cover { width: 210mm; height: 297mm; min-height: 0; break-after: page; border-bottom: none; }
+
+  .print-body .page { padding: 0 0 6mm; border-bottom: none; }
+  .print-body .page + .page { break-before: page; padding-top: 4mm; }
+
+  /* El mecanismo que de verdad sobrevive en Chrome: una <table> semántica
+     (thead/tbody/tfoot reales), no display:table sobre <div>. Con divs,
+     Chrome solo pinta el thead en la primera página de la tabla y el
+     tfoot en la última — deja de repetirse en cuanto hay contenido de
+     sobra para más de una página, forzado o por overflow natural. Con
+     elementos de tabla reales (aunque sea una única fila/celda gigante
+     por dentro, como aquí) repite cabecera y pie en todas las páginas.
+     Verificado con una prueba mínima antes de aplicarlo — ver
+     templates/README.md para el detalle y la evidencia. */
+  .print-shell { display: table; width: 100%; border-collapse: collapse; border-spacing: 0; }
+  .print-body { display: table-row-group; }
+  .print-head { display: table-header-group; }
+  .print-foot { display: table-footer-group; }
+  .print-shell tr { display: table-row; }
+  .print-shell td { display: table-cell; padding: 0; }
+  .print-head .print-bar {
+    padding-bottom: 3mm;
+    border-bottom: 0.5pt solid var(--color-border);
+    margin-bottom: 4mm;
+  }
+  .print-foot .print-bar {
+    font-size: 7.5pt;
+    padding-top: 2.5mm;
+    border-top: 0.5pt solid var(--color-border);
+    margin-top: 3mm;
+  }
+}
+</style>
+</head>
+<body>
+
+<div class="example-banner">
+  PLANTILLA wp-client-report — el contenido (sitio, hallazgos, cifras) es de ejemplo. La skill lo sustituye por datos reales al componer cada informe — contrato en templates/README.md.
+</div>
+
+<div class="sheet">
+
+  <!-- ============================= PORTADA ============================= -->
+  <section class="page cover">
+    <div class="cover-top">
+      <div class="cover-logo" id="coverLogo">A</div>
+      <div class="cover-issuer js-issuer-name">Alcor Estudio Digital</div>
+    </div>
+    <div class="cover-main">
+      <p class="cover-eyebrow">Informe de tienda</p>
+      <h1 class="cover-title">Ventas, catálogo y stock del periodo</h1>
+      <p class="cover-site">ejemplo.com · tienda WooCommerce</p>
+    </div>
+    <div class="cover-meta">
+      <span>Periodo: 21 jul – 20 ago de 2026</span>
+      <span>Preparado por <span class="js-issuer-name">Alcor Estudio Digital</span></span>
+    </div>
+  </section>
+
+  <table class="print-shell">
+    <thead class="print-head">
+      <tr><td>
+        <div class="print-bar">
+          <span><span class="js-issuer-name">Alcor Estudio Digital</span> — Informe de tienda</span>
+          <span><span class="js-report-site">ejemplo.com</span> · <span class="js-report-date">20 ago 2026</span></span>
+        </div>
+      </td></tr>
+    </thead>
+
+    <tbody class="print-body">
+      <tr><td>
+
+      <!-- ====================== RESUMEN DEL PERIODO ====================== -->
+      <section class="page">
+        <h2 class="section-title">Resumen del periodo</h2>
+        <div class="section-rule"></div>
+        <p class="summary-lede">
+          Últimos 30 días: la tienda mantiene un ritmo de ventas estable, con un ticket medio algo
+          por encima del mes anterior. El principal punto de atención es de catálogo, no de ventas:
+          hay pedidos y productos que conviene revisar antes de que generen una incidencia con un cliente.
+        </p>
+
+        <div class="stats-row">
+          <div class="stat-card">
+            <p class="stat-value">128</p>
+            <p class="stat-label">Pedidos pagados</p>
+          </div>
+          <div class="stat-card">
+            <p class="stat-value">9.842,50 €</p>
+            <p class="stat-label">Ingresos del periodo</p>
+          </div>
+          <div class="stat-card">
+            <p class="stat-value">76,89 €</p>
+            <p class="stat-label">Ticket medio</p>
+          </div>
+        </div>
+
+        <table class="product-table">
+          <thead>
+            <tr>
+              <th>Producto más vendido</th>
+              <th class="num">Unidades</th>
+              <th class="num">Ingresos</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Cesta de temporada mediana</td>
+              <td class="num">64</td>
+              <td class="num">2.176,00 €</td>
+            </tr>
+            <tr>
+              <td>Aceite de oliva virgen extra 500 ml</td>
+              <td class="num">140</td>
+              <td class="num">1.680,00 €</td>
+            </tr>
+            <tr>
+              <td>Miel artesana 250 g</td>
+              <td class="num">98</td>
+              <td class="num">980,00 €</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- ==================== CATÁLOGO Y STOCK ==================== -->
+      <section class="page">
+        <div class="area-header">
+          <h2 class="area-name">Catálogo y stock</h2>
+          <span class="area-pill pill-warning">Atención</span>
+        </div>
+        <p class="area-desc">Estado del catálogo publicado: qué se puede seguir vendiendo tal cual y qué necesita revisión.</p>
+
+        <div class="stats-row">
+          <div class="stat-card">
+            <p class="stat-value">312</p>
+            <p class="stat-label">Productos publicados</p>
+          </div>
+          <div class="stat-card">
+            <p class="stat-value">9</p>
+            <p class="stat-label">Sin stock</p>
+          </div>
+          <div class="stat-card">
+            <p class="stat-value">14</p>
+            <p class="stat-label">Sin imagen principal</p>
+          </div>
+        </div>
+
+        <div class="finding sev-medio">
+          <div class="finding-top">
+            <p class="finding-title">4 productos con ventas recientes y sin stock</p>
+            <span class="severity-chip chip-medio">Medio</span>
+          </div>
+          <p class="finding-why">Se siguen vendiendo (o se intentan vender) productos que ya no hay en almacén, lo que puede generar pedidos que luego no se pueden servir.</p>
+          <p class="finding-evidence">Fuente: kodavio/wc-list-products · stock_status: outofstock · con ventas en los últimos 30 días: 4</p>
+        </div>
+
+        <div class="finding sev-medio">
+          <div class="finding-top">
+            <p class="finding-title">14 productos publicados sin imagen principal</p>
+            <span class="severity-chip chip-medio">Medio</span>
+          </div>
+          <p class="finding-why">Un producto sin foto transmite menos confianza y suele vender peor. Es un cambio rápido de hacer por lotes.</p>
+          <p class="finding-evidence">Fuente: kodavio/wc-list-products · featured_image: ausente · productos afectados: 14 de 312</p>
+        </div>
+
+        <div class="finding sev-bajo">
+          <div class="finding-top">
+            <p class="finding-title">5 productos con stock bajo (menos de 3 unidades)</p>
+            <span class="severity-chip chip-bajo">Bajo</span>
+          </div>
+          <p class="finding-why">No es urgente, pero conviene tenerlos en la próxima reposición para no quedarse sin ellos a mitad de una venta activa.</p>
+          <p class="finding-evidence">Fuente: kodavio/wc-list-products · stock_quantity &lt; 3 · productos: 5</p>
+        </div>
+      </section>
+
+      <!-- ==================== HALLAZGOS OPERATIVOS ==================== -->
+      <section class="page">
+        <div class="area-header">
+          <h2 class="area-name">Hallazgos operativos</h2>
+          <span class="area-pill pill-danger">Urgente</span>
+        </div>
+        <p class="area-desc">Situaciones que afectan a pedidos concretos, no al catálogo en general.</p>
+
+        <div class="finding sev-alto">
+          <div class="finding-top">
+            <p class="finding-title">3 pedidos atascados en "procesando" desde hace más de 5 días</p>
+            <span class="severity-chip chip-alto">Alto</span>
+          </div>
+          <p class="finding-why">Un pedido pagado que no avanza es la causa más habitual de que un cliente escriba preguntando dónde está su compra. Conviene revisarlos hoy.</p>
+          <p class="finding-evidence">Fuente: kodavio/wc-orders-summary · status: processing · antigüedad &gt; 5 días: 3 pedidos</p>
+        </div>
+
+        <div class="finding sev-medio">
+          <div class="finding-top">
+            <p class="finding-title">2 pedidos con pago pendiente sin confirmar desde hace más de 48 horas</p>
+            <span class="severity-chip chip-medio">Medio</span>
+          </div>
+          <p class="finding-why">Puede ser una pasarela de pago que no notificó correctamente. Si el cliente ya pagó y el pedido no lo refleja, es un problema de confianza.</p>
+          <p class="finding-evidence">Fuente: kodavio/wc-orders-summary · status: pending · antigüedad &gt; 48h: 2 pedidos</p>
+        </div>
+
+        <div class="finding sev-bajo">
+          <div class="finding-top">
+            <p class="finding-title">Ningún pedido con reembolso solicitado sin resolver</p>
+            <span class="severity-chip chip-bajo">Bajo</span>
+          </div>
+          <p class="finding-why">No hay reembolsos pendientes de gestionar en este momento. No requiere acción.</p>
+          <p class="finding-evidence">Fuente: kodavio/wc-orders-summary · status: refund_requested · total: 0</p>
+        </div>
+      </section>
+
+      <!-- ========================= RECOMENDACIONES ========================= -->
+      <section class="page">
+        <h2 class="section-title">Recomendaciones priorizadas</h2>
+        <div class="section-rule"></div>
+        <p class="area-desc">Ordenadas por urgencia, para trabajar la lista de arriba a abajo.</p>
+
+        <ol class="reco-list">
+          <li class="reco-item">
+            <div class="reco-body">
+              <p class="reco-title">Revisar y avanzar los 3 pedidos atascados en "procesando"</p>
+              <p class="reco-meta">Severidad: Alto · Área: Tienda — pedidos</p>
+            </div>
+          </li>
+          <li class="reco-item">
+            <div class="reco-body">
+              <p class="reco-title">Confirmar con la pasarela de pago los 2 pedidos pendientes sin resolver</p>
+              <p class="reco-meta">Severidad: Medio · Área: Tienda — pedidos</p>
+            </div>
+          </li>
+          <li class="reco-item">
+            <div class="reco-body">
+              <p class="reco-title">Reponer stock de los 4 productos con ventas recientes agotados</p>
+              <p class="reco-meta">Severidad: Medio · Área: Tienda — catálogo</p>
+            </div>
+          </li>
+          <li class="reco-item">
+            <div class="reco-body">
+              <p class="reco-title">Añadir imagen principal a los 14 productos que no la tienen</p>
+              <p class="reco-meta">Severidad: Medio · Área: Tienda — catálogo</p>
+            </div>
+          </li>
+          <li class="reco-item">
+            <div class="reco-body">
+              <p class="reco-title">Incluir los 5 productos con stock bajo en la próxima reposición</p>
+              <p class="reco-meta">Severidad: Bajo · Área: Tienda — catálogo</p>
+            </div>
+          </li>
+        </ol>
+      </section>
+
+      <!-- ============================ ANEXO TÉCNICO ============================ -->
+      <section class="page">
+        <h2 class="section-title">Anexo técnico</h2>
+        <div class="section-rule"></div>
+        <p class="annex-note">Para quien quiera verificar cada dato con su propia herramienta. No es necesario leerlo para entender el informe.</p>
+
+        <table class="annex-table">
+          <thead>
+            <tr>
+              <th>Fuente</th>
+              <th>Campo</th>
+              <th>Valor</th>
+              <th>Fecha</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>kodavio/wc-get-status</td><td>provider</td><td>WooCommerce 8.9</td><td>2026-08-20</td></tr>
+            <tr><td>kodavio/wc-sales-report</td><td>paid_orders / gross_total</td><td>128 / 9.842,50 €</td><td>date_from: 2026-07-21</td></tr>
+            <tr><td>kodavio/wc-sales-report</td><td>average_order_value</td><td>76,89 €</td><td>date_from: 2026-07-21</td></tr>
+            <tr><td>kodavio/wc-list-products</td><td>total_published</td><td>312</td><td>2026-08-20</td></tr>
+            <tr><td>kodavio/wc-list-products</td><td>stock_status=outofstock con ventas recientes</td><td>4 productos</td><td>2026-08-20</td></tr>
+            <tr><td>kodavio/wc-list-products</td><td>featured_image ausente</td><td>14 productos</td><td>2026-08-20</td></tr>
+            <tr><td>kodavio/wc-list-products</td><td>stock_quantity &lt; 3</td><td>5 productos</td><td>2026-08-20</td></tr>
+            <tr><td>kodavio/wc-orders-summary</td><td>status=processing, antigüedad &gt; 5 días</td><td>3 pedidos</td><td>2026-08-20</td></tr>
+            <tr><td>kodavio/wc-orders-summary</td><td>status=pending, antigüedad &gt; 48h</td><td>2 pedidos</td><td>2026-08-20</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      </td></tr>
+    </tbody>
+
+    <tfoot class="print-foot">
+      <tr><td>
+        <div class="print-bar">
+          <span class="print-foot-left"><span class="js-footer-left">Alcor Estudio Digital · hola@alcorestudio.example · +34 900 000 000 · alcorestudio.example</span></span>
+          <span class="print-foot-right"><span class="js-footer-right">Alcor Estudio Digital S.L. · Informe confidencial preparado para uso exclusivo del destinatario · No redistribuir sin autorización.</span><span class="js-powered-by"> · Generado con la tecnología Kodavio.</span></span>
+        </div>
+      </td></tr>
+    </tfoot>
+  </table>
+
+</div>
+
+</body>
+</html>

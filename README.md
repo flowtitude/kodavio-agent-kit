@@ -154,7 +154,7 @@ Lo que el agente **nunca** hace solo en producción: publicar, instalar/actualiz
 | [`wp-site-health`](skills/wp-site-health/SKILL.md) | Mantenimiento: updates, limpieza, salud, rendimiento |
 | [`wp-security-triage`](skills/wp-security-triage/SKILL.md) | Triage de seguridad: infecciones, hardening, auditoría preventiva |
 | [`wp-security-cleanup`](skills/wp-security-cleanup/SKILL.md) | Respuesta a incidente: limpieza forense y hardening de un sitio comprometido, con gates |
-| [`wp-client-report`](skills/wp-client-report/SKILL.md) | Informe HTML/PDF con la marca del cliente a partir del trabajo hecho (salud, seguridad, conversión, entrega) |
+| [`wp-client-report`](skills/wp-client-report/SKILL.md) | Informe de marca blanca (HTML/PDF): auditoría completa, una sola área o informe de tienda |
 
 ### Playbooks del servidor (Kodavio, se cargan en runtime con `kodavio/skill-get`)
 

@@ -1,5 +1,6 @@
 # Datos locales — NUNCA se versionan (sitios y clientes reales)
 registry/sites.json
+registry/report-branding.json
 sites/*
 !sites/_template/
 state.md
@@ -16,6 +17,8 @@ kilo.jsonc
 
 # Sistema
 .DS_Store
+__pycache__/
+*.pyc
 # Komandesk Agent Kit local secrets
 .komandesk/secrets.local.env
 .komandesk/credentials.local.json
