@@ -128,7 +128,7 @@ PAT = re.compile(r"`((?:%s)/[\w./-]+)`|\]\(((?:%s)/[\w./-]+)\)" % ("|".join(DIRS
 # Plantillas ({slug}), globs, y los ficheros que por diseño solo existen en la copia
 # del operador (datos locales, gitignored): referenciarlos es correcto.
 SKIP = re.compile(r"\{slug\}|\{cliente\}|\{client\}|<|\*")
-LOCAL_BY_DESIGN = {"registry/sites.json", "registry/report-branding.json", "state.md"}
+LOCAL_BY_DESIGN = {"registry/sites.json", "registry/marca-informes.txt", "state.md"}
 
 targets = ["AGENTS.md", "README.md", *DIRS]
 files = []
@@ -187,7 +187,7 @@ done
 # ------------------------------------------------- 8. el kit sigue siendo clonable
 section "Kit clonable (sin datos locales versionados)"
 leaked=0
-for p in registry/sites.json registry/report-branding.json state.md .claude/settings.local.json; do
+for p in registry/sites.json registry/marca-informes.txt state.md .claude/settings.local.json; do
   git ls-files --error-unmatch "$p" >/dev/null 2>&1 && { fail "$p está versionado y es dato local"; leaked=1; }
 done
 while read -r tracked; do
@@ -232,15 +232,15 @@ python3 scripts/validate-registry.py registry/sites.example.json >/dev/null 2>&1
   && ok "sites.example.json valida contra el schema" \
   || fail "sites.example.json no valida contra su propio schema"
 
-# Marca del kit para informes de cliente — mismo patrón real/gitignored + example + schema.
-if [[ -f registry/report-branding.json ]]; then
-  python3 scripts/validate-report-branding.py registry/report-branding.json || fail "registry/report-branding.json no valida"
+# Marca del kit para informes de cliente — texto plano, patrón real/gitignored + example.
+if [[ -f registry/marca-informes.txt ]]; then
+  python3 scripts/validate-marca-informes.py registry/marca-informes.txt || fail "registry/marca-informes.txt no valida"
 else
-  warn "registry/report-branding.json no existe (cp registry/report-branding.example.json registry/report-branding.json y rellena tu marca)"
+  warn "registry/marca-informes.txt no existe (cp registry/marca-informes.example.txt registry/marca-informes.txt y rellena tu marca)"
 fi
-python3 scripts/validate-report-branding.py registry/report-branding.example.json >/dev/null 2>&1 \
-  && ok "report-branding.example.json valida contra el schema" \
-  || fail "report-branding.example.json no valida contra su propio schema"
+python3 scripts/validate-marca-informes.py registry/marca-informes.example.txt >/dev/null 2>&1 \
+  && ok "marca-informes.example.txt valida" \
+  || fail "marca-informes.example.txt no valida"
 
 # --------------------------------- 10. contrato con el plugin: no prometer lo que no hay
 section "Contrato con el plugin"

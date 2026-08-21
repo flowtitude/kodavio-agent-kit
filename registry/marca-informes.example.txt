@@ -1,0 +1,109 @@
+# PLANTILLA de la marca del kit para informes de cliente.
+#
+# Copia este archivo a marca-informes.txt (no versionado) y edita los valores.
+# Si marca-informes.txt no existe, skills/wp-client-report/SKILL.md para y lo
+# pide antes de componer cualquier informe — no firma con un nombre inventado.
+#
+#   cp registry/marca-informes.example.txt registry/marca-informes.txt
+#
+# Formato: una línea por ajuste, "Clave: valor". Las líneas que empiezan por
+# "#" son comentarios y se ignoran, igual que las líneas en blanco. Las
+# claves se reconocen con o sin acentos y sin distinguir mayúsculas de
+# minúsculas ("Teléfono", "telefono" y "TELÉFONO" son la misma clave) — para
+# que un error de tecleo no rompa nada. Una clave que no se reconozca genera
+# un aviso al validar (scripts/doctor.sh), no un error: se ignora y el resto
+# del fichero se aplica igual.
+#
+# Todo lo que no se rellene usa el valor de fábrica (el mismo que traían las
+# plantillas antes de que existiera este fichero) — no hace falta escribir
+# las líneas que no te importan. Este ejemplo las trae TODAS puestas para que
+# personalizar sea borrar y escribir encima, nunca partir de cero.
+#
+# Una sola marca por kit, no por sitio ni por cliente — se rellena una vez
+# para todos los sitios que operas.
+# Esquema/validador: scripts/validate-marca-informes.py (lo llama scripts/doctor.sh)
+
+
+# ============================== MARCA ==============================
+# Quién firma el informe — tu agencia o estudio, no el sitio auditado.
+# Único campo obligatorio; sin él, la skill para y lo pide.
+Emisor: Tu Agencia o Estudio S.L.
+
+# Pie de página del informe. Los tres son opcionales — deja en blanco los que
+# no quieras mostrar (borra la línea entera, no dejes "Correo: ").
+Correo: hola@tuagencia.example
+Teléfono: +34 900 000 000
+Web: tuagencia.example
+
+# Ruta o URL a tu logo (PNG/SVG). Si lo dejas vacío o borras la línea, la
+# portada usa la inicial de "Emisor" en tipografía grande — no hace falta
+# logo para poder personalizar el resto.
+Logo:
+
+# Texto legal libre del pie (razón social completa, aviso de confidencialidad,
+# condiciones de redistribución…). Una sola línea; si necesitas varias ideas,
+# sepáralas con " · ".
+Texto legal: Tu Agencia o Estudio S.L. · Informe confidencial preparado para uso exclusivo del destinatario · No redistribuir sin autorización.
+
+# sí / no. Añade "· Generado con la tecnología Kodavio." al final del pie.
+# Por defecto NO se muestra — marca blanca total salvo que lo actives aquí.
+Mostrar "Generado con Kodavio": no
+
+
+# ======================= COLORES Y TIPOGRAFÍA =======================
+# Títulos, filetes de sección y cabecera de la portada.
+Color principal: #1B3A4B
+# Acentos: botones/CTA de recomendaciones, número de cada recomendación.
+Color de acento: #C8792A
+# Cuerpo de texto del informe.
+Color del texto: #22292F
+# Fondo de la portada a página completa. Si lo borras, usa el mismo valor
+# que "Color principal" (comportamiento de antes de que este campo existiera).
+Color de portada: #1B3A4B
+# Con familias de sistema de respaldo siempre detrás, por si la fuente no
+# está disponible donde se genera el PDF.
+Tipografía: "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif
+
+# Aviso: verde/ámbar/rojo del semáforo de estado NO son colores de marca —
+# son tokens de sistema fijos, no se personalizan aquí (un cliente con rojo
+# corporativo no puede volver ilegible "todo va mal").
+
+
+# ================================ PORTADA ================================
+# Texto pequeño en mayúsculas encima del título de portada. Variable
+# disponible: {tipo_informe} (ver más abajo). Por defecto es literalmente
+# {tipo_informe}, es decir: "Informe de auditoría web" / "Informe de SEO" /
+# "Informe de tienda" según qué tipo de informe se esté componiendo — para
+# forzar el MISMO antetítulo en todos los tipos, escribe aquí un texto fijo.
+Portada · antetítulo: {tipo_informe}
+
+# Título grande de portada. Solo aplica tal cual al informe de auditoría
+# completa — en informe por área y de tienda, el título ya lo redacta la
+# skill según lo que audita cada informe concreto (p. ej. una portada de SEO
+# no puede llevar el mismo título que una de tienda). Fija un valor aquí solo
+# si quieres FORZAR el mismo título en todos los tipos.
+Portada · título: Estado del sitio y recomendaciones
+
+# sí / no. Si es "no", la portada no muestra la fecha del informe (o el
+# periodo, en el informe de tienda).
+Portada · mostrar fecha: sí
+
+
+# ========================= CABECERA Y PIE =========================
+# Se repiten en cada página impresa (excepto la portada). Variables
+# disponibles en las cuatro plantillas de texto de abajo:
+#   {emisor}       Emisor
+#   {correo}       Correo
+#   {telefono}     Teléfono
+#   {web}          Web
+#   {legal}        Texto legal
+#   {fecha}        fecha del informe (o el periodo, en el de tienda)
+#   {sitio}        dominio del sitio auditado
+#   {tipo_informe} "Informe de auditoría web" / "Informe de SEO" (u otra
+#                  área) / "Informe de tienda", según el tipo compuesto
+# Una variable que no reconozca o una llave sin cerrar se deja tal cual, en
+# texto — no rompe el resto de la cabecera o el pie.
+Cabecera · izquierda: {emisor} — {tipo_informe}
+Cabecera · derecha: {sitio} · {fecha}
+Pie · izquierda: {emisor} · {correo} · {telefono} · {web}
+Pie · derecha: {legal}

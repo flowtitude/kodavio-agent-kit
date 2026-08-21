@@ -7,16 +7,17 @@
 <style>
 
 /* ======================================================================
-   PUNTOS DE MARCA — personalizables desde registry/report-branding.json
+   PUNTOS DE MARCA — personalizables desde registry/marca-informes.txt
    Todo lo que cambia entre operadores vive en este bloque. El resto de la
    hoja de estilos solo consume estas variables, nunca colores sueltos.
    La skill wp-client-report reescribe estas variables con los valores de
-   registry/report-branding.json al montar cada informe real — ver el
+   registry/marca-informes.txt al montar cada informe real — ver el
    contrato de sustitución en templates/README.md, junto a esta plantilla.
    ====================================================================== */
 :root {
   --color-primary: #1B3A4B;
   --color-primary-light: #EAF0F2;
+  --color-cover: var(--color-primary); /* fondo de portada; propio si "Color de portada" está fijado */
   --color-accent: #C8792A;
   --color-accent-light: #FBEEE1;
   --color-text: #22292F;
@@ -73,7 +74,7 @@ body {
 /* ---------- Portada ---------- */
 .cover {
   padding: 0;
-  background: var(--color-primary);
+  background: var(--color-cover);
   color: #fff;
   min-height: 480px;
   display: flex;
@@ -376,6 +377,12 @@ table.annex-table tr { break-inside: avoid; }
   .print-body .page { padding: 0 0 6mm; border-bottom: none; }
   .print-body .page + .page { break-before: page; padding-top: 4mm; }
 
+  /* El pie clavado al fondo físico, no a media altura — decisión 2026-08-21.
+     Mismo mecanismo y misma calibración que informe-auditoria-completa.html —
+     ver el porqué (por qué NO position:fixed, por qué min-height solo en el
+     último `.page`) en templates/README.md. */
+  .print-body .page:last-child { min-height: 226mm; }
+
   /* El mecanismo que de verdad sobrevive en Chrome: una <table> semántica
      (thead/tbody/tfoot reales), no display:table sobre <div>. Con divs,
      Chrome solo pinta el thead en la primera página de la tabla y el
@@ -420,12 +427,12 @@ table.annex-table tr { break-inside: avoid; }
       <div class="cover-issuer js-issuer-name">Alcor Estudio Digital</div>
     </div>
     <div class="cover-main">
-      <p class="cover-eyebrow">Informe de tienda</p>
-      <h1 class="cover-title">Ventas, catálogo y stock del periodo</h1>
+      <p class="cover-eyebrow js-cover-kicker">Informe de tienda</p>
+      <h1 class="cover-title js-cover-title">Ventas, catálogo y stock del periodo</h1>
       <p class="cover-site">ejemplo.com · tienda WooCommerce</p>
     </div>
     <div class="cover-meta">
-      <span>Periodo: 21 jul – 20 ago de 2026</span>
+      <span class="js-cover-date-line">Periodo: 21 jul – 20 ago de 2026</span>
       <span>Preparado por <span class="js-issuer-name">Alcor Estudio Digital</span></span>
     </div>
   </section>
@@ -434,8 +441,8 @@ table.annex-table tr { break-inside: avoid; }
     <thead class="print-head">
       <tr><td>
         <div class="print-bar">
-          <span><span class="js-issuer-name">Alcor Estudio Digital</span> — Informe de tienda</span>
-          <span><span class="js-report-site">ejemplo.com</span> · <span class="js-report-date">20 ago 2026</span></span>
+          <span class="js-header-left">Alcor Estudio Digital — Informe de tienda</span>
+          <span class="js-header-right">ejemplo.com · 20 ago 2026</span>
         </div>
       </td></tr>
     </thead>

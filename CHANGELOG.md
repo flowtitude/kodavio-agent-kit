@@ -3,6 +3,39 @@
 > Qué cambia en cada actualización del kit y, sobre todo, **si tienes que migrar algo local**
 > (`registry/sites.json`, `sites/{slug}/`). Si una entrada no dice "migración", `git pull` basta.
 
+## 2026-08-21
+
+### Añadido
+- **Pie de informe clavado al fondo físico de cada página** (`skills/wp-client-report/templates/*.html`)
+  — antes, en páginas cortas, el pie repetido quedaba a media altura. `position: fixed` se probó
+  primero y se descartó: incompatible con la portada a sangre completa (Chrome no pinta el pie
+  fijo en la página que sigue justo a la portada — bug determinista, no una condición de carrera).
+  Se mantiene la `<table>` de cabecera/pie ya existente y se acota el bug real: solo la última
+  página del documento (donde la tabla termina de verdad) podía dejar el pie pegado al contenido.
+  Arreglo: `min-height` calibrado en el último `.page` (siempre el Anexo técnico). Verificado
+  posicionalmente — `pdftoppm` + `pdftotext -bbox`, no solo presencia textual — en las tres
+  plantillas. Detalle, evidencia y cómo recalibrar si el pie de marca crece: `templates/README.md`.
+- **Cabecera y portada configurables desde `registry/marca-informes.txt`** — `Cabecera · izquierda`
+  / `Cabecera · derecha` (plantillas de texto, mismo mecanismo que el pie, más la variable nueva
+  `{tipo_informe}`), `Portada · antetítulo`, `Portada · título`, `Portada · mostrar fecha` y
+  `Color de portada` (antes heredaba siempre el color principal; ahora es su propio ajuste con ese
+  valor como default). Todos con default = comportamiento exacto de los PDF anteriores a este
+  cambio. Contrato completo: `templates/README.md`.
+
+### Cambiado
+- **`registry/report-branding.json` (+ `.example.json` + `.schema.json`) → `registry/marca-informes.txt`
+  (+ `.example.txt`)** — decisión de AJ: texto plano en castellano (`Clave: valor`, comentarios con
+  `#`), no JSON, para que configurar la marca no exija saber qué es JSON. Claves reconocidas con o
+  sin acentos y sin distinguir mayúsculas/minúsculas; clave desconocida = aviso, no error. Nuevo
+  validador `scripts/validate-marca-informes.py` (sustituye a `scripts/validate-report-branding.py`,
+  que se retira junto con el schema JSON).
+
+### Notas — migración
+- Si venías del `report-branding.json` anterior: `cp registry/marca-informes.example.txt
+  registry/marca-informes.txt` y traslada tus valores al formato `Clave: valor` (tabla de
+  equivalencias en `templates/README.md`). El fichero JSON ya no se lee — `scripts/doctor.sh`
+  solo valida `marca-informes.txt`.
+
 ## 2026-08-20
 
 ### Añadido

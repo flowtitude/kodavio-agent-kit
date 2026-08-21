@@ -7,16 +7,17 @@
 <style>
 
 /* ======================================================================
-   PUNTOS DE MARCA — personalizables desde registry/report-branding.json
+   PUNTOS DE MARCA — personalizables desde registry/marca-informes.txt
    Todo lo que cambia entre operadores vive en este bloque. El resto de la
    hoja de estilos solo consume estas variables, nunca colores sueltos.
    La skill wp-client-report reescribe estas variables con los valores de
-   registry/report-branding.json al montar cada informe real — ver el
+   registry/marca-informes.txt al montar cada informe real — ver el
    contrato de sustitución en templates/README.md, junto a esta plantilla.
    ====================================================================== */
 :root {
   --color-primary: #1B3A4B;      /* cabeceras, filetes, portada */
   --color-primary-light: #EAF0F2;
+  --color-cover: var(--color-primary); /* fondo de portada; propio si "Color de portada" está fijado */
   --color-accent: #C8792A;       /* acentos, CTA de recomendaciones */
   --color-accent-light: #FBEEE1;
   --color-text: #22292F;         /* cuerpo de texto */
@@ -77,7 +78,7 @@ body {
 /* ---------- Portada ---------- */
 .cover {
   padding: 0;
-  background: var(--color-primary);
+  background: var(--color-cover);
   color: #fff;
   min-height: 520px;
   display: flex;
@@ -481,6 +482,30 @@ table.annex-table tr { break-inside: avoid; }
   .print-body .page { padding: 0 0 6mm; border-bottom: none; }
   .print-body .page + .page { break-before: page; padding-top: 4mm; }
 
+  /* El pie clavado al fondo físico, no a media altura — decisión 2026-08-21.
+     Probado y descartado: position:fixed en .print-foot. Repite en todas las
+     páginas EXCEPTO en la que sigue justo a la portada a sangre completa
+     (@page :first { margin: 0 }): ahí Chrome no pinta el pie fijo, de forma
+     determinista, en las tres plantillas — bug del motor de impresión, no
+     una condición de carrera. Evidencia y repro mínima en templates/README.md.
+     La cabecera fija SÍ sobrevive en esa misma página (asimetría del bug,
+     confirmada con varias repros), pero cambiar solo el pie de mecanismo
+     mientras la cabecera sigue en <table> habría dejado dos sistemas de
+     paginación distintos en el mismo documento — se descarta por fragilidad.
+     El bug real que sí existe con la <table> actual no es "cualquier página
+     corta": Chrome ya rellena a página completa toda página intermedia con
+     más contenido detrás (verificado). Solo la ÚLTIMA página del documento
+     — donde la tabla termina de verdad y no hay nada que la obligue a
+     rellenar — deja el pie pegado al contenido. Ahí se fuerza el relleno:
+     el último `.page` (siempre el Anexo técnico, §9.6 spec) recibe una
+     altura mínima calibrada contra esta misma cabecera/pie (237mm de hueco
+     entre bordes − 4mm padding-top de sección − 6mm padding-bottom de
+     página, con margen de seguridad para no desbordar una página extra en
+     blanco si el pie de marca ocupa dos líneas). Si el texto de marca crece
+     a 3+ líneas por lado, recalibra este valor con el método de
+     templates/README.md antes de confiar en él. */
+  .print-body .page:last-child { min-height: 226mm; }
+
   /* El mecanismo que de verdad sobrevive en Chrome: una <table> semántica
      (thead/tbody/tfoot reales), no display:table sobre <div>. Probado y
      descartado: con divs, Chrome solo pinta el thead en la PRIMERA página
@@ -528,12 +553,12 @@ table.annex-table tr { break-inside: avoid; }
       <div class="cover-issuer js-issuer-name">Alcor Estudio Digital</div>
     </div>
     <div class="cover-main">
-      <p class="cover-eyebrow">Informe de auditoría web</p>
-      <h1 class="cover-title">Estado del sitio y recomendaciones</h1>
+      <p class="cover-eyebrow js-cover-kicker">Informe de auditoría web</p>
+      <h1 class="cover-title js-cover-title">Estado del sitio y recomendaciones</h1>
       <p class="cover-site">ejemplo.com</p>
     </div>
     <div class="cover-meta">
-      <span>Fecha del informe: 20 de agosto de 2026</span>
+      <span class="js-cover-date-line">Fecha del informe: 20 de agosto de 2026</span>
       <span>Preparado por <span class="js-issuer-name">Alcor Estudio Digital</span></span>
     </div>
   </section>
@@ -546,8 +571,8 @@ table.annex-table tr { break-inside: avoid; }
     <thead class="print-head">
       <tr><td>
         <div class="print-bar">
-          <span><span class="js-issuer-name">Alcor Estudio Digital</span> — Informe de auditoría web</span>
-          <span><span class="js-report-site">ejemplo.com</span> · <span class="js-report-date">20 ago 2026</span></span>
+          <span class="js-header-left">Alcor Estudio Digital — Informe de auditoría web</span>
+          <span class="js-header-right">ejemplo.com · 20 ago 2026</span>
         </div>
       </td></tr>
     </thead>

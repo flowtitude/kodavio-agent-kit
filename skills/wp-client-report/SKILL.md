@@ -9,17 +9,18 @@ description: Informe de marca blanca (HTML/PDF) sobre un sitio WordPress — aud
 
 Flujo Kodavio: `diagnostic_audit`. El informe lo **dibuja el agente** donde se ejecuta, sobre las plantillas de `skills/wp-client-report/templates/` (contrato de sustitución en `templates/README.md`); el sitio solo aporta datos. Kodavio no lleva librería de PDF a propósito.
 
-**La marca vive en el kit, no en el sitio** (decisión 2026-08-20): se personaliza una vez para todos los sitios que operas, en `registry/report-branding.json` — no hay ability del plugin que la sirva ni falta que la haya (migración desde la versión anterior de esta skill: `CHANGELOG.md`).
+**La marca vive en el kit, no en el sitio** (decisión 2026-08-20): se personaliza una vez para todos los sitios que operas, en `registry/marca-informes.txt` — texto plano en castellano, pensado para un operador novel (`Clave: valor`, sin JSON), no hay ability del plugin que la sirva ni falta que la haya (migración desde la versión anterior de esta skill: `CHANGELOG.md`).
 
 ## Discovery — de dónde salen los datos
 
 1. `wp-site-session` hecho: sabes a qué sitio apuntas y en qué entorno estás.
 2. `kodavio/context-bootstrap` → scope, sistema de diseño, memoria vinculante.
-3. **Marca**: lee `registry/report-branding.json`. **Si no existe, para y pide configurarlo** —
-   `cp registry/report-branding.example.json registry/report-branding.json` y rellenar
-   `issuer_name` como mínimo. No hay fallback silencioso a un nombre inventado: es una
+3. **Marca**: lee `registry/marca-informes.txt`. **Si no existe, para y pide configurarlo** —
+   `cp registry/marca-informes.example.txt registry/marca-informes.txt` y rellenar
+   `Emisor` como mínimo. No hay fallback silencioso a un nombre inventado: es una
    decisión deliberada (antes la ability del sitio sí tenía ese fallback; el kit no, porque
    aquí "no configurado" significa que nadie ha decidido todavía qué marca lleva el informe).
+   Contrato completo de qué clave va en qué sitio del HTML: `templates/README.md`.
 4. **Cobertura por área**: `kodavio/capability-map` (expone `coverage_check` por área) para
    cada área que entre en el tipo de informe pedido — `covered` / `probable` / `none`. No se
    asume que un área tiene datos: se pregunta primero.
@@ -68,9 +69,10 @@ las que no aplican, nunca se dejan vacías con un título suelto.
 ## Preview — componer el HTML
 
 Clona la plantilla del tipo elegido y sustitúyela siguiendo el contrato exacto de
-`templates/README.md` (custom properties de marca, bindings `.js-*`, pie con variables,
-`show_powered_by`, contenido de ejemplo a reemplazar por hallazgos reales). No es un motor de
-plantillas: se edita el HTML a mano, sección por sección.
+`templates/README.md` (custom properties de marca, bindings `.js-*` de portada/cabecera/pie,
+plantillas de texto con variables — incluida `{tipo_informe}` —, `show_powered_by`, contenido de
+ejemplo a reemplazar por hallazgos reales). No es un motor de plantillas: se edita el HTML a
+mano, sección por sección.
 
 - **Severidad** normalizada a Alto/Medio/Bajo (mismo vocabulario que `wp-site-health`, no se
   inventa una segunda taxonomía): `seo-analyze` → `error`/`warning`/`notice` mapea 1:1; `page-health-check` → Alto si afecta `frontend_ok`/`builder_data_ok`, Medio el resto; hallazgos de

@@ -1,6 +1,6 @@
 # Datos locales — NUNCA se versionan (sitios y clientes reales)
 registry/sites.json
-registry/report-branding.json
+registry/marca-informes.txt
 sites/*
 !sites/_template/
 state.md
