@@ -90,7 +90,6 @@ Siempre, en todos los entornos: `dry_run=true` antes de cualquier write; conserv
 | `wp-content-publish` | Posts, contenido editorial, SEO on-page (copy en castellano perfecto) |
 | `wp-copywriting` | Copy comercial (landing, home, página de servicio, sobre nosotros, FAQ) anclado a scope y sistema de diseño |
 | `wp-marketing` | Plan de marketing digital sobre WordPress: captación, CRO, secuencias FluentCRM, medición |
-| `wp-patterns-author` | Crear y mantener patterns propios para el catálogo de Kodavio (formato spec, plantillas por categoría, validación, packs) |
 | `wp-builder-convert` | Conversión entre builders con rollback |
 | `wp-site-health` | Mantenimiento: updates, salud, rendimiento, logs |
 | `wp-security-triage` | Sospecha de infección, hardening proactivo, auditoría de seguridad |

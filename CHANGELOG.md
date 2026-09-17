@@ -3,6 +3,16 @@
 > Qué cambia en cada actualización del kit y, sobre todo, **si tienes que migrar algo local**
 > (`registry/sites.json`, `sites/{slug}/`). Si una entrada no dice "migración", `git pull` basta.
 
+## 2026-09-17 — Retirado el catálogo de secciones de Kodavio
+
+- Kodavio 0.3 ya no trae `patterns-*` (las 10 secciones genéricas). Se retira la skill
+  `wp-patterns-author` y las menciones en `wp-page-build` y en los operadores aparcados.
+- Lo sustituirá la biblioteca de bloques servida por flowtitude.com (decisiones en el repo del
+  plugin, `docs/design/biblioteca-de-bloques.md`).
+- **Migración**: quien tenga patrones propios guardados en un sitio con Kodavio 0.2 debe exportarlos
+  desde la pestaña Patterns del admin de Kodavio **antes** de actualizar a 0.3; después ya no hay forma de leerlos desde
+  Kodavio.
+
 ## 2026-09-17
 
 ### Cambiado — **migración**

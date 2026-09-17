@@ -146,7 +146,6 @@ Lo que el agente **nunca** hace solo en producción: publicar, instalar/actualiz
 | [`wp-design-patterns`](skills/wp-design-patterns/SKILL.md) | Patrones de composición: anatomía de sección, ritmo de página, catálogo (hero, features, pricing, FAQ…) |
 | [`wp-bricks-fds`](skills/wp-bricks-fds/SKILL.md) | Preferencias Bricks + Flowtitude Design System: clases semánticas, tokens fluidos, elementos vetados |
 | [`wp-tailwind-windpress`](skills/wp-tailwind-windpress/SKILL.md) | Tailwind v4 en WordPress vía WindPress: detección, reglas de utilities |
-| [`wp-patterns-author`](skills/wp-patterns-author/SKILL.md) | Crear y mantener patterns propios del catálogo de Kodavio: spec, validación, packs |
 | [`wp-copywriting`](skills/wp-copywriting/SKILL.md) | Copy comercial (home, landing, servicio, precios, FAQ) anclado al scope y al sistema de diseño |
 | [`wp-content-publish`](skills/wp-content-publish/SKILL.md) | Contenido editorial con SEO on-page y flujo draft → aprobación → publicación |
 | [`wp-marketing`](skills/wp-marketing/SKILL.md) | Plan de captación sobre WordPress: embudo, CRO, secuencias FluentCRM, medición |
@@ -220,7 +219,7 @@ kodavio-agent-kit/
 │   ├── gen-codex-agents.sh    genera .codex/agents/*.toml desde agents/*.md (nunca editar a mano)
 │   ├── add-site.sh            alta de sitios por terminal (el comando es /wp-onboard-site)
 │   └── wp-mcp-launch.sh|.ps1  lanzador MCP con credencial desde el almacén del SO
-├── skills/                    17 skills de orquestación, planificación y diseño (SKILL.md portables)
+├── skills/                    16 skills de orquestación, planificación y diseño (SKILL.md portables)
 ├── agents/                    10 subagentes especializados
 ├── workflows/WORKFLOWS.md     enrutado petición → flujo → skill → gates
 ├── sites/
