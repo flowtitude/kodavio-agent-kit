@@ -21,7 +21,7 @@ Verificación:
 3. **Fidelidad**: contrasta contra el brief sección a sección. Desviaciones = hallazgo, aunque "quede bonito".
 4. **Responsive**: estructura razonable en móvil (si tienes preview/WebFetch, úsalo).
 5. **Rollback**: ¿existe el backup/snapshot declarado? ¿`kodavio/conversion-status` / change log lo confirman? Rollback inexistente = hallazgo crítico.
-6. Conversiones: **el vídeo es el punto débil confirmado** — el converter Bricks→Elementor no escribe `video_type` y el camino Semantic Model V2 ignora `video_type` al analizar, así que un Vimeo/self-hosted puede llegar roto o ser el vídeo equivocado. Repróducelo, no te fíes de que el widget exista. Comprueba también dynamic bindings vivos. (Color-como-background y template-type-forzado se verificaron arreglados el 2026-08-04.)
+6. Conversiones (perímetro vivo: Bricks ↔ CrocoBuilder, verificado el 2026-09-16): comprueba en el **frontend servido** texto, orden, enlaces, imagen, clases con reglas CSS y media queries. El `alt` de una imagen **no llega a CrocoBuilder** (Croco lo deriva del medio y no admite escribirlo): no es un fallo de la conversión, dilo en el reporte. Si hay vídeo, reprodúcelo; no te fíes de que el elemento exista. Comprueba también dynamic bindings vivos.
 7. Tester mode activo → `kodavio/tester-verify`.
 
 Veredicto final: PASS / PASS con avisos / FAIL, con evidencia por punto (qué llamada o URL lo demuestra) y, en FAIL, el paso de rollback exacto recomendado. Castellano, directo.

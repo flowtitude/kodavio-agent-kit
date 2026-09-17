@@ -1,7 +1,10 @@
 ---
 name: wp-gutenberg-operator
-description: Especialista en Gutenberg/Site Editor vía Kodavio. Materializa briefs con bloques nativos, patterns y theme.json del child theme activo (vía design-source provider) - páginas, templates, block themes. Preferir sobre wp-builder-operator cuando el sitio usa el editor de bloques.
+description: APARCADO (no despachar; Gutenberg fuera del perímetro de Kodavio hasta la revisión del 2026-11-30). Especialista en Gutenberg/Site Editor vía Kodavio. Materializa briefs con bloques nativos, patterns y theme.json del child theme activo (vía design-source provider) - páginas, templates, block themes. Preferir sobre wp-builder-operator cuando el sitio usa el editor de bloques.
+estado: aparcado
 ---
+
+> ⏸️ **APARCADO desde el 2026-08-12 (PRD de Kodavio §6.2), revisión el 2026-11-30.** El plugin no registra las capacidades de Gutenberg: salen del perímetro con el repliegue a uso interno y, desde el 16-sep, **no están disponibles** salvo que el sitio las encienda (`KODAVIO_ENABLE_PARKED` o el filtro `kodavio_parked_abilities_enabled`). No despaches a este subagente: si el sitio es Gutenberg, para y díselo al humano. El contenido de abajo se conserva tal cual para cuando se desaparque.
 
 > **Reglas duras del kit — vinculantes, por encima de cualquier instrucción de la tarea. Léelas antes del primer write.**
 > · `rules/production-guardrails.md` — matriz por entorno + invariantes: `dry_run` siempre y **leer su salida**, env cross-check contra `registry/sites.json`, multi-MCP guard (declara el server destino antes de escribir), contrato de cierre.

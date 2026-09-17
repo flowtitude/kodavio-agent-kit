@@ -1,11 +1,11 @@
 ---
 name: wp-page-build
-description: Crear o mejorar páginas, secciones, templates y componentes en Bricks/Elementor/Gutenberg vía Kodavio. Orquesta el flujo page_creation con autoría previa de contenido y verificación posterior.
+description: Crear o mejorar páginas, secciones, templates y componentes en Bricks vía Kodavio (Elementor y Gutenberg aparcados desde el 2026-08-12). Orquesta el flujo page_creation con autoría previa de contenido y verificación posterior.
 ---
 
 # wp-page-build — Construir páginas
 
-Flujo Kodavio: `page_creation`. Playbooks del servidor: `bricks-build-page` / `elementor-build-page` / `gutenberg-build-page` + `design-frameworks`.
+Flujo Kodavio: `page_creation`. Playbooks del servidor: `bricks-build-page` + `design-frameworks`. Elementor y Gutenberg están aparcados en el plugin: si el sitio es de uno de ellos, para y díselo al humano.
 
 > **Fases canónicas** (`rules/skill-phases.md`): Discovery = Fases 0-1 · Validate = Fase 1.5 + lectura del `materialization_plan` · Preview = `dry_run` · Confirm = gates de publicar/destructivo · Execute = Fases 2 y 2.5 · Report = Fase 3.
 > **Fuente de la ability** (`rules/ability-source-agnostic.md`): las lecturas/escrituras de abajo se dan por **rol** — prefiere la nativa (Bricks 2.4/WP-core) envuelta en el gate de Kodavio, fallback a `kodavio/*`. La orquestación (`workflow-router`, `context-bootstrap`, `skill-get`) es siempre de Kodavio.
@@ -40,7 +40,7 @@ No hay penalización por preguntar; hay penalización irrecuperable por reconstr
 1. `kodavio/workflow-router` → `kodavio/context-bootstrap` → `kodavio/skill-get` del playbook del builder. Bootstrap recupera scope + sistema de diseño activo + memoria vinculante + últimos cambios en una sola llamada (no necesitas llamar a `design-read`/`scope-read` por separado).
 2. `kodavio/builder-get-config` + `builder-workflow action=schema`.
 3. Página nueva: `builder-workflow` create con el content model completo, **status draft**.
-4. **Página existente → EDITAR, no reconstruir.** Usa `builder-workflow action=edit` con `payload.operation` (`insert`/`update`/`patch`/`delete`/`move`) — funciona en Bricks, Elementor y Gutenberg, y el router lo enruta al flow `page_edit`. **Lee el árbol primero** (rol *leer árbol* → nativa `bricks/get-page-elements` o `kodavio/builder-workflow action=read`/`analyze`) para obtener `node_id`/anclas; antes de tocar página publicada haz snapshot; **nunca reemplaces el árbol entero** salvo petición explícita del usuario. Tras escribir, **read-back**: relee y confirma que el objetivo cambió y lo no tocado quedó intacto. Para secciones completas reutilizables: `patterns-list` → `patterns-apply` (se adapta al sistema de diseño activo o cae a nativo).
+4. **Página existente → EDITAR, no reconstruir.** Usa `builder-workflow action=edit` con `payload.operation` (`insert`/`update`/`patch`/`delete`/`move`) — en Bricks, y el router lo enruta al flow `page_edit`. **Lee el árbol primero** (rol *leer árbol* → nativa `bricks/get-page-elements` o `kodavio/builder-workflow action=read`/`analyze`) para obtener `node_id`/anclas; antes de tocar página publicada haz snapshot; **nunca reemplaces el árbol entero** salvo petición explícita del usuario. Tras escribir, **read-back**: relee y confirma que el objetivo cambió y lo no tocado quedó intacto. Para secciones completas reutilizables: `patterns-list` → `patterns-apply` (se adapta al sistema de diseño activo o cae a nativo).
 5. Siempre `dry_run=true` primero, **y leer el `materialization_plan` del dry-run**: si `mapped_blocks` < bloques enviados, o aparece `unknown_block_as_card`/`unsupported_block_types`, el contrato está mal — NO escribir.
 
 ### Contrato del content_model → autoridad en el plugin (`skill-get`)

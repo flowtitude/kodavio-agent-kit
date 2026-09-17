@@ -175,5 +175,5 @@ Si un archivo versionable necesita mencionar un sitio concreto, no lo hagas: la 
 
 ## Doctrina superior (capa SA — opcional fuera de Soluciones Abiertas)
 
-Las referencias a `agentkit/*` y al script `ops.sh` (en `scripts/` de sa-workspace, no de este kit) aplican en el entorno de Soluciones Abiertas. Si clonaste este kit y esas rutas no existen, **omítelas**: el resto del sistema es autosuficiente. En entorno SA: Human Gates, autonomía, WIP y comunicación heredan de `AGENTS.md` (raíz del workspace); acciones sensibles en producción → `agentkit/retros/sensitive-actions-log.md` SIEMPRE (fuera de SA: registra el equivalente en las NOTAS del sitio).
+Las referencias a `agentkit/*` y al script `ops.sh` (del workspace de agentkit, no de este kit) aplican en el entorno de Soluciones Abiertas. Si clonaste este kit y esas rutas no existen, **omítelas**: el resto del sistema es autosuficiente. En entorno SA: Human Gates, autonomía, WIP y comunicación heredan de `AGENTS.md` (raíz del workspace); acciones sensibles en producción → `agentkit/retros/sensitive-actions-log.md` SIEMPRE (fuera de SA: registra el equivalente en las NOTAS del sitio).
 

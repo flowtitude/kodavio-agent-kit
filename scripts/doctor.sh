@@ -276,6 +276,29 @@ print('\n'.join(d['abilities']))
   fi
   n_citadas="$(echo "$citadas" | grep -c . || true)"
   ok_if_clean "$n_citadas capacidades citadas, todas existen en el plugin $version"
+
+  # Existir no basta: desde el 16-sep el plugin aparca Elementor, Gutenberg y ACSS
+  # (maturity=parked) y NO las registra. Un kit que las recomienda manda al agente
+  # a una tool que no esta — y el manifiesto viejo lo daba por bueno. Se buscan
+  # con y sin prefijo, porque las skills las citan tambien como `nombre` a secas.
+  # Un fichero que se declara aparcado en su cabecera (`estado: aparcado`) puede
+  # citarlas: es justo el que explica que no funcionan hasta encenderlas.
+  aparcadas="$(python3 -c "
+import json
+d = json.load(open('$MANIFEST', encoding='utf-8'))
+print('\n'.join(n.split('/', 1)[1] for n in d.get('maturity', {}).get('parked', [])))
+")"
+  n_aparcadas_citadas=0
+  while IFS= read -r a; do
+    [[ -z "$a" ]] && continue
+    while IFS= read -r f; do
+      [[ -z "$f" ]] && continue
+      head -12 "$f" | grep -qiE '^estado:[[:space:]]*aparcado' && continue
+      fail "$a está aparcada en el plugin $version (no se registra) y se cita en $f"
+      n_aparcadas_citadas=$((n_aparcadas_citadas + 1))
+    done < <(grep -rlE "(kodavio/|\`)${a}([^a-z0-9-]|$)" skills/ rules/ agents/ workflows/ docs/ ./*.md 2>/dev/null)
+  done <<< "$aparcadas"
+  [[ $n_aparcadas_citadas -eq 0 ]] && ok "ninguna capacidad aparcada recomendada fuera de los ficheros marcados como aparcados"
 fi
 
 # ---------------------------------------------------------------- veredicto

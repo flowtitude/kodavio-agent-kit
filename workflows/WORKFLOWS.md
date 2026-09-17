@@ -8,7 +8,7 @@
 | "¿Cómo está el sitio X?" / informe / análisis previo | `diagnostic_audit` | `wp-site-health` (parte auditoría) | wp-auditor | ninguno (read-only) |
 | "Hazme la web" / sitio nuevo / rediseño completo | — (plan) → flujos en orden | `wp-site-plan` → cola de briefs | wp-content-architect → builder-operator del builder → wp-verifier | aprobar plan; publicar = gate |
 | Mantenimiento: updates, limpieza, ajustes | `wordpress_admin` | `wp-site-health` | wp-operator + wp-verifier | updates/limpieza = gate + log |
-| Crear/editar página, sección, template, componente | `page_creation` | `wp-page-build` (+ `wp-design-patterns` en autoría) | wp-bricks/elementor/gutenberg-operator + wp-verifier | publicar = gate |
+| Crear/editar página, sección, template, componente | `page_creation` | `wp-page-build` (+ `wp-design-patterns` en autoría) | wp-bricks-operator + wp-verifier (elementor y gutenberg, aparcados) | publicar = gate |
 | "Hazla como esta captura/mockup" | `page_creation` | `wp-reference-to-brief` → `wp-page-build` | builder-operator del builder + wp-verifier | publicar = gate |
 | Posts, contenido editorial, SEO on-page | `page_creation` (light) o CRUD | `wp-content-publish` | wp-content-writer | publicar = gate |
 | Copy comercial: home, landing, servicio, precios, FAQ | — (autoría, previa a `page_creation`) | `wp-copywriting` → `wp-page-build` | wp-content-writer | ninguno (no escribe en el sitio) |

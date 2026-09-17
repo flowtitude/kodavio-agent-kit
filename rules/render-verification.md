@@ -10,7 +10,7 @@ Lo que el usuario ve casi nunca es el dato que escribiste. Entre medias hay un a
 
 | Integración | Dónde vive lo que se ve | Quién lo regenera |
 |---|---|---|
-| **Elementor** | CSS compilado en `uploads/elementor/css/post-<id>.css` | Solo un Guardar/Update en el editor, o Tools › Regenerate CSS. **Ni el toggle draft→publish** |
+| **Elementor** *(aparcado en Kodavio desde el 2026-08-12; se conserva para cuando vuelva)* | CSS compilado en `uploads/elementor/css/post-<id>.css` | Solo un Guardar/Update en el editor, o Tools › Regenerate CSS. **Ni el toggle draft→publish** |
 | **WindPress / Tailwind** | CSS que WindPress compila **en el navegador** | Alguien tiene que abrir WindPress; no hay recompilación desde PHP |
 | **Bricks** | CSS regenerado por el Save_Pipeline | La escritura delegada a la ability nativa 2.4 lo hereda; otros caminos, no siempre |
 | **Cualquiera** | Caché de objetos, de página, CDN | Purga explícita |
