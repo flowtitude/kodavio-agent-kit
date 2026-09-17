@@ -74,7 +74,7 @@ Antes de construir, orientar el sistema de diseño activo (rol *orientar diseño
 
 - Páginas, templates y componentes generados → **entidades Bricks/BD** (vía Kodavio).
 - Archivos del child theme → territorio de **Flowkit** (versionado). Si un template generado debe convertirse en archivo de tema, se exporta como artefacto revisado para Flowkit; no se escribe directo.
-- Cambios de tokens/knobs FDS → flujo `design_system` (con `kodavio/design-write` para que quede en la design memory del sitio), no ediciones sueltas por página.
+- Cambios de tokens/knobs FDS → flujo `design_system`, no ediciones sueltas por página. La cadena completa —memoria de diseño → FDS → WindPress → *Generate* humano → CSS servido— está en `wp-tailwind-windpress`, sección *Cambiar tokens del sistema*.
 
 ## Checklist antes de dar por buena una página Bricks+FDS
 
