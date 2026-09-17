@@ -2,7 +2,7 @@
 #
 # Sync the kit SOURCE (this repo) into an INSTALLED copy, without touching the
 # installed copy's personal/local layer. Run this after updating the source so the
-# installed kit (e.g. sa-workspace/wp-agents) picks up new skills/agents/docs while
+# installed kit (e.g. ~/Documents/agentkit/sitekit) picks up new skills/agents/docs while
 # your machine-specific config, secrets and sites stay put.
 #
 # Usage:  scripts/sync-installed.sh [TARGET_DIR]

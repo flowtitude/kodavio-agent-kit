@@ -1,3 +1,7 @@
+estado: aparcado
+
+> ⏸️ **APARCADO**: Elementor está fuera del perímetro de Kodavio desde el 2026-08-12 y sus capacidades no se registran desde el 16-sep (revisión el 2026-11-30). Este documento se conserva para cuando se desaparque; hoy no aplica.
+
 # Brechas conocidas de Kodavio en Elementor (plantillas de producto y Pro)
 
 > Origen: sesión de construcción de una plantilla Single Product de Elementor Pro sobre un sitio WooCommerce real (WP 7.0, Elementor 4.1.4, modo `v4_v3`, WooCommerce + Product Add-Ons), 2026-07-04/06. Cada punto está **reproducido**, no supuesto.

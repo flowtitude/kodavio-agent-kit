@@ -7,11 +7,11 @@ description: Crear patterns propios para el catálogo de Kodavio (hero, CTA, fea
 
 > Recorre las fases canónicas (`rules/skill-phases.md`). El motor de patrones es moat de Kodavio (sin equivalente nativo); se usa `kodavio/*` directamente.
 
-Skill de **autoría de patrones**. El plugin Kodavio incluye un catálogo Core de patterns (hero centrado, CTA banner, features, etc.) que se materializan en Bricks/Elementor/Gutenberg desde un único spec. Esta skill ayuda al operador a **crear los suyos propios** en el formato correcto, sin que tenga que aprender el motor.
+Skill de **autoría de patrones**. El plugin Kodavio incluye un catálogo Core de patterns (hero centrado, CTA banner, features, etc.) que se materializan en Bricks desde un único spec (Elementor y Gutenberg, aparcados desde el 2026-08-12). Esta skill ayuda al operador a **crear los suyos propios** en el formato correcto, sin que tenga que aprender el motor.
 
 ## Por qué necesitas esto
 
-Un pattern es una pieza de página reutilizable expresada como **datos puros** (JSON). El plugin lo materializa al builder del sitio (Bricks o Elementor) usando los tokens del sistema de diseño activo. Ventaja: el mismo pattern funciona en cualquier sitio con cualquier sistema, sin código.
+Un pattern es una pieza de página reutilizable expresada como **datos puros** (JSON). El plugin lo materializa al builder del sitio (hoy Bricks; Elementor está aparcado) usando los tokens del sistema de diseño activo. Ventaja: el mismo pattern funciona en cualquier sitio con cualquier sistema, sin código.
 
 Limitación: el spec **tiene que cumplir el contrato** del motor (`Kodavio_Pattern_Materializer`). Un campo mal puesto y el pattern no aparece en el catálogo.
 
