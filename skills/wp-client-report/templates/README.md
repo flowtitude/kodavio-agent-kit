@@ -126,7 +126,8 @@ skill sustituye sección por sección con los datos reales de la sesión:
 - **Hallazgo** (`.finding.sev-alto` / `.sev-medio` / `.sev-bajo`): título, frase no técnica de
   "por qué importa" y `.finding-evidence` con la fuente exacta (ability/sesión + campo + valor +
   fecha) — la misma evidencia que luego repite el anexo.
-- **Sin cobertura**: si `coverage_check(area)` da `none`, no se inventa un hallazgo — se usa el
+- **Sin cobertura**: lo que un `site-*-report` devuelve en `limitations`, o un área sin datos
+  (SEO o Tienda con `coverage_check` en `none`), no se inventa como hallazgo — se usa el
   bloque `.no-coverage` (ya en `informe-auditoria-completa.html`) con el texto "sin cobertura
   verificable en este sitio todavía" en vez de la lista de `.finding`.
 - **Recomendaciones** (`.reco-list`): una lista única, todas las áreas mezcladas, ordenada por
