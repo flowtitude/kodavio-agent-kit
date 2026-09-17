@@ -21,21 +21,30 @@ Flujo Kodavio: `diagnostic_audit`. El informe lo **dibuja el agente** donde se e
    decisión deliberada (antes la ability del sitio sí tenía ese fallback; el kit no, porque
    aquí "no configurado" significa que nadie ha decidido todavía qué marca lleva el informe).
    Contrato completo de qué clave va en qué sitio del HTML: `templates/README.md`.
-4. **Cobertura por área**: `kodavio/capability-map` (expone `coverage_check` por área) para
-   cada área que entre en el tipo de informe pedido — `covered` / `probable` / `none`. No se
-   asume que un área tiene datos: se pregunta primero.
-5. **Datos por área**, solo si `coverage_check` dio `covered` o `probable`:
-   - **Salud** → `kodavio/page-health-check`, `kodavio/wp-get-config-summary`, `kodavio/wp-list-plugins`, `kodavio/wp-get-change-log`, `kodavio/analytics-site-summary`, `kodavio/builder-editor-open-check`.
-   - **SEO** → `kodavio/seo-detect` (qué plugin), `kodavio/seo-analyze`, `kodavio/seo-read`.
-   - **Seguridad** → sin ability propia de auditoría normalizada hoy. Sale de una sesión ya
-     ejecutada de `wp-security-triage`, citada como fuente (fecha + qué se encontró). No se
-     lanza una triage nueva solo para el informe.
-   - **Rendimiento** y **Accesibilidad** → sin ability propia hoy ("Por construir" en el mapa
-     de cobertura). Si `coverage_check` da `none` — el caso normal — **no se inventa una
-     medición**: la sección va con semáforo gris y "sin cobertura verificable en este sitio
-     todavía" (ver `templates/README.md`, bloque `.no-coverage`). Solo se citan datos si el
-     agente hizo de verdad una medición manual en esta sesión, con fecha y método, nunca como
-     relleno para no dejar la sección vacía.
+4. **Cobertura de SEO y Tienda**: `kodavio/capability-map` (expone `coverage_check` por área)
+   — `covered` / `probable` / `none`. Solo decide esas dos áreas, que dependen de un plugin de
+   terceros (el de SEO, WooCommerce o FluentCart). **No se usa para Salud, Seguridad,
+   Rendimiento ni Accesibilidad**: `coverage_check` solo cuenta proveedores externos a los que
+   delegar, y en esas cuatro da `none` aunque Kodavio tenga su propio informe (comprobado el
+   2026-09-17: `none` en las tres últimas con los cuatro `site-*-report` funcionando).
+5. **Datos por área**:
+   - **Salud** → `kodavio/site-health-report` (el Site Health de WordPress, normalizado), más
+     `kodavio/page-health-check`, `kodavio/wp-get-config-summary`, `kodavio/wp-list-plugins`,
+     `kodavio/wp-get-change-log`, `kodavio/analytics-site-summary`,
+     `kodavio/builder-editor-open-check`.
+   - **Seguridad** → `kodavio/site-security-report`. Si hay una sesión reciente de
+     `wp-security-triage`, sus hallazgos se añaden citados como fuente (fecha + qué se
+     encontró); no se lanza una triage nueva solo para el informe.
+   - **Rendimiento** → `kodavio/site-performance-report`.
+   - **Accesibilidad** → `kodavio/site-accessibility-report`. Carga la portada por HTTP desde
+     el propio servidor: si no llega, lo dice en `limitations` y esa comprobación no cuenta.
+   - Los cuatro `site-*-report` devuelven lo mismo: `summary` (`critical` / `recommended` /
+     `good`), `findings` (con `severity` y `area`), `delegation` y `limitations`. **Lo que
+     aparezca en `limitations` va al informe como «sin cobertura»** (bloque `.no-coverage` de
+     `templates/README.md`), nunca se omite ni se rellena. Si un área no tiene ningún hallazgo
+     comprobado, la sección entera va con ese bloque.
+   - **SEO** (solo si `coverage_check('seo')` no es `none`) → `kodavio/seo-detect` (qué
+     plugin), `kodavio/seo-analyze`, `kodavio/seo-read`.
    - **Tienda — WooCommerce** → `kodavio/wc-get-status`, `kodavio/wc-sales-report`,
      `kodavio/wc-orders-summary`, `kodavio/wc-list-products`, `kodavio/wc-read-order`,
      `kodavio/analytics-commerce-summary`.
@@ -75,7 +84,9 @@ ejemplo a reemplazar por hallazgos reales). No es un motor de plantillas: se edi
 mano, sección por sección.
 
 - **Severidad** normalizada a Alto/Medio/Bajo (mismo vocabulario que `wp-site-health`, no se
-  inventa una segunda taxonomía): `seo-analyze` → `error`/`warning`/`notice` mapea 1:1; `page-health-check` → Alto si afecta `frontend_ok`/`builder_data_ok`, Medio el resto; hallazgos de
+  inventa una segunda taxonomía): `seo-analyze` → `error`/`warning`/`notice` mapea 1:1; `page-health-check` → Alto si afecta `frontend_ok`/`builder_data_ok`, Medio el resto;
+  `site-*-report` → `critical` = Alto, `recommended` = Medio, `good` no es hallazgo (cuenta
+  para el verde); hallazgos de
   seguridad citados desde `wp-security-triage` → comprometido = Alto, sospechoso = Medio.
 - **Semáforo sin puntuación numérica** (decisión 2026-08-20 §9.1): solo verde/ámbar/rojo. Una
   puntuación 0-100 exigiría una fórmula de ponderación que hoy no existe en ninguna ability —
