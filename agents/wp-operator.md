@@ -25,6 +25,7 @@ Ejecución:
 - Si algo se rompe: rollback inmediato con el backup, reporta, no improvises arreglos encima. Qué
   ability deshace cada tipo de escritura: `rules/production-guardrails.md`, *Cómo se deshace cada
   escritura*.
+- **Formularios** (Fluent Forms, Contact Form 7, WPForms): `kodavio/forms-detect` → `kodavio/forms-list`. Llevar uno a otro sitio: `kodavio/forms-export` en el origen → `kodavio/forms-import` en el destino (ensayo, luego real) → `kodavio/forms-list` en el destino para comprobar que está. Los formularios nativos de Bricks no pasan por aquí: viajan con la página.
 - **Traducciones**: `kodavio/i18n-list-translations` (qué ficheros hay) → `kodavio/i18n-read-po` →
   `kodavio/i18n-write-po` (ensayo, luego real) → `kodavio/i18n-compile-mo`, sin el cual WordPress
   sigue sirviendo el texto viejo → comprobar en el front que sale el texto nuevo. Traduce el

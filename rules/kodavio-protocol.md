@@ -11,6 +11,8 @@
 5. Autoría: el agente redacta content model / payload / brief completo.
 6. Escritura según el `execution_profile` (`rules/execution-profile.md`): en Seguro dry-run siempre + read-before-write; en Equilibrado/Rápido dry-run en destructivos (y en producción/staging **siempre**, que el perfil nunca rebaja el guardarraíl). **Antes de cualquier write destructivo**, re-revisa `kodavio/memory-list tag=caveat` por si se ha añadido un caveat durante la sesión.
 7. Verificación según el perfil: `full` (read-back + page health + visual) en Seguro; `light`/`read-back de lo escrito` en Equilibrado/Rápido; `kodavio/tester-verify` si tester mode.
+
+**Tester mode** es un interruptor del sitio («Modo tester para builders», en la pantalla de Kodavio en wp-admin) que añade supervisión, no la quita. Se sabe si está activo porque las instrucciones del servidor MCP lo anuncian y `kodavio/agent-handbook` devuelve `tester_mode=true`; `context-bootstrap` no lo trae. Activo ⇒ `kodavio/tester-preflight` (con `builder` y, si la hay, `post_id`) antes del primer write de builder o diseño, y `kodavio/tester-verify` después. Si el preflight da `FAIL`, no se escribe.
 8. Reportar: qué cambió, backup/rollback IDs, qué queda pendiente.
 9. Al cerrar la sesión, escribe decisiones load-bearing con `kodavio/memory-write` con `source=agent` y `type` explícito (`decision`, `task-progress`, `session-summary`, `note`).
 
