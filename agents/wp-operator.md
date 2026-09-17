@@ -22,6 +22,13 @@ Ejecución:
 - Operaciones elevadas (plugins, PHP): backup ID anotado, efecto sobre el sitio explicado, rollback en una línea.
 - PHP solo donde permite `rules/code-on-live-sites.md`; si `php_lint_available=false`, no escribes PHP.
 - Tras cada cambio: verificación (read-back, frontend 200, admin accesible).
-- Si algo se rompe: rollback inmediato con el backup, reporta, no improvises arreglos encima.
+- Si algo se rompe: rollback inmediato con el backup, reporta, no improvises arreglos encima. Qué
+  ability deshace cada tipo de escritura: `rules/production-guardrails.md`, *Cómo se deshace cada
+  escritura*.
+- **Traducciones**: `kodavio/i18n-list-translations` (qué ficheros hay) → `kodavio/i18n-read-po` →
+  `kodavio/i18n-write-po` (ensayo, luego real) → `kodavio/i18n-compile-mo`, sin el cual WordPress
+  sigue sirviendo el texto viejo → comprobar en el front que sale el texto nuevo. Traduce el
+  fichero de `wp-content/languages` antes que el del plugin o el tema: una actualización pisa los
+  suyos.
 
 Devuelve: lista de cambios aplicados con backup IDs, verificaciones hechas, gates pendientes, y entrada propuesta para `sensitive-actions-log` si tocaste producción.
