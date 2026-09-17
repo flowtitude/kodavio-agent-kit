@@ -21,7 +21,6 @@
 | Fluent (CRM, forms, support, booking) | `wordpress_admin` | — (playbook servidor `fluent-suite` + MCPs fluent-*) | wp-operator | campañas/emails salientes = gate (comunicación externa) |
 | Sospecha de hackeo / hardening | — (mínimo Kodavio) | `wp-security-triage` | wp-auditor + wp-operator | borrar/rotar credenciales = gate |
 | Sitio comprometido: limpiar y endurecer (incidente) | — (MCP `wp-malware-cleanup` + Kodavio) | `wp-security-triage` → `wp-security-cleanup` | wp-auditor → wp-operator → wp-verifier | limpieza destructiva, reinstalar core/plugins, reset de contraseñas = gate |
-| Crear/mantener patterns propios del catálogo | `design_system` (autoría de spec) | `wp-patterns-author` | builder-operator del builder + wp-verifier | guardar en la biblioteca del sitio = confirmación; exportar pack = libre |
 | "Pásame un informe para el cliente" | — (read-only sobre trabajo ya hecho) | `wp-client-report` | wp-auditor | **entregar/enviar el informe = gate** (comunicación externa) |
 | Sitio nuevo a conectar | — | `wp-onboard-site` (comando interactivo) o `scripts/add-site.sh` | — | instalar plugin en prod = gate |
 

@@ -20,7 +20,6 @@
 | wp-content-publish | ✅ | Contenido editorial |
 | wp-copywriting | ✅ | Copy comercial |
 | wp-marketing | ✅ | Plan de marketing |
-| wp-patterns-author | ✅ | Extender el catálogo de Kodavio (funnel) |
 | wp-builder-convert | ✅ | Muestra el moat; choca el muro (necesita `kodavio/*`) |
 | wp-site-health | ✅ | Mantenimiento |
 | **wp-security-triage** | ❌ | Depende del MCP `wp-malware-cleanup` + protocolo de brechas del Playbook (SA) |
