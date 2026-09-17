@@ -42,6 +42,17 @@ Kodavio 0.3 es **el punto único MCP del sitio**: por su mismo endpoint, con la 
 
 Las escrituras de un plugin ajeno siguen todo lo demás de esta regla y de `production-guardrails.md`: ensayo si la ability lo admite, gate por entorno, verificación separada.
 
+**Sus playbooks también se absorben.** `kodavio/skill-list` incluye las skills que trae instaladas
+otro plugin del sitio (CrocoBuilder reparte las suyas dentro del plugin), cada una con su `source`
+y su `version`, y `kodavio/skill-get` devuelve el contenido. No se instalan aparte ni se copian al
+kit: la versión que llega es la del plugin que hay en ESE sitio. Cuando el trabajo va de ese
+plugin, ese playbook manda sobre lo genérico.
+
+**Pero las reglas del kit van por delante.** Si un playbook ajeno contradice una regla dura de aquí
+—por ejemplo los elementos de Bricks que `wp-bricks-fds` veta, o los gates por entorno—, gana la
+regla del kit. Un playbook de un tercero es guía técnica de su plugin, no permiso para saltarse el
+guardarraíl.
+
 ## Lo que SIEMPRE es de Kodavio (el moat — no delegable)
 
 La nativa es single-site y "reversibility over gating". El kit aporta lo que ninguna capa de abilities da, y **no se delega jamás**:
