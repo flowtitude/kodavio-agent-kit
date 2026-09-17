@@ -40,7 +40,19 @@ Antes de construir, orientar el sistema de diseño activo (rol *orientar diseño
 ## Bricks — elementos y políticas
 
 **Estructura con nodos nativos, siempre:**
-- Jerarquía: section → container → block/div → contenido.
+- **Regla 1 (AJ, 12-sep-2026): solo elementos `div`.** Nunca los elementos `section`, `container` ni
+  `block` de Bricks: traen su propio layout (ancho, padding, flex) que pisa al FDS. La raíz de cada
+  sección es un `div` con la etiqueta semántica `section` en sus settings; el resto, `div` con la
+  etiqueta que toque (`div`, `nav`, `article`, `ul`, `li`…). Vale también para lo que devuelva un
+  conversor: se corrige antes de escribir.
+- **Regla 2 (AJ, 13-sep-2026): un texto de un solo párrafo es un `text-basic` con su etiqueta
+  semántica** (`p`, `span`, `dt`, `dd`, `li`, `blockquote`, `summary`…). El texto enriquecido
+  (`text`) solo cuando son varios párrafos. Un `text-basic` con etiqueta `div` está mal.
+- **Regla 3 (AJ, 13-sep-2026): la imagen va siempre dentro de un `div` con etiqueta `figure`.**
+  Nunca un `image` suelto en la rejilla o en la tarjeta. El FDS ya estila `figure > img`.
+- **Regla 4 (AJ, 13-sep-2026): sin elemento `divider` de Bricks.** Con el FDS no se ve: su línea
+  la borra el reset `* { border-width: 0 }`, que va en una capa posterior a la de Bricks. Un
+  separador es un `div` con etiqueta `hr` y la clase `border-border`.
 - Tag semántico vía settings del elemento (`name=heading` + `settings.tag=h2`), **nunca** HTML incrustado en el texto.
 - Un nodo de texto (`text-basic`, `text`, `heading`, `button`) contiene texto. Si contiene `<div>`, `<section>`, `<style>` o markup de layout, está mal.
 - Ediciones: patch del elemento (rol *escribir/parchear* → nativa `bricks/update-element` o `kodavio/bricks-apply-patch`), no reenviar el árbol. Full-tree replace solo con rebuild pedido explícitamente.
