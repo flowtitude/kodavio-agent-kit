@@ -3,6 +3,14 @@
 > Qué cambia en cada actualización del kit y, sobre todo, **si tienes que migrar algo local**
 > (`registry/sites.json`, `sites/{slug}/`). Si una entrada no dice "migración", `git pull` basta.
 
+## 2026-09-17
+
+### Cambiado — **migración**
+- **El plan del sitio vive en Kodavio, no en `sites/{slug}/PLAN.md`.** `wp-site-plan` guarda alcance, sitemap y cola de construcción con `kodavio/scope-write` y los lee con `scope-read`, `scope-gap-analysis` y `site-build-next-step`. Antes el plan vivía en dos sitios que podían no coincidir. **Migración:** si tienes un `sites/{slug}/PLAN.md`, vuelca sus páginas a `sitemap.pages[]` con `scope-write` (estado en `status`, patrón y dependencias tal cual, notas en `notes`), comprueba con `scope-read` y borra el fichero.
+- **Cadena FDS → WindPress** en `wp-tailwind-windpress`, con el *Generate* humano de WindPress.
+- **Auditoría de fidelidad de conversión** con los seis ejes; aviso de que el diff y la previsualización visual del plugin no sirven hoy para `builder-transfer-page`.
+- Elementor y Gutenberg aparcados; el doctor sale en rojo si el kit recomienda una capacidad aparcada.
+
 ## 2026-08-21
 
 ### Añadido

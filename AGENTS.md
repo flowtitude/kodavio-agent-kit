@@ -36,7 +36,7 @@ kodavio-agent-kit/
 ├── scripts/doctor.sh    detector de deriva del kit — verde/rojo, engánchalo al pre-commit
 ├── registry/abilities-kodavio.json  qué capacidades expone el plugin de verdad
 │                          (generado: kodavio/scripts/export-abilities-manifest.php)
-├── sites/{slug}/        memoria por sitio (NOTAS.md + PLAN.md si hay plan de sitio)
+├── sites/{slug}/        memoria por sitio (NOTAS.md); el plan del sitio vive en Kodavio (scope)
 └── state.md             estado vivo de esta capa
 ```
 
@@ -166,7 +166,7 @@ Los MCP por sitio se configuran por herramienta, cada una en su fichero de confi
 Este repo es un **kit clonable**: nunca contiene datos de sitios ni clientes reales. Lo local vive solo en tu máquina (`.gitignore`):
 
 - `registry/sites.json` — tus sitios reales. Se crea desde `registry/sites.example.json`.
-- `sites/{slug}/NOTAS.md` y `sites/{slug}/PLAN.md` — memoria y cola de briefs de cada sitio (solo `sites/_template/` se versiona). En entorno SA el backlog maestro sigue siendo OPS; PLAN.md es el detalle por sitio.
+- `sites/{slug}/NOTAS.md` — memoria de cada sitio (solo `sites/_template/` se versiona). **El plan y la cola de construcción no van aquí**: viven en el alcance del sitio en Kodavio (`kodavio/scope-*`, ver `wp-site-plan`).
 - `state.md`, `.claude/settings.local.json` — estado y permisos de tu máquina.
 - **Skills/subagentes personales del operador** — créalos en `skills/<nombre>/` (visibles para Claude Code porque `.claude/skills` es symlink a `skills/`) y lista su ruta en **`.sync-keep.local`** (una por línea, p. ej. `skills/<tu-skill>/`). `sync-installed.sh` los preserva (no los borra al sincronizar) y `.sync-keep.local` está gitignored, así que tus nombres personales nunca llegan al kit compartido. Para tu flujo propio (intake/analyze/pricing/pm/track…) sin filtrarlo a otros.
 - Credenciales: **jamás** en este árbol, ni versionadas ni sin versionar. Access store / gestor de secretos.

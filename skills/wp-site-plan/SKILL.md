@@ -11,7 +11,14 @@ El antídoto contra "ve construyendo y ya veremos": un plan corto, aprobado por 
 
 ## Fase 1 — Discovery (entrevista única)
 
-Pregunta en una sola tanda lo que no sepas ya (revisa antes `kodavio/scope-read` y el sistema de diseño — rol *orientar diseño* → nativa `bricks/get-design-context` o `kodavio/design-read` — quizá el sitio ya tiene scope):
+Antes de preguntar nada, lee lo que ya hay:
+
+- `kodavio/scope-read` — quizá el sitio ya tiene alcance.
+- Sistema de diseño — rol *orientar diseño* → nativa `bricks/get-design-context` o `kodavio/design-read`.
+- **Sitio que ya existe (rediseño):** `kodavio/scope-import-from-site` con `dry_run=true`. Trae páginas, plugins y resumen de diseño leídos del sitio, y **declara en `needs_human` lo que no se puede leer** (audiencia, objetivos, propósito de cada página): esa lista es tu entrevista.
+- **Sitio nuevo:** `kodavio/scope-plan-new-site` guarda el encargo, la audiencia y los objetivos **tal cual** y propone un sitemap por defecto. No interpreta el encargo: `plan_report.needs_agent` dice qué tienes que reescribir tú.
+
+Pregunta en una sola tanda lo que siga sin saberse:
 
 1. **Negocio**: qué vende/ofrece, a quién (audiencia), qué acción quiere provocar (lead, venta, llamada).
 2. **Contenido disponible**: textos, fotos, logos, testimonios reales — qué existe y qué hay que crear.
@@ -30,13 +37,27 @@ Produce y presenta para aprobación:
 
 ## Fase 3 — Persistencia (cada cosa en su memoria)
 
-- Scope (audiencia, sitemap, ofertas, integraciones) → memoria Kodavio del sitio si hay ability de escritura disponible; si no, anotado para volcarlo.
-- Dirección de diseño → `kodavio/design-write` (lenguaje visual del sitio).
-- La cola de trabajo → `sites/{slug}/PLAN.md` (local): checklist de páginas con estado (pendiente/draft/aprobada/publicada). Es el backlog operativo del sitio; se actualiza en cada sesión.
+**El plan vive en el alcance del sitio, en Kodavio, y en ningún otro sitio.** Así lo lee cualquier agente que entre después, desde cualquier herramienta. `sites/{slug}/NOTAS.md` guarda decisiones y rarezas del sitio, no el plan.
+
+- **Alcance y cola de construcción** → `kodavio/scope-write` (`mode=merge`, `dry_run` primero). Forma verificada contra el plugin el 2026-09-17:
+  - `project`: `brief`, `audience`, `goals`.
+  - `strategy`: `positioning`, `primary_conversion`, `builder_preference`, `commerce`, `lead_generation`.
+  - `sitemap.pages[]`, una por página en orden de construcción: `title`, `slug`, `purpose`, `priority` (`mvp` / `fase-2`), `status` (`pendiente` → `draft` → `aprobada` → `publicada`), `builder`, `post_id` (cuando exista), `notes`. El patrón de composición y las dependencias se guardan tal cual (acaban en `meta.pattern` y `meta.depends_on`).
+  - `content_plan`: `global_components`, `forms`, `backlog`.
+  - `build_state.next_actions`: lo siguiente, en orden.
+- **Dirección de diseño** → `kodavio/design-write` (lenguaje visual del sitio). Tokens → cadena de `wp-tailwind-windpress`.
+- **Read-back**: `kodavio/scope-read` y comprobar que las páginas y sus estados están. Un plan no guardado no existe.
 
 ## Fase 4 — Ejecución
 
-Por cada ítem de la cola: `wp-site-session` → `wp-page-build` con el brief del plan → verificación → marcar en PLAN.md. Una página aprobada por sesión vale más que cinco a medias. Cambios de alcance a mitad → se actualiza el plan primero (y el scope en Kodavio), no se improvisa.
+Por cada página del plan:
+
+1. `wp-site-session`, y `kodavio/site-build-next-step` para ver qué toca (lo razona con alcance, memoria de diseño, huecos y riesgo). `kodavio/scope-gap-analysis` (`focus=pages`) lista lo que el alcance tiene y el sitio aún no.
+2. `wp-page-build` con el encargo de esa página (su `purpose`, `notes` y patrón).
+3. Verificación.
+4. `kodavio/scope-write`: `status` y `post_id` de la página, y `build_state.next_actions` al día.
+
+Una página aprobada por sesión vale más que cinco a medias. **Cambio de alcance a mitad → `scope-write` primero, construir después**; nunca al revés.
 
 ## Anti-patrones
 
