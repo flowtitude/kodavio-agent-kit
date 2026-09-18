@@ -16,6 +16,8 @@
   oficial de skills de Bricks desde su fuente, fijado a su última versión publicada, solo si algún
   sitio del registro usa Bricks. Las de CrocoBuilder no se instalan: las sirve Kodavio.
 - `doctor.sh` comprueba los ajustes y corre el simulacro del actualizador.
+- En la **primera** actualización, si la copia instalada es un repositorio, decide su git: lo
+  confirmado y sin tocar se actualiza; lo que tengas sin confirmar cuenta como tuyo y no se pisa.
 - **Migración**: quien usara `sync-installed.sh` pasa a `scripts/actualizar-kit.sh --desde <fuente>`.
   La primera actualización conserva todo lo que tengas editado y te lo lista.
 

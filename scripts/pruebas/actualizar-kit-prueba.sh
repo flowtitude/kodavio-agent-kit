@@ -89,9 +89,30 @@ printf 'regla v3\n' > "$FUENTE/rules/regla.md"
 bash "$KIT/scripts/actualizar-kit.sh" --desde "$FUENTE" --destino "$COPIA" --ensayo >/dev/null
 [[ "$(cat "$COPIA/rules/regla.md")" == "regla v2" ]]; comprobar "6: el ensayo no escribe" $?
 
+# === 7) primera vez sobre una copia que es repositorio: lo confirmado no es tuyo ====
+# Sin manifiesto, un fichero viejo parecería editado a mano y se quedaría congelado.
+# Si la copia instalada es un repo, su git lo sabe: lo confirmado y sin tocar se actualiza.
+COPIA2="$TEMP/instalada-repo"
+mkdir -p "$COPIA2"
+git -C "$COPIA2" init -q
+git -C "$COPIA2" config user.email prueba@local
+git -C "$COPIA2" config user.name prueba
+printf 'kit v1\n' > "$COPIA2/AGENTS.md"
+printf 'regla v1\n' > "$COPIA2/rules-regla.md"
+mkdir -p "$COPIA2/rules"; printf 'regla v1\n' > "$COPIA2/rules/regla.md"; rm "$COPIA2/rules-regla.md"
+printf 'skill v1\n' > "$COPIA2/skills-una.md"; rm "$COPIA2/skills-una.md"
+mkdir -p "$COPIA2/skills/una"; printf 'skill v1 + mi cambio\n' > "$COPIA2/skills/una/SKILL.md"
+git -C "$COPIA2" add -A >/dev/null
+git -C "$COPIA2" commit -qm "copia instalada"
+printf 'skill v1 + otro cambio sin confirmar\n' > "$COPIA2/skills/una/SKILL.md"
+
+bash "$KIT/scripts/actualizar-kit.sh" --desde "$FUENTE" --destino "$COPIA2" >/dev/null
+[[ "$(cat "$COPIA2/AGENTS.md")" == "kit v2" ]]; comprobar "7: lo confirmado y sin tocar se actualiza aunque no haya manifiesto" $?
+[[ "$(cat "$COPIA2/skills/una/SKILL.md")" == "skill v1 + otro cambio sin confirmar" ]]; comprobar "7b: lo que tienes sin confirmar no se pisa" $?
+
 if [[ $fallos -gt 0 ]]; then
   echo "actualizar-kit-prueba: $fallos FALLOS" >&2
   exit 1
 fi
 
-echo "actualizar-kit-prueba: OK (6 casos)"
+echo "actualizar-kit-prueba: OK (7 casos)"

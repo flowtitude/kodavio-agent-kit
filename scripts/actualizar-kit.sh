@@ -107,6 +107,20 @@ entregado() {  # $1 = ruta relativa -> el hash con el que lo entregamos, o vací
   awk -v r="$1" '$2 == r { print $1; exit }' "$MANIFIESTO"
 }
 
+# Sin manifiesto (primera actualización) todo lo que difiera parecería editado a mano, y una
+# copia simplemente vieja se quedaría congelada con un «.nuevo» al lado. Si la copia instalada
+# es un repositorio, su propio git ya sabe la respuesta: un fichero sin cambios respecto a su
+# último commit no lo has tocado tú.
+DESTINO_ES_REPO=0
+git -C "$DESTINO" rev-parse --is-inside-work-tree >/dev/null 2>&1 && DESTINO_ES_REPO=1
+
+lo_tocaste() {  # $1 = ruta relativa; 0 = sí, lo tocó el operador
+  local rel="$1"
+  [[ $DESTINO_ES_REPO -eq 1 ]] || return 0
+  git -C "$DESTINO" ls-files --error-unmatch "$rel" >/dev/null 2>&1 || return 0
+  [[ -n "$(git -C "$DESTINO" status --porcelain -- "$rel" 2>/dev/null)" ]]
+}
+
 actualizados=0; nuevos=0; conservados=0; iguales=0; retirados=0
 CONSERVADOS=(); RETIRADOS=()
 NUEVO_MANIFIESTO="$TEMP/manifiesto"
@@ -138,7 +152,20 @@ while IFS= read -r origen; do
 
   # Editado aquí: el fichero instalado no es el que entregamos la última vez.
   esperado="$(entregado "$rel")"
-  if [[ -n "$esperado" && "$esperado" != "$h_destino" ]] || [[ -z "$esperado" ]]; then
+  if [[ -z "$esperado" ]]; then
+    # Sin manifiesto: decide el git de la copia instalada, si lo hay.
+    if lo_tocaste "$rel"; then
+      esperado_editado=1
+    else
+      esperado_editado=0
+    fi
+  elif [[ "$esperado" != "$h_destino" ]]; then
+    esperado_editado=1
+  else
+    esperado_editado=0
+  fi
+
+  if [[ $esperado_editado -eq 1 ]]; then
     conservados=$((conservados + 1))
     CONSERVADOS+=("$rel")
     [[ $ENSAYO -eq 0 ]] && cp -p "$origen" "$destino.nuevo"
@@ -200,5 +227,9 @@ if [[ ${#CONSERVADOS[@]} -gt 0 ]]; then
   echo "[kit]   $conservados conservados porque los habías editado (versión nueva en «.nuevo»):"
   for rel in "${CONSERVADOS[@]}"; do echo "[kit]     - $rel"; done
   echo "[kit]   Mira el «.nuevo», lleva tu cambio a un fichero «.local.md» y borra el «.nuevo»."
+  if [[ $DESTINO_ES_REPO -eq 1 && ! -s "$MANIFIESTO" ]]; then
+    echo "[kit]   (Primera actualización: aquí cuentan como tuyos los ficheros que tengas sin"
+    echo "[kit]    confirmar en git. Confírmalos o descártalos y la próxima ya no los marcará.)"
+  fi
 fi
 echo "[kit] Tus sitios, tu registro, tus secretos y tus ficheros «.local» no se han tocado."
