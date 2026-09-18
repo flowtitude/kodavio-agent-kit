@@ -109,6 +109,7 @@ mkdir -p "$COPIA2/skills/una"; printf 'skill v1 + mi cambio\n' > "$COPIA2/skills
 git -C "$COPIA2" add -A >/dev/null
 git -C "$COPIA2" commit -qm "copia instalada"
 printf 'retirada del kit\n' > "$COPIA2/rules/retirada.md"
+mkdir -p "$COPIA2/skills/retirada"; printf 'skill retirada\n' > "$COPIA2/skills/retirada/SKILL.md"
 printf 'retirada y tocada\n' > "$COPIA2/rules/retirada-mia.md"
 git -C "$COPIA2" add -A >/dev/null
 git -C "$COPIA2" commit -qm "ficheros que el kit ya no trae"
@@ -119,6 +120,7 @@ printf 'skill v1 + otro cambio sin confirmar\n' > "$COPIA2/skills/una/SKILL.md"
 bash "$KIT/scripts/actualizar-kit.sh" --desde "$FUENTE" --destino "$COPIA2" >/dev/null
 [[ "$(cat "$COPIA2/AGENTS.md")" == "kit v2" ]]; comprobar "7: lo confirmado y sin tocar se actualiza aunque no haya manifiesto" $?
 [[ ! -f "$COPIA2/rules/retirada.md" ]]; comprobar "7c: lo que el kit retiró se va ya en la primera actualización" $?
+[[ ! -d "$COPIA2/skills/retirada" ]]; comprobar "7e: y la carpeta que se queda vacía también" $?
 [[ -f "$COPIA2/rules/retirada-mia.md" ]]; comprobar "7d: salvo si lo tenías tocado" $?
 [[ "$(cat "$COPIA2/skills/una/SKILL.md")" == "skill v1 + otro cambio sin confirmar" ]]; comprobar "7b: lo que tienes sin confirmar no se pisa" $?
 
