@@ -121,6 +121,9 @@ bash "$KIT/scripts/actualizar-kit.sh" --desde "$FUENTE" --destino "$COPIA2" >/de
 [[ "$(cat "$COPIA2/AGENTS.md")" == "kit v2" ]]; comprobar "7: lo confirmado y sin tocar se actualiza aunque no haya manifiesto" $?
 [[ ! -f "$COPIA2/rules/retirada.md" ]]; comprobar "7c: lo que el kit retiró se va ya en la primera actualización" $?
 [[ ! -d "$COPIA2/skills/retirada" ]]; comprobar "7e: y la carpeta que se queda vacía también" $?
+mkdir -p "$COPIA2/skills/vieja-vacia"
+bash "$KIT/scripts/actualizar-kit.sh" --desde "$FUENTE" --destino "$COPIA2" >/dev/null
+[[ ! -d "$COPIA2/skills/vieja-vacia" ]]; comprobar "7f: una carpeta vacía de una actualización anterior también se limpia" $?
 [[ -f "$COPIA2/rules/retirada-mia.md" ]]; comprobar "7d: salvo si lo tenías tocado" $?
 [[ "$(cat "$COPIA2/skills/una/SKILL.md")" == "skill v1 + otro cambio sin confirmar" ]]; comprobar "7b: lo que tienes sin confirmar no se pisa" $?
 

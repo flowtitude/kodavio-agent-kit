@@ -240,8 +240,8 @@ fi
 
 # Una carpeta que se queda vacía al retirar su contenido sigue contando como skill para
 # doctor.sh ("falta SKILL.md"), así que se va con ella.
-if [[ $ENSAYO -eq 0 && $retirados -gt 0 ]]; then
-  find "$DESTINO" -mindepth 1 -type d -empty -not -path "*/.git/*" -delete 2>/dev/null || true
+if [[ $ENSAYO -eq 0 ]]; then
+  find "$DESTINO" -mindepth 1 -type d -empty -not -path "*/.git/*" -not -path "$DESTINO/sites/*" -not -path "$DESTINO/.komandesk/*" -delete 2>/dev/null || true
 fi
 
 if [[ $ENSAYO -eq 0 ]]; then
