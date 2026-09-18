@@ -222,6 +222,22 @@ while IFS=' ' read -r h_entregado rel; do
   fi
 done < "$MANIFIESTO"
 
+# Y en la primera actualización, cuando el manifiesto aún no dice qué vino del kit, lo
+# retirado se reconoce igual: si la copia es un repositorio y el fichero está confirmado y
+# sin tocar, es del kit y se va con él. Sin esto, una skill retirada seguía viva en la copia
+# instalada (visto con wp-patterns-author en sitekit el 18-09-2026).
+if [[ $DESTINO_ES_REPO -eq 1 ]]; then
+  while IFS= read -r instalado; do
+    rel="${instalado#"$DESTINO"/}"
+    excluido "$rel" && continue
+    [[ -e "$FUENTE/$rel" ]] && continue
+    [[ -n "$(entregado "$rel")" ]] && continue   # ya lo trató la pasada anterior
+    lo_tocaste "$rel" && continue
+    [[ $ENSAYO -eq 0 ]] && rm -f "$instalado"
+    retirados=$((retirados + 1))
+  done < <(find "$DESTINO" -type f -not -path "$DESTINO/.git/*" | sort)
+fi
+
 if [[ $ENSAYO -eq 0 ]]; then
   sort -k2 "$NUEVO_MANIFIESTO" > "$MANIFIESTO"
 fi

@@ -57,9 +57,15 @@ while IFS= read -r ajuste; do
   ajustes=$((ajustes + 1))
   base="${ajuste%.local.md}.md"
   [[ "$ajuste" == "./AGENTS.local.md" ]] && base="./AGENTS.md"
-  [[ -f "$base" ]] || fail "${ajuste#./}: ajuste sin fichero del kit al que acompañar (esperaba ${base#./})"
-  git ls-files --error-unmatch "${ajuste#./}" >/dev/null 2>&1 \
-    && fail "${ajuste#./}: un ajuste personal no se versiona (quítalo del índice)"
+  if [[ -f "$base" ]]; then
+    git ls-files --error-unmatch "${ajuste#./}" >/dev/null 2>&1 \
+      && fail "${ajuste#./}: un ajuste sobre un fichero del kit no se versiona (quítalo del índice)"
+  else
+    # Un *.local.md que no acompaña a nada del kit es una nota personal del operador,
+    # no un error: en la copia instalada llevan meses (MIS-SKILLS.local.md).
+    warn "${ajuste#./}: nota personal (no acompaña a ningún fichero del kit)"
+    ajustes=$((ajustes - 1))
+  fi
 done < <(find . -name '*.local.md' -not -path './.git/*' | sort)
 ok_if_clean "$ajustes ajuste(s) del operador, cada uno junto a su fichero del kit"
 
