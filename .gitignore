@@ -11,6 +11,11 @@ state.md
 kilo.jsonc
 .kilo/
 
+# Ajustes del operador sobre ficheros del kit: viven solo en su copia.
+*.local.md
+*.nuevo
+.kit-manifest.local
+
 # Capa personal del operador: vive solo en la copia instalada, nunca en el kit compartido.
 # Las skills/subagentes personales se listan en .sync-keep.local, que la sync preserva.
 .sync-keep.local

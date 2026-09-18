@@ -1,0 +1,19 @@
+{
+  "_nota": "Paquetes de skills que publica un tercero y el kit NO copia: se instalan y se actualizan desde su propia fuente, para que la versión sea la suya y no una copia que deriva. Las skills que un plugin trae dentro (CrocoBuilder) no van aquí: las sirve Kodavio con skill-get.",
+  "paquetes": [
+    {
+      "id": "bricks-skills",
+      "nombre": "Skills oficiales de Bricks",
+      "quien": "codeerhq (equipo de Bricks)",
+      "repo": "https://github.com/codeerhq/bricks-skills",
+      "licencia": "GPL-2.0",
+      "requiere_stack": "bricks",
+      "instalar_en": "~/.bricks/skills/bricks-skills",
+      "script_actualizar": "scripts/bricks-skills-upgrade",
+      "carpeta_skills": "skills",
+      "prefijo": "bricks-",
+      "enlazar_en": "~/.agents/skills",
+      "nota": "Su script fija el clon a la última versión publicada, no a main. Las reglas de este kit mandan sobre lo que digan estas skills (rules/ability-source-agnostic.md)."
+    }
+  ]
+}

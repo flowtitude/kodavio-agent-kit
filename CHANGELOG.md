@@ -3,6 +3,22 @@
 > Qué cambia en cada actualización del kit y, sobre todo, **si tienes que migrar algo local**
 > (`registry/sites.json`, `sites/{slug}/`). Si una entrada no dice "migración", `git pull` basta.
 
+## 2026-09-18 — Actualizar sin perder lo tuyo, y skills de terceros por manifiesto
+
+- `scripts/actualizar-kit.sh` sustituye a `sync-installed.sh`: actualiza desde la última versión
+  publicada (o desde un clon con `--desde`), **no pisa un fichero del kit que hayas editado** —deja
+  la versión nueva como `<fichero>.nuevo` y avisa—, respeta lo personal y rehace los enlaces.
+  `--ensayo` dice qué haría sin tocar nada.
+- **Capa de ajustes**: `AGENTS.local.md`, `rules/<regla>.local.md`, `skills/<slug>/SKILL.local.md`.
+  El agente los lee después del original y mandan sobre él; están fuera de git y la actualización
+  no los toca. Es el sitio donde van los cambios propios, en vez de editar el fichero del kit.
+- `scripts/skills-externas.sh` + `registry/skills-externas.json`: instala y actualiza el paquete
+  oficial de skills de Bricks desde su fuente, fijado a su última versión publicada, solo si algún
+  sitio del registro usa Bricks. Las de CrocoBuilder no se instalan: las sirve Kodavio.
+- `doctor.sh` comprueba los ajustes y corre el simulacro del actualizador.
+- **Migración**: quien usara `sync-installed.sh` pasa a `scripts/actualizar-kit.sh --desde <fuente>`.
+  La primera actualización conserva todo lo que tengas editado y te lo lista.
+
 ## 2026-09-17 — Retirado el catálogo de secciones de Kodavio
 
 - Kodavio 0.3 ya no trae `patterns-*` (las 10 secciones genéricas). Se retira la skill

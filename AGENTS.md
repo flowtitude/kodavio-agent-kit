@@ -40,6 +40,17 @@ kodavio-agent-kit/
 └── state.md             estado vivo de esta capa
 ```
 
+## Tus ajustes sobre el kit (`*.local.md`)
+
+**Si junto a un fichero del kit hay otro con el mismo nombre y `.local.md`, léelo justo después y
+manda sobre el original.** `AGENTS.local.md` sobre este fichero, `rules/<regla>.local.md` sobre esa
+regla, `skills/<slug>/SKILL.local.md` sobre esa skill.
+
+Ahí van los ajustes del operador. **No se editan los ficheros del kit**: están fuera de git, así que
+no llegan al kit compartido, y `scripts/actualizar-kit.sh` no los toca. Si alguien edita el fichero
+del kit igualmente, la actualización tampoco lo pisa: deja la versión nueva como `<fichero>.nuevo`
+y avisa.
+
 **Fuente única, sin excepción.** `CLAUDE.md`, `.claude/skills`, `.claude/agents` y `.agents/skills` son **symlinks**; `.codex/agents/*.toml` se genera con `scripts/gen-codex-agents.sh` y no se edita a mano. Si algo de eso se convierte en copia, cada herramienta acaba leyendo un kit distinto — `scripts/doctor.sh` lo detecta y bloquea el commit.
 
 ## Protocolo de sesión por sitio (obligatorio)
@@ -167,7 +178,8 @@ Este repo es un **kit clonable**: nunca contiene datos de sitios ni clientes rea
 - `registry/sites.json` — tus sitios reales. Se crea desde `registry/sites.example.json`.
 - `sites/{slug}/NOTAS.md` — memoria de cada sitio (solo `sites/_template/` se versiona). **El plan y la cola de construcción no van aquí**: viven en el alcance del sitio en Kodavio (`kodavio/scope-*`, ver `wp-site-plan`).
 - `state.md`, `.claude/settings.local.json` — estado y permisos de tu máquina.
-- **Skills/subagentes personales del operador** — créalos en `skills/<nombre>/` (visibles para Claude Code porque `.claude/skills` es symlink a `skills/`) y lista su ruta en **`.sync-keep.local`** (una por línea, p. ej. `skills/<tu-skill>/`). `sync-installed.sh` los preserva (no los borra al sincronizar) y `.sync-keep.local` está gitignored, así que tus nombres personales nunca llegan al kit compartido. Para tu flujo propio (intake/analyze/pricing/pm/track…) sin filtrarlo a otros.
+- **Ajustes sobre ficheros del kit** — en `*.local.md` junto al original (ver arriba). Nunca editando el fichero del kit.
+- **Skills/subagentes personales del operador** — créalos en `skills/<nombre>/` (visibles para Claude Code porque `.claude/skills` es symlink a `skills/`) y lista su ruta en **`.sync-keep.local`** (una por línea, p. ej. `skills/<tu-skill>/`). `scripts/actualizar-kit.sh` los preserva (no los borra al actualizar) y `.sync-keep.local` está gitignored, así que tus nombres personales nunca llegan al kit compartido. Para tu flujo propio (intake/analyze/pricing/pm/track…) sin filtrarlo a otros.
 - Credenciales: **jamás** en este árbol, ni versionadas ni sin versionar. Access store / gestor de secretos.
 
 Si un archivo versionable necesita mencionar un sitio concreto, no lo hagas: la referencia va a `sites.json` (caveats) o a las NOTAS del sitio.
