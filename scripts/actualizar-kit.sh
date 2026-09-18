@@ -99,7 +99,14 @@ excluido() {  # $1 = ruta relativa
 # El manifiesto guarda cómo entregamos cada fichero la última vez: lo que no coincide
 # con él es que lo tocaste tú.
 MANIFIESTO="$DESTINO/.kit-manifest.local"
-[[ -f "$MANIFIESTO" ]] || : > "$MANIFIESTO"
+# El ensayo no escribe NADA en el destino, ni siquiera un manifiesto vacío: si escribe,
+# deja de ser un ensayo (visto el 18-09-2026, apareció suelto en sitekit).
+if [[ ! -f "$MANIFIESTO" ]]; then
+  if [[ $ENSAYO -eq 1 ]]; then
+    MANIFIESTO="$TEMP/manifiesto-vacio"
+  fi
+  : > "$MANIFIESTO"
+fi
 
 # Sin arrays asociativos a propósito: macOS trae bash 3.2 y con `declare -A` este script
 # no arrancaba en el Mac donde se usa.

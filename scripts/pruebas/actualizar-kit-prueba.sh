@@ -88,6 +88,10 @@ grep -q "skills/una/SKILL.md" <<< "$SALIDA"; comprobar "3c: y se avisa por panta
 printf 'regla v3\n' > "$FUENTE/rules/regla.md"
 bash "$KIT/scripts/actualizar-kit.sh" --desde "$FUENTE" --destino "$COPIA" --ensayo >/dev/null
 [[ "$(cat "$COPIA/rules/regla.md")" == "regla v2" ]]; comprobar "6: el ensayo no escribe" $?
+COPIA3="$TEMP/instalada-ensayo"
+mkdir -p "$COPIA3"
+bash "$KIT/scripts/actualizar-kit.sh" --desde "$FUENTE" --destino "$COPIA3" --ensayo >/dev/null
+[[ -z "$(ls -A "$COPIA3")" ]]; comprobar "6b: un ensayo sobre una copia vacía no deja ni el manifiesto" $?
 
 # === 7) primera vez sobre una copia que es repositorio: lo confirmado no es tuyo ====
 # Sin manifiesto, un fichero viejo parecería editado a mano y se quedaría congelado.
