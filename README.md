@@ -77,11 +77,28 @@ El equipo de WordPress mantiene skills de desarrollo (bloques, temas, plugins, R
 
 Con ellas cubres el desarrollo (código); este kit cubre la operación (sitios en vivo). Se complementan.
 
-### 2. MCP de documentación (opcional)
+### 2. Skills oficiales de Bricks (si operas sitios Bricks)
+
+El equipo de Bricks publica su propio paquete de skills. El kit no las copia: las instala desde su
+fuente y las deja fijadas a la última versión publicada.
+
+```bash
+scripts/skills-externas.sh estado      # qué hay y si te hace falta
+scripts/skills-externas.sh instalar    # clona y enlaza (solo si algún sitio tuyo usa Bricks)
+scripts/skills-externas.sh actualizar  # pasa su propio actualizador
+```
+
+Las skills de **CrocoBuilder** no se instalan: vienen dentro del plugin, y Kodavio las sirve con
+`kodavio/skill-get` con la versión que tenga ese sitio.
+
+Si una skill de un tercero contradice una regla de este kit, **gana la regla del kit**
+(`rules/ability-source-agnostic.md`).
+
+### 3. MCP de documentación (opcional)
 
 Un server de docs de WordPress (p. ej. `wordpress-docs-mcp`) evita que el agente alucine funciones del core.
 
-### 3. Verificación
+### 4. Verificación
 
 Pide a tu agente: *"Lista las skills disponibles"* → deben aparecer las `wp-*` de este kit (vía `.claude/skills`) y, si las instalaste, las oficiales de WordPress.
 
@@ -247,10 +264,23 @@ Fuente única: `AGENTS.md`. Todo lo demás son punteros — edita siempre AGENTS
 ## Mantener el kit al día
 
 ```bash
-git pull
+scripts/actualizar-kit.sh --ensayo   # qué cambiaría
+scripts/actualizar-kit.sh            # actualiza desde la última versión publicada
 ```
 
-Tus datos locales (`sites.json`, `sites/*`, `state.md`) no se tocan: están fuera de git. Si una actualización cambia el esquema de `sites.example.json`, [CHANGELOG.md](CHANGELOG.md) lo indica y migras tu `sites.json` a mano.
+El kit se lee en **tres capas**, y la actualización solo toca la primera:
+
+| Capa | Qué es | En la actualización |
+|---|---|---|
+| **El kit** | Reglas, skills, subagentes, scripts | Se actualiza siempre |
+| **Lo tuyo** | `registry/sites.json`, `sites/*`, `state.md`, secretos, skills propias (`.sync-keep.local`) | No se toca |
+| **Tus ajustes** | Ficheros `*.local.md` junto al original: `AGENTS.local.md`, `rules/<regla>.local.md`, `skills/<slug>/SKILL.local.md` | No se tocan, y el agente los lee después del original: mandan sobre él |
+
+**Ajusta el kit en un `*.local.md`, no editando el fichero del kit.** Si aun así lo editas, la
+actualización **no lo pisa**: deja la versión nueva al lado como `<fichero>.nuevo` y te avisa.
+Los `*.local.md` están fuera de git, así que nunca llegan al kit compartido.
+
+Si trabajas sobre un clon del repositorio, `git pull` sigue valiendo. Si una actualización cambia el esquema de `sites.example.json`, [CHANGELOG.md](CHANGELOG.md) lo indica y migras tu `sites.json` a mano.
 
 Mejoras y errores del **kit** → issues/PRs en este repo. Errores del **plugin Kodavio** → canal de la beta de Flowtitude.
 

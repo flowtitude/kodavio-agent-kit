@@ -48,6 +48,29 @@ is_personal() {  # $1 = slug de la skill
   grep -qE "^skills/$1/?[[:space:]]*$" .sync-keep.local
 }
 
+# ------------------------------------------------ ajustes del operador (*.local.md)
+# Un ajuste con el nombre mal puesto no lo lee nadie, y el operador cree que sí.
+section "Ajustes del operador"
+ajustes=0
+while IFS= read -r ajuste; do
+  [[ -n "$ajuste" ]] || continue
+  ajustes=$((ajustes + 1))
+  base="${ajuste%.local.md}.md"
+  [[ "$ajuste" == "./AGENTS.local.md" ]] && base="./AGENTS.md"
+  [[ -f "$base" ]] || fail "${ajuste#./}: ajuste sin fichero del kit al que acompañar (esperaba ${base#./})"
+  git ls-files --error-unmatch "${ajuste#./}" >/dev/null 2>&1 \
+    && fail "${ajuste#./}: un ajuste personal no se versiona (quítalo del índice)"
+done < <(find . -name '*.local.md' -not -path './.git/*' | sort)
+ok_if_clean "$ajustes ajuste(s) del operador, cada uno junto a su fichero del kit"
+
+# --------------------------------------------- el actualizador no pierde tu trabajo
+section "Actualizador del kit"
+if bash scripts/pruebas/actualizar-kit-prueba.sh >/dev/null 2>&1; then
+  ok "el simulacro pasa: lo editado no se pisa y lo personal no se toca"
+else
+  fail "scripts/pruebas/actualizar-kit-prueba.sh falla — córrelo a mano para ver qué caso"
+fi
+
 # ---------------------------------------------------------------- 1. symlinks
 # Windows sin Developer Mode y los rsync mal hechos los convierten en copias:
 # a partir de ahí cada herramienta lee un kit distinto.
