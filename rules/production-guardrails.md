@@ -54,7 +54,7 @@ qué dice que restauraría).
 
 | Qué se escribió | Cómo se deshace |
 |---|---|
-| Ficheros de código, mu-plugins, snippets, fuentes de diseño, traducciones (`.po`/`.mo`) | `kodavio/rollback` — la última operación, un `op_id` o todo lo hecho sobre una ruta (`path` + `since`). Un snippet creado se desactiva, no se borra; un fichero que no existía no se restaura (sería borrarlo: GATE) |
+| Ficheros de código, mu-plugins, snippets, fuentes de diseño, traducciones (`.po`/`.mo`) | `kodavio/rollback` — la última operación, un `op_id` o todo lo hecho sobre una ruta (`path` + `since`). Un snippet creado se desactiva, no se borra; un fichero que no existía no se restaura (sería borrarlo: GATE). Si el fichero es del tema activo o de un plugin activo, añade `confirm_live_code=true`, la misma confirmación que pidió escribirlo. Requiere Kodavio 0.3.0 y el permiso «Editar código» encendido en Herramientas › Permisos |
 | Página Bricks (árbol de elementos y ajustes de página) | `bricks/list-revisions` → `kodavio/builder-restore-revision` con `post_id` + `revision_id`. `wp_restore_post_revision()` no repone los datos del builder |
 | Migración a Tailwind de una página | `kodavio/tailwind-migration-rollback` con `post_id` |
 | Entradas y páginas sin builder | Revisiones de WordPress |

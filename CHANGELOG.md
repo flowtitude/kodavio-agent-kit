@@ -3,6 +3,14 @@
 > Qué cambia en cada actualización del kit y, sobre todo, **si tienes que migrar algo local**
 > (`registry/sites.json`, `sites/{slug}/`). Si una entrada no dice "migración", `git pull` basta.
 
+## 2026-09-23 — Al día con Kodavio 0.3.0 publicada
+
+- `registry/abilities-kodavio.json` regenerado desde la `v0.3.0` publicada (antes decía
+  `0.3.1-dev.1`). Mismas 255 capacidades.
+- `rules/production-guardrails.md`: para deshacer con `kodavio/rollback` un fichero del tema activo
+  o de un plugin activo hay que pasar `confirm_live_code=true`. Antes de la 0.3.0 no había forma:
+  el resultado era «restored 0 of 1». Deshacer va con el permiso «Editar código».
+
 ## 2026-09-18 — Actualizar sin perder lo tuyo, y skills de terceros por manifiesto
 
 - `scripts/actualizar-kit.sh` sustituye a `sync-installed.sh`: actualiza desde la última versión
