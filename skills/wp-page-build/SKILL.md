@@ -39,7 +39,7 @@ No hay penalización por preguntar; hay penalización irrecuperable por reconstr
 
 1. `kodavio/workflow-router` → `kodavio/context-bootstrap` → `kodavio/skill-get` del playbook del builder. Bootstrap recupera scope + sistema de diseño activo + memoria vinculante + últimos cambios en una sola llamada (no necesitas llamar a `design-read`/`scope-read` por separado).
 2. `kodavio/builder-get-config` + `builder-workflow action=schema`.
-3. Página nueva: `builder-workflow` create con el content model completo, **status draft**.
+3. Página nueva: `builder-workflow` create con el content model completo, **status draft**. Si el sitio tiene WindPress con FDS y hay biblioteca de bloques, mira antes `wp-block-library`: montar con bloques ya hechos sale mejor que el andamio del materializador.
 4. **Página existente → EDITAR, no reconstruir.** Usa `builder-workflow action=edit` con `payload.operation` (`insert`/`update`/`patch`/`delete`/`move`) — en Bricks, y el router lo enruta al flow `page_edit`. **Lee el árbol primero** (rol *leer árbol* → nativa `bricks/get-page-elements` o `kodavio/builder-workflow action=read`/`analyze`) para obtener `node_id`/anclas; antes de tocar página publicada haz snapshot; **nunca reemplaces el árbol entero** salvo petición explícita del usuario. Tras escribir, **read-back**: relee y confirma que el objetivo cambió y lo no tocado quedó intacto.
 5. Siempre `dry_run=true` primero, **y leer el `materialization_plan` del dry-run**: si `mapped_blocks` < bloques enviados, o aparece `unknown_block_as_card`/`unsupported_block_types`, el contrato está mal — NO escribir.
 
