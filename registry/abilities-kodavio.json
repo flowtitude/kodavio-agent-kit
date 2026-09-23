@@ -1,10 +1,11 @@
 {
     "plugin": "kodavio",
-    "version": "0.3.0",
-    "count": 255,
+    "version": "0.3.1-dev.2",
+    "count": 259,
     "by_maturity": {
         "active": 211,
         "deprecated": 1,
+        "foundation": 4,
         "parked": 41,
         "utility": 2
     },
@@ -15,6 +16,10 @@
         "kodavio/analytics-commerce-summary",
         "kodavio/analytics-content-summary",
         "kodavio/analytics-site-summary",
+        "kodavio/block-library-build-page",
+        "kodavio/block-library-get",
+        "kodavio/block-library-list",
+        "kodavio/block-library-save",
         "kodavio/bricks-active-template-rule-delete",
         "kodavio/bricks-active-template-rule-upsert",
         "kodavio/bricks-active-template-rules-list",
@@ -481,6 +486,12 @@
         ],
         "deprecated": [
             "kodavio/report-get-branding"
+        ],
+        "foundation": [
+            "kodavio/block-library-build-page",
+            "kodavio/block-library-get",
+            "kodavio/block-library-list",
+            "kodavio/block-library-save"
         ],
         "parked": [
             "kodavio/acss-apply-variable-overrides",

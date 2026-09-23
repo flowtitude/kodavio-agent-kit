@@ -141,6 +141,7 @@ Toda sesión sobre un sitio empieza por el skill **`wp-site-session`**: el agent
 | *"¿Cómo está example.com?"* | Auditoría read-only (`wp-site-health`) → informe con riesgos y plan |
 | *"Hazme la web de mi clínica"* | `wp-site-plan`: discovery → sitemap + modelo de contenido + cola de briefs → apruebas el plan → construcción página a página |
 | *"Crea una página de servicios con hero, 3 features y CTA"* | `wp-page-build`: brief y copy primero → build en draft → verificación → te enseña la preview |
+| *"Móntame la home con bloques: hero, servicios y CTA"* | `wp-block-library`: eliges bloques de la biblioteca → escribes el texto de cada uno → página en draft → verificas que se ve |
 | *"Hazla parecida a esta captura"* (+ imagen) | `wp-reference-to-brief`: extrae estructura y jerarquía con visión → brief adaptado a TU design system → build |
 | *"Escribe 5 posts sobre X para el blog"* | `wp-content-publish`: muestra 1 de ejemplo → apruebas → lote completo en draft con SEO on-page |
 | *"Migra esta página de Elementor a Bricks"* | `wp-builder-convert`: plan → conversión a draft → auditoría de fidelidad → rollback garantizado |
@@ -163,6 +164,7 @@ Lo que el agente **nunca** hace solo en producción: publicar, instalar/actualiz
 | [`wp-design-patterns`](skills/wp-design-patterns/SKILL.md) | Patrones de composición: anatomía de sección, ritmo de página, catálogo (hero, features, pricing, FAQ…) |
 | [`wp-bricks-fds`](skills/wp-bricks-fds/SKILL.md) | Preferencias Bricks + Flowtitude Design System: clases semánticas, tokens fluidos, elementos vetados |
 | [`wp-tailwind-windpress`](skills/wp-tailwind-windpress/SKILL.md) | Tailwind v4 en WordPress vía WindPress: detección, reglas de utilities |
+| [`wp-block-library`](skills/wp-block-library/SKILL.md) | Páginas nuevas con bloques de la biblioteca de Kodavio (FDS + WindPress) y bloques propios de la licencia |
 | [`wp-copywriting`](skills/wp-copywriting/SKILL.md) | Copy comercial (home, landing, servicio, precios, FAQ) anclado al scope y al sistema de diseño |
 | [`wp-content-publish`](skills/wp-content-publish/SKILL.md) | Contenido editorial con SEO on-page y flujo draft → aprobación → publicación |
 | [`wp-marketing`](skills/wp-marketing/SKILL.md) | Plan de captación sobre WordPress: embudo, CRO, secuencias FluentCRM, medición |
@@ -236,7 +238,7 @@ kodavio-agent-kit/
 │   ├── gen-codex-agents.sh    genera .codex/agents/*.toml desde agents/*.md (nunca editar a mano)
 │   ├── add-site.sh            alta de sitios por terminal (el comando es /wp-onboard-site)
 │   └── wp-mcp-launch.sh|.ps1  lanzador MCP con credencial desde el almacén del SO
-├── skills/                    16 skills de orquestación, planificación y diseño (SKILL.md portables)
+├── skills/                    17 skills de orquestación, planificación y diseño (SKILL.md portables)
 ├── agents/                    10 subagentes especializados
 ├── workflows/WORKFLOWS.md     enrutado petición → flujo → skill → gates
 ├── sites/

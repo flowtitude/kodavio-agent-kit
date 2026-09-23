@@ -98,6 +98,7 @@ Siempre, en todos los entornos: `dry_run=true` antes de cualquier write; conserv
 | `wp-design-patterns` | Fase de autoría: anatomía de sección, ritmo de página, catálogo de patrones |
 | `wp-bricks-fds` | Sitios Bricks con Flowtitude Design System: clases, tokens, elementos vetados |
 | `wp-tailwind-windpress` | Tailwind v4 vía WindPress: detección, reglas de utilities, convivencia con Bricks |
+| `wp-block-library` | Página nueva con bloques de la biblioteca (FDS + WindPress) y guardar bloques propios de la licencia |
 | `wp-content-publish` | Posts, contenido editorial, SEO on-page (copy en castellano perfecto) |
 | `wp-copywriting` | Copy comercial (landing, home, página de servicio, sobre nosotros, FAQ) anclado a scope y sistema de diseño |
 | `wp-marketing` | Plan de marketing digital sobre WordPress: captación, CRO, secuencias FluentCRM, medición |

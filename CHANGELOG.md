@@ -3,6 +3,15 @@
 > Qué cambia en cada actualización del kit y, sobre todo, **si tienes que migrar algo local**
 > (`registry/sites.json`, `sites/{slug}/`). Si una entrada no dice "migración", `git pull` basta.
 
+## 2026-09-23 (2) — Páginas con bloques de la biblioteca
+
+- Skill nueva `wp-block-library`: página nueva de Bricks con bloques de la biblioteca de Kodavio
+  (FDS con WindPress), con tu texto en cada bloque, y guardar en la biblioteca de la licencia los
+  bloques que crees. Requiere **Kodavio 0.3.1** (capacidades `kodavio/block-library-*`).
+- `registry/abilities-kodavio.json` regenerado desde Kodavio `0.3.1-dev.2`: 259 capacidades, 4 de
+  ellas en `foundation` (las de la biblioteca, hasta probarlas con una licencia real).
+- `wp-page-build` remite a la nueva skill cuando el sitio tiene WindPress con FDS.
+
 ## 2026-09-23 — Al día con Kodavio 0.3.0 publicada
 
 - `registry/abilities-kodavio.json` regenerado desde la `v0.3.0` publicada (antes decía
