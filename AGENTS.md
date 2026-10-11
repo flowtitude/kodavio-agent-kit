@@ -1,9 +1,5 @@
 # AGENTS.md — kodavio-agent-kit
 
-> Puerta de entrada para operar **instalaciones WordPress en vivo a través de Kodavio**.
-> La lee cualquier agente: Claude Code, Cursor, Codex, OpenCode, Kilo Code.
-> Fuente única: este archivo. `CLAUDE.md` y `.cursor/rules/` son punteros, no copias.
-
 Capa **cliente** para trabajar con sitios WordPress reales vía el plugin Kodavio (MCP por sitio).
 Kodavio aporta workflows, playbooks, capability map, handbook, dry-run, backups y tester mode; este
 kit aporta qué sitios hay (`registry/sites.json`), qué se puede hacer en cada entorno
@@ -46,7 +42,7 @@ Regla canónica completa: `rules/production-guardrails.md`. Resumen ejecutivo:
 | Borrar (contenido, media, usuarios, plugins) | confirmación | confirmación | **Human Gate siempre** |
 | Bulk ops (>10 items) | confirmación | confirmación | **Human Gate** |
 
-Siempre, en todos los entornos: `dry_run=true` antes de cualquier write; conservar originales; anotar backup/rollback IDs en la respuesta.
+Siempre, en todos los entornos: conservar originales y anotar backup/rollback IDs en la respuesta.
 
 ## Reglas de oro
 
@@ -56,8 +52,8 @@ Siempre, en todos los entornos: `dry_run=true` antes de cualquier write; conserv
 4. **Nunca PHP en tema/plugin activo.** Sandbox (`wp-content/kodavio-sandbox/`) o mu-plugin con lint + backup; en producción, además, gate.
 5. **Un flujo primario por tarea.** `kodavio/workflow-router` decide; los compuestos, en orden de dependencia.
 6. **Verificar antes de declarar éxito:** read-back, editor-open check, página sana. El write que «no falló» no es un write verificado, y el que no se ve tampoco: **escrito ≠ visible** (`rules/render-verification.md`).
-7. **Memoria en su capa** (abajo). Errores → `agentkit/retros/mistakes.md` (capa SA).
-8. **Castellano** al comunicar; código y tecnicismos en inglés. Contenido publicable → `agentkit/rules/copy-review.md` (capa SA).
+7. **Memoria en su capa** (abajo).
+8. **Castellano** al comunicar; código y tecnicismos en inglés.
 9. **Página existente + verbo de modificación** (cambia, edita, ajusta, corrige, mueve, reordena, reemplaza) ⇒ `action=edit`, **nunca** `create`; crear solo si no existe (verificar con `wp-search` o `builder-router` antes de elegir).
 10. **El nombre del server MCP == entorno** (`acme_com` = producción, `acme_com_staging` = staging). Verifica el destino antes de cada write.
 11. **Los caveats de `registry/sites.json` y `sites/{slug}/NOTAS.md` son vinculantes.** Si uno prohíbe la acción, para y pregunta.
@@ -76,15 +72,7 @@ sesión. Tabla completa: `docs/guia-del-kit.md`.
 
 ## Skills y subagentes
 
-Toda skill de construcción, edición o administración recorre las fases canónicas (`rules/skill-phases.md`).
-Cuándo usar cada una: su descripción y `docs/guia-del-kit.md`.
-
-- **Skills:** `wp-site-session` (siempre al empezar), `wp-onboard-site`, `wp-site-plan`, `wp-page-build`,
-  `wp-reference-to-brief`, `wp-design-patterns`, `wp-bricks-fds`, `wp-tailwind-windpress`,
-  `wp-block-library`, `wp-content-publish`, `wp-copywriting`, `wp-marketing`, `wp-builder-convert`,
-  `wp-site-health`, `wp-security-triage`, `wp-security-cleanup`, `wp-client-report`. Los playbooks del
-  servidor se cargan con `kodavio/skill-get`.
-- **Subagentes:** `wp-auditor` (solo lectura), `wp-operator`, `wp-bricks-operator`,
-  `wp-elementor-operator`, `wp-gutenberg-operator`, `wp-builder-operator` (genérico),
-  `wp-content-architect`, `wp-woo-operator`, `wp-content-writer`, `wp-verifier`. El especialista del
-  builder del sitio antes que el genérico.
+Están en `skills/` y `agents/`; cuándo usar cada uno, en `docs/guia-del-kit.md`. Toda skill de
+construcción, edición o administración recorre las fases canónicas (`rules/skill-phases.md`). Los
+playbooks del servidor se cargan con `kodavio/skill-get`. Subagente: el especialista del builder del
+sitio antes que el genérico.
