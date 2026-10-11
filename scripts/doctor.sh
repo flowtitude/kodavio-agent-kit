@@ -125,7 +125,7 @@ for d in skills/*/; do
 
   grep -q "skill-phases" "$f" || fail "$slug: no declara las fases canónicas (rules/skill-phases.md)"
   grep -q "$slug" workflows/WORKFLOWS.md || fail "$slug: sin fila en workflows/WORKFLOWS.md — no se enruta"
-  grep -q "$slug" AGENTS.md || fail "$slug: no aparece en la tabla de AGENTS.md"
+  grep -q "$slug" docs/guia-del-kit.md || fail "$slug: no aparece en la tabla de skills de docs/guia-del-kit.md"
 done
 ok_if_clean "${#SKILLS[@]} skills del kit con frontmatter, fases, enrutado y puerta de entrada$([[ $PERSONAL -gt 0 ]] && echo " (+$PERSONAL personales, fuera del alcance)")"
 
@@ -139,7 +139,7 @@ for f in agents/*.md; do
   grep -q "production-guardrails" "$f" || fail "$slug: no cita rules/production-guardrails.md"
   grep -q "ability-source-agnostic" "$f" || fail "$slug: no cita rules/ability-source-agnostic.md"
   grep -q "credentials" "$f" || fail "$slug: no cita la regla de no filtrar datos sensibles (docs/credentials.md)"
-  grep -q "$slug" AGENTS.md || fail "$slug: no aparece en la tabla de subagentes de AGENTS.md"
+  grep -q "$slug" docs/guia-del-kit.md || fail "$slug: no aparece en la tabla de subagentes de docs/guia-del-kit.md"
 done
 ok_if_clean "$(ls agents/*.md | wc -l | tr -d ' ') subagentes con reglas duras cableadas"
 
