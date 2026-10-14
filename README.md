@@ -293,4 +293,4 @@ MIT (`LICENSE`). El kit es markdown y scripts: clónalo, cámbialo y úsalo en t
 
 ---
 
-*Construido por [Soluciones Abiertas](https://solucionesabiertas.es) sobre [Kodavio](https://flowtitude.com). El agente redacta, Kodavio ejecuta, tú apruebas.*
+*Hecho por [Soluciones Abiertas](https://solucionesabiertas.es) sobre [Kodavio](https://flowtitude.com). El agente redacta, Kodavio ejecuta, tú apruebas.*
