@@ -1,13 +1,13 @@
 ---
 name: wp-builder-convert
-description: Convertir páginas entre Bricks y CrocoBuilder, o de HTML a Bricks, vía Kodavio, con auditoría de fidelidad y marcha atrás. Usar para migraciones de builder o de sistema de diseño. Elementor y Gutenberg están aparcados.
+description: Convertir páginas entre Bricks y CrocoBuilder, o de HTML a Bricks o CrocoBuilder, vía Kodavio, con auditoría de fidelidad y marcha atrás. Usar para migraciones de builder o de sistema de diseño. Elementor y Gutenberg están aparcados.
 ---
 
 # wp-builder-convert — Conversión entre builders
 
 Flujo Kodavio: `builder_migration` (perfil `conversion`). Playbooks del servidor: `builder-conversion` (simple) o `builder-conversion-advanced` (con dynamic data, forms, Woo, ACF/JetEngine, frameworks).
 
-**Perímetro vivo (Kodavio 0.3, verificado el 2026-09-16/17):** Bricks ↔ CrocoBuilder en los dos sentidos (`builder-transfer-page`, en `active`) y HTML → Bricks (`builder-create-from-model` con `html`). Elementor y Gutenberg están **aparcados**: el plugin no registra sus capacidades. Si la conversión los toca, para y díselo al humano.
+**Perímetro vivo (Kodavio 0.3.2):** Bricks ↔ CrocoBuilder en los dos sentidos (`builder-transfer-page`, en `active`; verificado desde el kit el 2026-09-16/17 con la 0.3) y HTML → Bricks o CrocoBuilder (`builder-create-from-model` con `html`; desde la 0.3.2 Kodavio lee el HTML con su propio analizador, también en sitios sin Bricks). Desde la 0.3.2 CrocoBuilder se reconoce sin decir el builder. Elementor y Gutenberg están **aparcados**: el plugin no registra sus capacidades. Si la conversión los toca, para y díselo al humano.
 
 > Fases canónicas: `rules/skill-phases.md`. **La conversión es moat de Kodavio: no hay ability nativa equivalente** (ningún builder convierte a otro) → aquí se usa `kodavio/*` directamente; la regla `ability-source-agnostic` no aplica a la conversión.
 
@@ -32,15 +32,17 @@ Flujo Kodavio: `builder_migration` (perfil `conversion`). Playbooks del servidor
    - **Responsive**: las media queries del origen llegan; captura las dos páginas a 1280 px, 768 px y 390 px.
    Más: dynamic bindings vivos y formularios que envían.
 
-   **Dos herramientas del plugin que hoy NO sirven para esto** (comprobado en WordPress real el 2026-09-17):
-   - `kodavio/conversion-visual-preview` y `conversion-visual-verdict` solo funcionan con las conversiones que sobrescriben la página y guardan copia (Elementor ↔ Bricks, aparcadas). Con `builder-transfer-page` responden `kodavio_preview_no_backup`. No hacen falta: las dos páginas ya existen, captúralas directamente.
-   - `kodavio/builder-conversion-diff` compara recuentos de secciones, bloques y nodos, que no significan lo mismo en Bricks y en CrocoBuilder (Croco no tiene secciones). Hacia Croco da un resultado falso: una página correcta sale con «faltan 8 secciones» y `fidelity_score: 30`. **No lo uses como veredicto.**
+   **Las herramientas de comparación del plugin, y hasta dónde llegan:**
+   - `kodavio/conversion-visual-preview` y `conversion-visual-verdict` solo funcionan con las conversiones que sobrescriben la página y guardan copia (Elementor ↔ Bricks, aparcadas). Con `builder-transfer-page` responden `kodavio_preview_no_backup` (comprobado el 2026-09-17). No hacen falta: las dos páginas ya existen, captúralas directamente.
+   - `kodavio/builder-conversion-diff`: hasta la 0.3.1 daba pérdidas falsas hacia CrocoBuilder; desde la 0.3.2 compara contenido (titulares, textos, enlaces, imágenes), no estructura interna. Sirve de primera lectura, **no de veredicto**: no mira estilos ni responsive, que son ejes de la auditoría.
 5. **Lo que hay que saber de la conversión hoy** (verificado en WordPress real con Bricks 2.4 y CrocoBuilder, 2026-09-16/17):
    - **Lee poco de cada vez.** `builder-analyze-page` y `bricks-tree-read` devuelven por defecto un resumen (`detail=summary`). El detalle se pide por tramos (`section_offset`/`section_limit`) o por nodo (`node_id`). La respuesta de `builder-transfer-page` también lleva solo la ficha por sección. Si una respuesta pasa de 32 KB, trae un aviso con cómo pedirla troceada: hazle caso.
    - **Bricks → CrocoBuilder:** llegan texto, orden, enlaces, imagen, clases con sus reglas CSS y media queries. **El `alt` no llega**, porque Croco lo deriva del medio y no admite escribirlo. Dilo en el reporte, no es un fallo.
    - **CrocoBuilder → Bricks:** las clases de Croco se dan de alta como clases globales de Bricks con su CSS. Párrafos y listas van al elemento `text` (texto enriquecido).
    - **HTML → Bricks:** el árbol sale solo con `div` (raíz con etiqueta `section`); `summary`, `dt` y `dd` conservan su etiqueta; los formularios muestran sus etiquetas y el checkbox su texto; un encabezado dentro del `<form>` se coloca justo antes. **Lo que Bricks no puede guardar se avisa en `warnings`**: clases en campos, etiquetas y botón de envío. Léelo: `fidelity.native_repairs` cuenta lo repuesto y `fidelity.classes_kept_as_names`, las clases que quedan como nombre (se pintan igual).
-   - **Marcha atrás de una transferencia: no es una sola llamada.** Página creada a la papelera (en Bricks, `kodavio/bricks-delete-page`) y **borrar las clases globales que creó** (`bricks/delete-global-class` en Bricks; la API de Croco en Croco). Anota qué clases creó (`created.global_classes.created`) para poder deshacerlo.
+   - **HTML → CrocoBuilder** (0.3.2): un enlace no puede envolver bloques; si el HTML trae una tarjeta enlazada, Kodavio la escribe con un enlace estirado y devuelve el CSS que falta. Sin ese CSS la tarjeta no es clicable: añádelo y compruébalo en lo servido (`rules/render-verification.md`).
+   - Lo que no tiene equivalente en el otro builder: desde la 0.3.2 Kodavio propone una pieza editable con todas sus apariciones. Es una propuesta: decide el humano.
+   - **Marcha atrás de una transferencia: no es una sola llamada.** Página creada a la papelera (desde la 0.3.2 la papelera de Kodavio vale para cualquier página; en Bricks también `kodavio/bricks-delete-page`) y **borrar las clases globales que creó** (`bricks/delete-global-class` en Bricks; la API de Croco en Croco). Anota qué clases creó (`created.global_classes.created`) para poder deshacerlo.
    - Si hay vídeo, **reprodúcelo** en la copia convertida; no basta con que el elemento exista.
 
 ## Cierre

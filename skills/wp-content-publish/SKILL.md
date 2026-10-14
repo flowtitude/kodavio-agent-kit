@@ -15,6 +15,7 @@ Posts de blog, noticias, fichas, textos de páginas — donde manda el contenido
 
 - Sitio con builder en la página destino → vía Kodavio (los metadatos del builder importan).
 - Post/página de contenido puro → CRUD (`wp-create-post`/`wp_create_post`) es suficiente, confirmando el sitio destino del server MCP.
+- Slug y orden, papelera y subida de imágenes con su `alt`: desde Kodavio 0.3.2 van por Kodavio, con ensayo y marcha atrás, no por WP-CLI ni a mano (`rules/kodavio-protocol.md`). Cambiar el slug de algo publicado cambia su URL (la vieja redirige): en producción es GATE, como toda edición de lo publicado.
 
 ## Flujo
 
