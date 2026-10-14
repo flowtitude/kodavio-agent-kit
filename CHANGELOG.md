@@ -3,6 +3,38 @@
 > Qué cambia en cada actualización del kit y, sobre todo, **si tienes que migrar algo local**
 > (`registry/sites.json`, `sites/{slug}/`). Si una entrada no dice "migración", `git pull` basta.
 
+## 2026-10-14 — Al día con Kodavio 0.3.2
+
+Lo que el kit daba por imposible o mandaba a hacer por fuera y Kodavio 0.3.2 ya hace. El kit remite
+a Kodavio (`kodavio/agent-handbook`, `kodavio/capability-map`, el playbook `configurar-sitio`) y no
+repite su manual. Con un sitio en 0.3.1 o anterior, todo lo de abajo sigue sin existir.
+
+- **WP-CLI y la API REST a mano dejan de ser rodeo** para slug y orden, papelera, subir medios y
+  fuentes, vista previa y configuración de WordPress y WooCommerce (`rules/kodavio-protocol.md`).
+- **Configuración del sitio y de la tienda** por el playbook `configurar-sitio`: fila nueva en
+  `workflows/WORKFLOWS.md`, `wp-operator` y `wp-woo-operator`. Gates nuevos en la tienda: salir del
+  modo pruebas de una pasarela (cobros reales), moneda, clientes y webhooks.
+- **Deshacer** (`rules/production-guardrails.md`): fila para lo que Kodavio 0.3.2 deshace con el
+  `op_id` (configuración, papelera, medios, formularios, CrocoBuilder, caché de WindPress, ajustes de
+  Bricks), encendido de serie; el código sigue necesitando el permiso que lo escribe.
+- **Capacidad apagada ≠ inexistente**: `capability-map` la marca como apagada y dice dónde se
+  enciende; el agente lo dice y no la rodea (`rules/ability-source-agnostic.md`). Bricks: el
+  interruptor de sus capacidades ya se enciende desde el agente.
+- **Vista previa con el cambio como candidato** en la fase Preview (`rules/skill-phases.md`) y en la
+  verificación del render; no sirve todavía para Bricks.
+- **WindPress**: la caché se puede compilar fuera y subir, con copia; nunca se purga
+  (`wp-tailwind-windpress`, `rules/render-verification.md`, `wp-bricks-fds`, `wp-verifier`).
+- **Fragmentos**: JS en FluentSnippets y CSS/JS solo en las páginas que tocan (`rules/code-on-live-sites.md`).
+- **CrocoBuilder**: editar páginas y plantillas existentes por parche (`wp-page-build`;
+  despacho por `wp-builder-operator`). En `wp-builder-convert`: HTML → CrocoBuilder también sin
+  Bricks, CrocoBuilder se reconoce solo, el diff ya no da pérdidas falsas (primera lectura, no
+  veredicto) y el CSS pendiente de las tarjetas enlazadas.
+- **Formularios**: cambiar uno existente conserva su id y su shortcode (`wp-operator`).
+- **Componentes nativos de Bricks**: editarlos es un cambio global; si Kodavio no deja borrar uno en
+  uso, no se fuerza (`wp-bricks-operator`).
+- `registry/abilities-kodavio.json` **no** se ha regenerado (sigue en `0.3.1-dev.2`): por eso el kit
+  aún no cita por su nombre las capacidades nuevas de la 0.3.2.
+
 ## 2026-09-23 (2) — Páginas con bloques de la biblioteca
 
 - Skill nueva `wp-block-library`: página nueva de Bricks con bloques de la biblioteca de Kodavio
