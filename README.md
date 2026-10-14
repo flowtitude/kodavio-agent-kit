@@ -2,7 +2,7 @@
 
 Workspace clonable para operar **instalaciones WordPress en vivo con agentes de IA** (Claude Code, Cursor, Codex, OpenCode, Kilo Code) a través del plugin **[Kodavio](https://flowtitude.com)**.
 
-Kodavio convierte cada WordPress en un servidor MCP con abilities seguras para builders (Bricks, Elementor, Gutenberg), diseño, conversión, contenido dinámico y administración. Este kit es la **capa cliente** que le falta a tu máquina: registro de sitios, guardarraíles por entorno, protocolo de trabajo, skills de orquestación y subagentes — todo en markdown portable, sin lock-in a ninguna herramienta.
+Kodavio convierte cada WordPress en un servidor MCP con abilities seguras para builders (Bricks y CrocoBuilder; Elementor y Gutenberg vienen aparcados desde Kodavio 0.3), diseño, conversión, contenido dinámico, configuración de WordPress y WooCommerce y administración. Este kit es la **capa cliente** que le falta a tu máquina: registro de sitios, guardarraíles por entorno, protocolo de trabajo, skills de orquestación y subagentes — todo en markdown portable, sin lock-in a ninguna herramienta.
 
 ```
 ┌─────────────────────────────┐         ┌──────────────────────────────┐
@@ -139,12 +139,13 @@ Toda sesión sobre un sitio empieza por el skill **`wp-site-session`**: el agent
 | Tú dices | El sistema hace |
 |---|---|
 | *"¿Cómo está example.com?"* | Auditoría read-only (`wp-site-health`) → informe con riesgos y plan |
-| *"Hazme la web de mi clínica"* | `wp-site-plan`: discovery → sitemap + modelo de contenido + cola de briefs → apruebas el plan → construcción página a página |
+| *"Hazme la web de mi clínica"* | `wp-site-plan`: discovery → sitemap + modelo de contenido + cola de briefs → apruebas el plan → montaje página a página |
 | *"Crea una página de servicios con hero, 3 features y CTA"* | `wp-page-build`: brief y copy primero → build en draft → verificación → te enseña la preview |
 | *"Móntame la home con bloques: hero, servicios y CTA"* | `wp-block-library`: eliges bloques de la biblioteca → escribes el texto de cada uno → página en draft → verificas que se ve |
 | *"Hazla parecida a esta captura"* (+ imagen) | `wp-reference-to-brief`: extrae estructura y jerarquía con visión → brief adaptado a TU design system → build |
 | *"Escribe 5 posts sobre X para el blog"* | `wp-content-publish`: muestra 1 de ejemplo → apruebas → lote completo en draft con SEO on-page |
-| *"Migra esta página de Elementor a Bricks"* | `wp-builder-convert`: plan → conversión a draft → auditoría de fidelidad → rollback garantizado |
+| *"Pasa esta página de Bricks a CrocoBuilder"* | `wp-builder-convert`: plan → conversión a draft → auditoría de fidelidad → rollback garantizado |
+| *"Pon Redsys en modo pruebas"* | playbook `configurar-sitio` de Kodavio: ensayo con el antes y el después → tu confirmación → marcha atrás disponible |
 | *"Actualiza los plugins"* | `wp-site-health`: en producción te pide confirmación update a update, con backup previo |
 | *"Creo que el sitio está hackeado"* | `wp-security-triage`: contención → evidencia → limpieza → vector → hardening |
 
@@ -159,8 +160,8 @@ Lo que el agente **nunca** hace solo en producción: publicar, instalar/actualiz
 | [`wp-site-session`](skills/wp-site-session/SKILL.md) | Protocolo de arranque/cierre por sitio: entorno, memoria, handbook, guardarraíles |
 | [`wp-onboard-site`](skills/wp-onboard-site/SKILL.md) | Comando interactivo de alta de sitio: plugin, credencial, MCP, registry con datos reales |
 | [`wp-site-plan`](skills/wp-site-plan/SKILL.md) | Planificación de sitio/rediseño: discovery, sitemap, modelo de contenido, cola de briefs |
-| [`wp-reference-to-brief`](skills/wp-reference-to-brief/SKILL.md) | Imagen de referencia o mockup → brief de construcción preciso (visión) |
-| [`wp-page-build`](skills/wp-page-build/SKILL.md) | Páginas/secciones/templates en Bricks, Elementor o Gutenberg, con autoría previa y verificación |
+| [`wp-reference-to-brief`](skills/wp-reference-to-brief/SKILL.md) | Imagen de referencia o mockup → brief preciso para montar la página (visión) |
+| [`wp-page-build`](skills/wp-page-build/SKILL.md) | Páginas/secciones/templates en Bricks o CrocoBuilder, con autoría previa y verificación |
 | [`wp-design-patterns`](skills/wp-design-patterns/SKILL.md) | Patrones de composición: anatomía de sección, ritmo de página, catálogo (hero, features, pricing, FAQ…) |
 | [`wp-bricks-fds`](skills/wp-bricks-fds/SKILL.md) | Preferencias Bricks + Flowtitude Design System: clases semánticas, tokens fluidos, elementos vetados |
 | [`wp-tailwind-windpress`](skills/wp-tailwind-windpress/SKILL.md) | Tailwind v4 en WordPress vía WindPress: detección, reglas de utilities |
@@ -176,7 +177,7 @@ Lo que el agente **nunca** hace solo en producción: publicar, instalar/actualiz
 
 ### Playbooks del servidor (Kodavio, se cargan en runtime con `kodavio/skill-get`)
 
-`bricks-build-page` · `elementor-build-page` · `gutenberg-build-page` · `design-frameworks` · `flowtitude-design-scope` · `builder-conversion[-advanced]` · `elementor-migrate-v4` · `content-model-schema` · `dynamic-data-binding` · `acf-integration` · `jetengine-integration` · `woocommerce-operations` · `fluent-suite` · `wordpress-admin-safe`
+Kodavio trae sus propios playbooks (configurar el sitio y la tienda, montar páginas en Bricks, conversión entre builders, WooCommerce, contenido dinámico, administración segura…) y los de otros plugins del sitio. La lista viva de cada sitio la da `kodavio/skill-list`.
 
 ### Subagentes (roles especializados)
 
@@ -185,11 +186,11 @@ Lo que el agente **nunca** hace solo en producción: publicar, instalar/actualiz
 | [`wp-auditor`](agents/wp-auditor.md) | Diagnóstico read-only; nunca escribe |
 | [`wp-operator`](agents/wp-operator.md) | Administración WP segura: plugins, settings, usuarios |
 | [`wp-bricks-operator`](agents/wp-bricks-operator.md) | Especialista Bricks (+FDS): nodos nativos, patch-first, elementos vetados |
-| [`wp-elementor-operator`](agents/wp-elementor-operator.md) | Especialista Elementor: contenedores, site kit, sin addons fantasma |
-| [`wp-gutenberg-operator`](agents/wp-gutenberg-operator.md) | Especialista Gutenberg: bloques core, patterns, theme.json |
-| [`wp-builder-operator`](agents/wp-builder-operator.md) | Genérico de builders (fallback cuando no hay especialista) |
+| [`wp-elementor-operator`](agents/wp-elementor-operator.md) | Especialista Elementor: contenedores, site kit, sin addons fantasma (aparcado con Elementor en Kodavio 0.3) |
+| [`wp-gutenberg-operator`](agents/wp-gutenberg-operator.md) | Especialista Gutenberg: bloques core, patterns, theme.json (aparcado con Gutenberg en Kodavio 0.3) |
+| [`wp-builder-operator`](agents/wp-builder-operator.md) | Genérico de builders, CrocoBuilder incluido (fallback cuando no hay especialista) |
 | [`wp-content-architect`](agents/wp-content-architect.md) | Modelo de contenido y datos dinámicos: CPTs, campos, bindings |
-| [`wp-woo-operator`](agents/wp-woo-operator.md) | WooCommerce con gates de dinero (precios, pedidos, reembolsos) |
+| [`wp-woo-operator`](agents/wp-woo-operator.md) | WooCommerce con gates de dinero (precios, pedidos, reembolsos, pasarelas y su modo pruebas) |
 | [`wp-content-writer`](agents/wp-content-writer.md) | Copy editorial y SEO en el idioma del sitio |
 | [`wp-verifier`](agents/wp-verifier.md) | Verificación adversarial post-write: read-back, salud, fidelidad, rollback |
 
@@ -292,4 +293,4 @@ MIT (`LICENSE`). El kit es markdown y scripts: clónalo, cámbialo y úsalo en t
 
 ---
 
-*Construido por [Soluciones Abiertas](https://solucionesabiertas.es) sobre [Kodavio](https://flowtitude.com). El agente redacta, Kodavio ejecuta, tú apruebas.*
+*Hecho por [Soluciones Abiertas](https://solucionesabiertas.es) sobre [Kodavio](https://flowtitude.com). El agente redacta, Kodavio ejecuta, tú apruebas.*
