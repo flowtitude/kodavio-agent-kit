@@ -64,7 +64,7 @@ y avisa.
 | `wp-security-cleanup` | Respuesta a incidente: orquesta `wp-malware-cleanup-mcp` + abilities Kodavio + gates humanos para limpiar y endurecer un sitio comprometido |
 | `wp-client-report` | Informe de marca blanca (auditoría completa, área o tienda) a partir del trabajo ya hecho; entregarlo es gate |
 
-Los playbooks **del servidor** (bricks-build-page, acf-integration, fluent-suite, woocommerce-operations…) se cargan en runtime con `kodavio/skill-get` — no se duplican aquí.
+Los playbooks **del servidor** (bricks-build-page, acf-integration, fluent-suite, woocommerce-operations, configurar-sitio…) se cargan en runtime con `kodavio/skill-get` — no se duplican aquí.
 
 Skills globales ya instaladas que aplican (no reinstalar): `wp-wpcli-and-ops`, `wp-performance-review`, `wp-security-audit`, `design-*`, y el pack oficial WordPress/agent-skills (`wp-block-development`, `wp-plugin-development`, `wp-rest-api`…).
 
@@ -77,7 +77,7 @@ Skills globales ya instaladas que aplican (no reinstalar): `wp-wpcli-and-ops`, `
 | `wp-bricks-operator` | builder_operator | Especialista Bricks (+FDS): nodos nativos, patch-first, vetos |
 | `wp-elementor-operator` | builder_operator | Especialista Elementor: contenedores, site kit, migración v4 |
 | `wp-gutenberg-operator` | builder_operator | Especialista Gutenberg: bloques core, patterns, theme.json |
-| `wp-builder-operator` | builder_operator | Genérico/fallback cuando el builder es mixto o desconocido |
+| `wp-builder-operator` | builder_operator | Genérico/fallback cuando el builder es mixto o desconocido, y CrocoBuilder |
 | `wp-content-architect` | content_architect | CPTs, taxonomías, campos, queries y bindings — antes que las páginas |
 | `wp-woo-operator` | operator | WooCommerce con gates de dinero (precios, pedidos, refunds) |
 | `wp-content-writer` | — | Copy, posts, SEO (castellano perfecto / inglés según sitio) |

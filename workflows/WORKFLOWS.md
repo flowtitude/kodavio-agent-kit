@@ -8,7 +8,7 @@
 | "¿Cómo está el sitio X?" / informe / análisis previo | `diagnostic_audit` | `wp-site-health` (parte auditoría) | wp-auditor | ninguno (read-only) |
 | "Hazme la web" / sitio nuevo / rediseño completo | — (plan) → flujos en orden | `wp-site-plan` → cola de briefs | wp-content-architect → builder-operator del builder → wp-verifier | aprobar plan; publicar = gate |
 | Mantenimiento: updates, limpieza, ajustes | `wordpress_admin` | `wp-site-health` | wp-operator + wp-verifier | updates/limpieza = gate + log |
-| Crear/editar página, sección, template, componente | `page_creation` | `wp-page-build` (+ `wp-design-patterns` en autoría) | wp-bricks-operator + wp-verifier (elementor y gutenberg, aparcados) | publicar = gate |
+| Crear/editar página, sección, template, componente | `page_creation` | `wp-page-build` (+ `wp-design-patterns` en autoría) | wp-bricks-operator (CrocoBuilder: wp-builder-operator) + wp-verifier (elementor y gutenberg, aparcados) | publicar = gate |
 | Página nueva con bloques de la biblioteca (sitio con WindPress + FDS) | `page_creation` | `wp-block-library` (+ `wp-bricks-fds` si hay que crear un bloque) | wp-bricks-operator + wp-verifier | guardar bloque en la biblioteca de la licencia y publicar = gate |
 | "Hazla como esta captura/mockup" | `page_creation` | `wp-reference-to-brief` → `wp-page-build` | builder-operator del builder + wp-verifier | publicar = gate |
 | Posts, contenido editorial, SEO on-page | `page_creation` (light) o CRUD | `wp-content-publish` | wp-content-writer | publicar = gate |
@@ -17,8 +17,9 @@
 | Tokens, paleta, sistema de diseño, frameworks | `design_system` | `wp-bricks-fds` / `wp-tailwind-windpress` (+ playbooks servidor `design-frameworks`, `flowtitude-design-scope`) | builder-operator + wp-verifier | aplicar sistema activo = gate |
 | CPTs, campos, ACF/JetEngine, loops, dynamic data | `content_model_dynamic` | — (playbooks servidor `content-model-schema`, `dynamic-data-binding`, `acf-integration`, `jetengine-integration`) | wp-content-architect + builder-operator + wp-verifier | migrar datos existentes = gate |
 | Snippet, shortcode, hook, endpoint, mu-plugin | `mini_plugin` | — + regla `code-on-live-sites.md` | wp-operator + wp-verifier | SIEMPRE gate en producción |
-| Migrar builder (E↔B↔G) o framework | `builder_migration` | `wp-builder-convert` | wp-auditor → builder-operator destino → wp-verifier | cutover y borrado de original = gate |
+| Migrar builder (Bricks ↔ CrocoBuilder, HTML → builder) o framework | `builder_migration` | `wp-builder-convert` | wp-auditor → builder-operator destino → wp-verifier | cutover y borrado de original = gate |
 | WooCommerce: productos, pedidos, cupones | `wordpress_admin` | — (playbook servidor `woocommerce-operations`) | wp-woo-operator | pedidos/refunds/precios = gate (dinero) |
+| Configurar WordPress (ajustes, enlaces, menús, usuarios, roles) o la tienda (envío, impuestos, pasarelas, clientes, webhooks) | `wordpress_admin` | — (playbook servidor `configurar-sitio`, Kodavio 0.3.2) | wp-operator (tienda: wp-woo-operator) | todo ajuste del sitio = gate; pasarelas, moneda, clientes y webhooks = gate (dinero y datos) |
 | Fluent (CRM, forms, support, booking) | `wordpress_admin` | — (playbook servidor `fluent-suite` + MCPs fluent-*) | wp-operator | campañas/emails salientes = gate (comunicación externa) |
 | Sospecha de hackeo / hardening | — (mínimo Kodavio) | `wp-security-triage` | wp-auditor + wp-operator | borrar/rotar credenciales = gate |
 | Sitio comprometido: limpiar y endurecer (incidente) | — (MCP `wp-malware-cleanup` + Kodavio) | `wp-security-triage` → `wp-security-cleanup` | wp-auditor → wp-operator → wp-verifier | limpieza destructiva, reinstalar core/plugins, reset de contraseñas = gate |
