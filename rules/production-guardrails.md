@@ -40,7 +40,7 @@
 | Tema: cambiar / actualizar | **GATE** + log |
 | PHP / snippets / mu-plugins | **GATE**; solo sandbox o mu-plugin con lint + backup. Tema/plugin activo: prohibido salvo orden explícita |
 | Usuarios: crear/editar/borrar, roles | **GATE** |
-| Settings del sitio (permalinks, lectura, URLs) | **GATE** |
+| Settings del sitio (permalinks, lectura, URLs, visibilidad en buscadores, menús) y de la tienda | **GATE**. Se hacen con el playbook del servidor `configurar-sitio` (Kodavio 0.3.2), nunca por WP-CLI |
 | Borrar cualquier cosa | **GATE siempre**; preferir papelera/desactivar a destruir |
 | Bulk ops (>10 items, contando llamadas individuales en una misma sesión) | **GATE** con muestra de 2-3 items primero. **No paralelizar writes** contra el mismo post/template (Bricks/Elementor guardan el árbol en una sola fila de postmeta como `_bricks_page_content` / `_elementor_data`; escrituras concurrentes pisan datos). Para >5 escrituras: en serie, con read-back entre lotes. |
 | Conversión de builder | Solo sobre copia/draft; tocar el original = **GATE** |
@@ -54,7 +54,8 @@ qué dice que restauraría).
 
 | Qué se escribió | Cómo se deshace |
 |---|---|
-| Ficheros de código, mu-plugins, snippets, fuentes de diseño, traducciones (`.po`/`.mo`) | `kodavio/rollback` — la última operación, un `op_id` o todo lo hecho sobre una ruta (`path` + `since`). Un snippet creado se desactiva, no se borra; un fichero que no existía no se restaura (sería borrarlo: GATE). Si el fichero es del tema activo o de un plugin activo, añade `confirm_live_code=true`, la misma confirmación que pidió escribirlo. Requiere Kodavio 0.3.0 y el permiso «Editar código» encendido en Herramientas › Permisos |
+| Ficheros de código, mu-plugins, snippets, fuentes de diseño, traducciones (`.po`/`.mo`) | `kodavio/rollback` — la última operación, un `op_id` o todo lo hecho sobre una ruta (`path` + `since`). Un snippet creado se desactiva, no se borra; un fichero que no existía no se restaura (sería borrarlo: GATE). Si el fichero es del tema activo o de un plugin activo, añade `confirm_live_code=true`, la misma confirmación que pidió escribirlo. Requiere Kodavio 0.3.0 y el permiso que escribe ese código encendido en Herramientas › Permisos (deshacer código vuelve a escribir código) |
+| Configuración de WordPress y de la tienda, papelera, medios subidos, formularios editados, páginas y plantillas de CrocoBuilder, caché de WindPress, ajustes de Bricks | `kodavio/rollback` con el `op_id` que devolvió la escritura. Desde Kodavio 0.3.2 viene encendido de serie y sin licencia. Ojo: deshacer una subida **borra** el fichero (GATE en producción), y deshacer un borrado lo recrea con id nuevo |
 | Página Bricks (árbol de elementos y ajustes de página) | `bricks/list-revisions` → `kodavio/builder-restore-revision` con `post_id` + `revision_id`. `wp_restore_post_revision()` no repone los datos del builder |
 | Migración a Tailwind de una página | `kodavio/tailwind-migration-rollback` con `post_id` |
 | Entradas y páginas sin builder | Revisiones de WordPress |

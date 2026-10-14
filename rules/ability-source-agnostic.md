@@ -10,7 +10,7 @@ El ecosistema estandarizó una capa MCP nativa (WordPress Abilities API en 6.9, 
 
 ## Orden operativo
 
-1. **Descubrir** qué hay en el sitio: `kodavio/capability-map` + `mcp-adapter-discover-abilities`. Detecta si el builder, WordPress **u otros plugins del sitio** exponen abilities (Bricks 2.4: `bricks/*`; ver *Capacidades de otros plugins del sitio* abajo).
+1. **Descubrir** qué hay en el sitio: `kodavio/capability-map` + `mcp-adapter-discover-abilities`. Detecta si el builder, WordPress **u otros plugins del sitio** exponen abilities (Bricks 2.4: `bricks/*`; ver *Capacidades de otros plugins del sitio* abajo). Desde Kodavio 0.3.2, una capacidad apagada sale en `capability-map` como **apagada**, con dónde se enciende: existe, así que ni la des por inexistente ni la rodees; dile al humano dónde encenderla. (Entrando por el servidor por defecto de `mcp-adapter`, llamarla sigue diciendo «Ability not found»: mira el mapa.)
 2. **Preferir la nativa** cuando exista y esté habilitada (Bricks › Settings › AI on; no `BRICKS_DISABLE_MCP`).
 3. **Envolver en el gate del kit**: la nativa ejecuta, pero el entorno/Human Gate/verify siguen siendo de Kodavio (`production-guardrails.md`, `execution-profile.md`). La nativa **no** decide si se escribe en producción — eso lo decide el gate.
 4. **Fallback a `kodavio/*`** si no hay nativa, está desactivada o falla. Comportamiento nunca peor que sin capa nativa.
@@ -23,7 +23,7 @@ El ecosistema estandarizó una capa MCP nativa (WordPress Abilities API en 6.9, 
 | Orientar diseño (tokens/clases/paleta) | `bricks/get-design-context` | `kodavio/design-read` |
 | Leer árbol de elementos | `bricks/get-page-elements`, `bricks/get-page-structure` | `kodavio/builder-workflow` (action=read), `kodavio/bricks-tree-read` |
 | Escribir/parchear elementos | `bricks/set-page-elements`, `bricks/update-element`, `bricks/batch-update-elements`, `bricks/add-element`, `bricks/remove-element` | `kodavio/bricks-apply-patch`, `kodavio/bricks-node-*`, `kodavio/builder-workflow` |
-| Previsualizar sin commit | `bricks/render-elements` | `dry_run=true` de Kodavio |
+| Previsualizar sin commit | `bricks/render-elements` | `dry_run=true` de Kodavio; desde 0.3.2, su vista previa con el cambio como candidato (contenido de WordPress y CrocoBuilder; no Bricks) |
 | Revisión / rollback | `bricks/list-revisions`, `bricks/restore-revision` | snapshots/backups de Kodavio |
 | Sistema de diseño (clases/vars/theme styles/components) | `bricks/create/update-global-class`, `set-global-variables`, `create-theme-style`, `create-component` | `kodavio/bricks-global-class-upsert`, `kodavio/bricks-theme-style-upsert`, `kodavio/design-*` |
 | Modelo de contenido | `bricks/list-cms-sources` | `kodavio/content-list-*`, `kodavio/scope-read` |
@@ -38,7 +38,7 @@ Kodavio 0.3 es **el punto único MCP del sitio**: por su mismo endpoint, con la 
 2. **Cómo se llama:** `mcp-adapter-get-ability-info` con el **nombre nativo** (`bricks/list-global-classes`) → esquema de entrada y salida.
 3. **Ejecutar:** `mcp-adapter-execute-ability` con `ability_name` y los argumentos dentro de `parameters`. Corre como el usuario actual: **el permiso del plugin dueño se aplica igual**; si dice que no, es que no.
 4. **Borrados y destructivas:** el control de Kodavio responde `kodavio_mcp_gate_confirm_required` y pide repetir con `"__confirm": true` dentro de `parameters`. **Ese `__confirm` no lo añade el agente por su cuenta**: es la marca de que un humano ha aprobado esa acción concreta (Human Gate de `production-guardrails.md`). Sin aprobación, no se reenvía.
-5. **Si un plugin no aparece:** en Bricks, su propio interruptor `abilitiesApi` tiene que estar activo o registra cero abilities. El panel **Kodavio › MCP instalados** (sección «Lo absorbido, agrupado por proveedor») dice por qué falta cada fuente.
+5. **Si un plugin no aparece:** en Bricks, su propio interruptor `abilitiesApi` tiene que estar activo o registra cero abilities. Desde Kodavio 0.3.2 el agente puede encenderlo (con copia y confirmación doble; en producción es un ajuste del sitio, así que GATE). El panel **Kodavio › MCP instalados** (sección «Lo absorbido, agrupado por proveedor») dice por qué falta cada fuente.
 
 Las escrituras de un plugin ajeno siguen todo lo demás de esta regla y de `production-guardrails.md`: ensayo si la ability lo admite, gate por entorno, verificación separada.
 

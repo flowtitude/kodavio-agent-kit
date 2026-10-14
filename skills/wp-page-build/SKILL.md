@@ -1,6 +1,6 @@
 ---
 name: wp-page-build
-description: Crear o mejorar páginas, secciones, templates y componentes en Bricks vía Kodavio (Elementor y Gutenberg aparcados desde el 2026-08-12). Orquesta el flujo page_creation con autoría previa de contenido y verificación posterior.
+description: Crear o mejorar páginas, secciones, templates y componentes en Bricks o CrocoBuilder vía Kodavio (Elementor y Gutenberg aparcados desde el 2026-08-12). Orquesta el flujo page_creation con autoría previa de contenido y verificación posterior.
 ---
 
 # wp-page-build — Construir páginas
@@ -42,6 +42,7 @@ No hay penalización por preguntar; hay penalización irrecuperable por reconstr
 3. Página nueva: `builder-workflow` create con el content model completo, **status draft**. Si el sitio tiene WindPress con FDS y hay biblioteca de bloques, mira antes `wp-block-library`: montar con bloques ya hechos sale mejor que el andamio del materializador.
 4. **Página existente → EDITAR, no reconstruir.** Usa `builder-workflow action=edit` con `payload.operation` (`insert`/`update`/`patch`/`delete`/`move`) — en Bricks, y el router lo enruta al flow `page_edit`. **Lee el árbol primero** (rol *leer árbol* → nativa `bricks/get-page-elements` o `kodavio/builder-workflow action=read`/`analyze`) para obtener `node_id`/anclas; antes de tocar página publicada haz snapshot; **nunca reemplaces el árbol entero** salvo petición explícita del usuario. Tras escribir, **read-back**: relee y confirma que el objetivo cambió y lo no tocado quedó intacto.
 5. Siempre `dry_run=true` primero, **y leer el `materialization_plan` del dry-run**: si `mapped_blocks` < bloques enviados, o aparece `unknown_block_as_card`/`unsupported_block_types`, el contrato está mal — NO escribir.
+6. **CrocoBuilder** (Kodavio 0.3.2): edita páginas y plantillas existentes (cabecera, pie, entrada, archivo) sin cambiarles el id, con copia y marcha atrás exacta. El criterio es el de Bricks: un elemento suelto (clases, etiqueta, ancla) se **parchea**; reescribir la página o la plantilla entera, solo si se pidió y leyendo el ensayo, que enseña el árbol y cuenta todos los elementos. Una plantilla con bucles o paginación, siempre por parche. Lee las condiciones de una plantilla antes de tocarlas: una sin valor se aplica a mucho más de lo que parece. Sobre una publicada, vista previa con el cambio antes de escribir. Qué capacidad hace cada cosa: `kodavio/capability-map` y los playbooks de CrocoBuilder que sirve el sitio (`kodavio/skill-list`).
 
 ### Contrato del content_model → autoridad en el plugin (`skill-get`)
 

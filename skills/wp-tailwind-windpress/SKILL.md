@@ -5,7 +5,7 @@ description: Trabajar con Tailwind CSS v4 en WordPress vía WindPress - detecci�
 
 # wp-tailwind-windpress — Tailwind en WordPress
 
-> ⚠️ **WindPress compila Tailwind en el navegador**: no hay recompilación desde PHP. Un cambio de tokens o de config escrito por MCP puede no existir en el CSS servido hasta que alguien abra WindPress. Aplica `rules/render-verification.md` — si no se ve, no está hecho, y tu reporte lo dice.
+> ⚠️ **WindPress compila Tailwind en el navegador**: no hay recompilación desde PHP. Un cambio de tokens o de config escrito por MCP no existe en el CSS servido hasta que alguien abra WindPress y genere, o hasta que se suba la caché compilada fuera del sitio (Kodavio 0.3.2, paso 6 de abajo). Aplica `rules/render-verification.md` — si no se ve, no está hecho, y tu reporte lo dice.
 
 > Recorre las fases canónicas (`rules/skill-phases.md`) y ejecuta por **rol**, prefiriendo la ability nativa cuando exista, envuelta en el gate de Kodavio (`rules/ability-source-agnostic.md`).
 
@@ -17,11 +17,11 @@ description: Trabajar con Tailwind CSS v4 en WordPress vía WindPress - detecci�
 
 ## Modelo mental
 
-WindPress compila Tailwind v4 **dentro de WordPress**: escanea el contenido (árboles del builder incluidos) y genera el CSS. No hay build local ni node en el server. Consecuencias:
+WindPress compila Tailwind v4 **dentro de WordPress**: escanea el contenido (árboles del builder incluidos) y genera el CSS. No hay node en el server. Consecuencias:
 
 - Las clases escritas en elementos Bricks/Gutenberg sí se compilan (si el scanner las ve).
 - Clases generadas dinámicamente (concatenadas en runtime) NO se detectan → no existirán en el CSS.
-- Cambios de config/tokens → recompilar desde WindPress y verificar en frontend.
+- Cambios de config/tokens → recompilar (paso 6 de *Cambiar tokens del sistema*) y verificar en frontend.
 
 ## Reglas de uso
 
@@ -39,7 +39,7 @@ WindPress compila Tailwind v4 **dentro de WordPress**: escanea el contenido (ár
 
 ## Cambiar tokens del sistema: la cadena FDS → WindPress
 
-Un token (color, tipografía, spacing…) no se cambia editando ficheros de WindPress: recorre una cadena, y **la última milla es de un humano**. Verificada de punta a punta en la fase 5 de `projects/kodavio/scripts/verify-bricks-battery.sh` (Bricks 2.4, 2026-09-17). Cada paso con su `dry_run` primero y su gate según entorno (`rules/production-guardrails.md`).
+Un token (color, tipografía, spacing…) no se cambia editando ficheros de WindPress: recorre una cadena, y la última milla es compilar. Pasos 1-5 y el *Generate* humano, verificados de punta a punta en la fase 5 de `projects/kodavio/scripts/verify-bricks-battery.sh` (Bricks 2.4, 2026-09-17). Cada paso con su `dry_run` primero y su gate según entorno (`rules/production-guardrails.md`).
 
 1. **Leer lo que hay.** `kodavio/design-get-tokens` (`group`) y `kodavio/windpress-read-config` (`include_values=true`): tokens actuales de la memoria de diseño y ficheros de tokens de WindPress.
 2. **Escribir el token en la memoria de diseño**, que es el origen: `kodavio/design-set-tokens` (`group`, `tokens`, `dry_run`). Nunca directamente en el CSS de WindPress.
@@ -47,9 +47,12 @@ Un token (color, tipografía, spacing…) no se cambia editando ficheros de Wind
 4. **Sincronizar con WindPress.** `kodavio/windpress-sync-design-system` con `dry_run=true`, leer la salida, y después `dry_run=false` + `confirm_write=true`. Por defecto **fusiona en el fichero de tokens que el sitio ya tiene**, con copia previa; no crea ficheros nuevos.
    - Si el sitio **no tiene sistema de tokens** en WindPress, la sincronización falla y el error sugiere `force_new_theme=true`: crea un `kodavio-theme.css` con su import. Úsalo solo con aprobación: da de alta el sistema de diseño en ese sitio.
 5. **Read-back.** `kodavio/windpress-read-config` con `include_values=true`: el valor nuevo tiene que estar en `files[].preview` del fichero de tokens (`uploads/windpress/data/`). Si no está, la cadena se cortó aquí: no sigas.
-6. **Compilar: no se puede desde PHP.** `kodavio/windpress-cache-action` con `action=build` responde que no hay acción ejecutable, porque WindPress compila en el navegador. **No es un fallo que puedas resolver.** El paso es humano: abrir WindPress en wp-admin y pulsar **Generate**.
-7. **Reporta en primera línea que falta ese paso** (`rules/render-verification.md`): *«El token está en el fichero de WindPress; falta abrir WindPress › Generate para que llegue a la web.»* La tarea queda pendiente de un humano, no hecha.
-8. **Verificar en lo servido, después del Generate.** El valor tiene que estar en `/wp-content/uploads/windpress/cache/tailwind.css` y aplicarse en una página. Solo entonces está hecho.
+6. **Compilar.** `kodavio/windpress-cache-action` con `action=build` sigue sin compilar: WindPress compila en el navegador. Dos caminos:
+   - **Humano**: abrir WindPress en wp-admin y pulsar **Generate**. Es el que ve todas las clases.
+   - **Desde el agente** (Kodavio 0.3.2): pedir a Kodavio las clases que usa el sitio y el `main.css`, compilar con Tailwind en tu máquina y subir la caché, con ensayo, copia de la anterior y confirmación doble. Cambia el CSS de **todo el sitio**: en producción es GATE. Compilar fuera puede dejar fuera alguna clase que WindPress sí habría visto. Las capacidades y el orden exacto: `kodavio/agent-handbook`.
+   - **Nunca purgar** la caché de WindPress salvo que el humano lo pida.
+7. **Si no se ha compilado, repórtalo en primera línea** (`rules/render-verification.md`): *«El token está en el fichero de WindPress; falta abrir WindPress › Generate (o subir la caché) para que llegue a la web.»* La tarea queda pendiente, no hecha.
+8. **Verificar en lo servido, después de compilar.** El valor tiene que estar en `/wp-content/uploads/windpress/cache/tailwind.css` y aplicarse en una página. Si subiste la caché, comprueba además que no ha desaparecido ningún estilo que antes se veía; si falta alguno, deshaz la subida (`kodavio/rollback`) o genera desde WindPress. Solo entonces está hecho.
 
 Para comprobar si unas utilities existen antes de usarlas en elementos: `kodavio/windpress-verify-utilities` (`classes`).
 

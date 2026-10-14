@@ -4,7 +4,7 @@
 
 ## Jerarquía de ubicaciones (de preferida a prohibida)
 
-1. **Gestor de snippets del sitio** — `kodavio/wp-write-snippet` escribe en **FluentSnippets, Code Snippets o WPCode**, el que tenga el sitio (`kodavio/wp-detect-snippet-manager` dice cuál). Es la superficie preferida: cada snippet se desactiva desde wp-admin sin FTP, y **Kodavio lo desactiva solo** si tras escribir la portada o la API REST dejan de responder. Verificado en WordPress real con los tres el 2026-09-17.
+1. **Gestor de snippets del sitio** — `kodavio/wp-write-snippet` escribe en **FluentSnippets, Code Snippets o WPCode**, el que tenga el sitio (`kodavio/wp-detect-snippet-manager` dice cuál). Es la superficie preferida: cada snippet se desactiva desde wp-admin sin FTP, y **Kodavio lo desactiva solo** si tras escribir la portada o la API REST dejan de responder. Verificado en WordPress real con los tres el 2026-09-17. Con FluentSnippets, desde Kodavio 0.3.2 también JS, y un fragmento CSS o JS puede cargar **solo en las páginas que digas**: si el código es de una página, que no cargue en todo el sitio.
 2. **Sandbox Kodavio** — `wp-content/kodavio-sandbox/*.php`, vía `kodavio/wp-write-code-file`. Recuperable sin FTP, con safe mode y crash marker (`kodavio/wp-sandbox-status`, `wp-sandbox-clear-crash`). Si el sitio no tiene gestor de snippets, y para todo lo experimental.
 3. **MU-plugin — último recurso** — vía `kodavio/wp-write-mu-plugin` + `wp-validate-mu-plugin`, que vienen **apagadas por defecto** (permiso aparte en Kodavio › Herramientas). Solo si el código tiene que cargar antes que los plugins. Se carga en cada petición: si rompe algo que la comprobación no ve, se recupera por FTP. Un archivo, una responsabilidad, prefijo `sa-`.
 4. **Plugin propio versionado** — si la funcionalidad crece, se convierte en plugin con repo git. Ya no se edita en vivo: se desarrolla local y se despliega.
@@ -28,7 +28,7 @@ NUNCA se editan con `wp-write-*` ni `file_put_contents`. Editarlas por FS deja e
 
 Toda escritura sobre el sistema de diseño pasa por su ability (con `dry_run`, backup y, en WindPress, respetando el pipeline de compilación):
 
-- **Tailwind / WindPress** → `kodavio/windpress-*` (`detect`, `read-config`, `sync-design-system`, `cache-action`) y/o `kodavio/design-source-*` con `provider=windpress`.
+- **Tailwind / WindPress** → `kodavio/windpress-*` (`detect`, `read-config`, `sync-design-system`, `cache-action` y, desde 0.3.2, la subida de la caché compilada: `wp-tailwind-windpress`) y/o `kodavio/design-source-*` con `provider=windpress`.
 - **theme.json** → `kodavio/design-source-*` con `provider=gutenberg`.
 - **ACSS / Core Framework** → `kodavio/design-source-*` con `provider=framework-overrides` o `kodavio/design-apply-active-system`.
 - **Bricks global classes / tokens** → `kodavio/design-source-*` con `provider=bricks`.

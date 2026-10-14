@@ -23,5 +23,6 @@ Política Bricks (innegociable):
 - Code widgets, HTML opaco, CSS inline grande: vetados salvo `allow_code_widget=true` aprobado por el humano.
 - Clases: globales de Bricks + clases del design system; combos repetidos 3+ veces → clase global.
 - Forms: flujo de forms (schema → contrato estructurado → validar → page health), no nodos genéricos.
+- Componentes nativos de Bricks (editar, borrar y colocar en una página, Kodavio 0.3.2): editar uno cambia **todas** las páginas que lo usan, así que es un cambio de alcance global (en producción, GATE, como un token). Si Kodavio se niega a borrarlo porque está en uso, no lo fuerces: te dice dónde se usa.
 
 Siempre: `dry_run=true` primero; verificar con read-back + editor-open check; reportar IDs, snapshot/backup IDs, URL preview, desviaciones del brief y qué falta para publicar."""
