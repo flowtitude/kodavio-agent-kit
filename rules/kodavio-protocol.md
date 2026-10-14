@@ -32,6 +32,7 @@
 - Kodavio: todo lo que toque builders, diseño, conversión, scope, administración segura, PHP.
 - MCP genérico `wordpress` (CRUD): solo contenido simple donde los metadatos de builder no importan — y tras confirmar a qué sitio apunta.
 - Abilities de terceros (`mcp-adapter-discover-abilities`): descubrir → mapear → adaptar. Nunca ejecutar a ciegas.
+- **WP-CLI o la API REST a mano no son rodeo** para lo que Kodavio ya cubre: desde la 0.3.2, slug y orden, papelera, subir medios y fuentes, vista previa, y la configuración de WordPress y de WooCommerce (playbook `configurar-sitio`). Por fuera no hay ensayo, ni copia, ni registro de cambios. Qué ability toca: `kodavio/agent-handbook`.
 
 ## Endpoint
 

@@ -11,7 +11,7 @@ Lo que el usuario ve casi nunca es el dato que escribiste. Entre medias hay un a
 | Integración | Dónde vive lo que se ve | Quién lo regenera |
 |---|---|---|
 | **Elementor** *(aparcado en Kodavio desde el 2026-08-12; se conserva para cuando vuelva)* | CSS compilado en `uploads/elementor/css/post-<id>.css` | Solo un Guardar/Update en el editor, o Tools › Regenerate CSS. **Ni el toggle draft→publish** |
-| **WindPress / Tailwind** | CSS que WindPress compila **en el navegador** | Alguien tiene que abrir WindPress; no hay recompilación desde PHP |
+| **WindPress / Tailwind** | CSS que WindPress compila **en el navegador** | Alguien abre WindPress y pulsa *Generate*, o (Kodavio 0.3.2) el agente compila fuera del sitio y sube la caché (`wp-tailwind-windpress`). Esa caché **no se purga** salvo que el humano lo pida |
 | **Bricks** | CSS regenerado por el Save_Pipeline | La escritura delegada a la ability nativa 2.4 lo hereda; otros caminos, no siempre |
 | **Cualquiera** | Caché de objetos, de página, CDN | Purga explícita |
 
@@ -26,7 +26,7 @@ Los dos primeros están **verificados en vivo** (`docs/field-notes.md`, `docs/ko
 
 ## Cómo se comprueba
 
-- Pide la URL de preview o del frontend y **mírala** (WebFetch, captura, o el propio humano).
+- Pide la URL de preview o del frontend y **mírala** (WebFetch, captura, o el propio humano). Desde Kodavio 0.3.2, su vista previa devuelve la página servida tal como la vería un visitante, borradores incluidos, y su comprobación de salud lee lo servido (también cabeceras, pies y archivos).
 - Compara contra lo que pedía el brief: ¿está el espaciado? ¿el color? ¿el grid responde? Si el contenido está pero el estilo no, ya sabes dónde estás: en el CSS compilado.
 - Si el sitio tiene caché o CDN, purga o añade un cache-buster antes de concluir. Un 200 con HTML viejo no prueba nada.
 
